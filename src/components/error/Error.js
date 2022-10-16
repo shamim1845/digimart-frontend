@@ -1,0 +1,47 @@
+import React, {useEffect} from 'react';
+import styled from 'styled-components';
+import {useNavigate} from "react-router-dom"
+
+const Error = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setTimeout(() => {
+            navigate("/")
+        }, 5000)
+    }, [navigate]);
+
+
+    
+    return (
+        <Container>
+            <h1>Opps! Page not found...</h1>
+            <button onClick={() => navigate('/')}>Back to Home</button>
+        </Container>
+    )
+}
+
+export default Error;
+
+
+const Container = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+height: 55vh;
+    h1{
+
+    }
+    button{
+        margin-top: 1rem;
+        border: none;
+        background-color: tomato;
+        padding: .5rem 1rem;
+        cursor: pointer;
+        transition:  all .5s;
+            &:hover{
+                color: #fff;
+            }
+    }
+`
