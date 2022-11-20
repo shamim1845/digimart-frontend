@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "proxy": "https://digimart-ecom-backend.herokuapp.com/",
+  "proxy": "https://digimart-ecom-backend.herokuapp.com",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -16,6 +16,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.24.0",
     "country-state-city": "^3.0.1",
+    "formik": "^2.2.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",

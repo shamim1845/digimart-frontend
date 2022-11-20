@@ -85,20 +85,20 @@ else if(password !== cPassword) {
               <InputGroup>
                 <div>
                   <label htmlFor="name">Enter Your name</label>
-                  <input type="name" name="name" onChange={InputHandler} value={data.name}/>
+                  <input type="name" name="name" required min={3} onChange={InputHandler} value={data.name}/>
                 </div>
                 <div>
                   <label htmlFor="email">Enter Your Email</label>
-                  <input type="email" name="email" onChange={InputHandler} value={data.email}/>
+                  <input type="email" name="email" required onChange={InputHandler} value={data.email}/>
                 </div>
                 <div>
                   <label htmlFor="password">Password</label>
-                  <input type="password" name="password" onChange={InputHandler} value={data.password} placeholder="At least 8 characters"/>
+                  <input type="password" name="password" required min={8} onChange={InputHandler} value={data.password} placeholder="At least 8 characters"/>
                   <p><span>i</span> Passwords must be at least 8 characters.</p>
                 </div>
                 <div>
                   <label htmlFor="password">Confirm password</label>
-                  <input type="password" name="cPassword" onChange={InputHandler} value={data.cPassword}/>
+                  <input type="password" name="cPassword" required min={8} onChange={InputHandler} value={data.cPassword}/>
                 </div>
               </InputGroup>
               <Button>

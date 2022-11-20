@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const HeaderMiddle = () => {
     return (
@@ -8,7 +8,8 @@ const HeaderMiddle = () => {
         <MiddleLeft>
           <div className="logo">
             <h2>
-              DIGI<span>MART</span>
+              <Link to={"/"}> DIGI<span>MART</span></Link>
+             
             </h2>
           </div>
           <div className="menu">
