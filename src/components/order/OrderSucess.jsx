@@ -29,6 +29,7 @@ justify-content: center;
 align-items: center;
 max-width: 1440px;
 height: 60vh;
+margin: auto;
 `
 const CheckMark = styled.div`
 margin-bottom: 1rem;

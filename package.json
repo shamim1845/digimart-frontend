@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "proxy": "https://digimart-ecom-backend.herokuapp.com",
+  "proxy": "https://digimart-ecom-backend.onrender.com/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -27,7 +27,8 @@
     "react-slick": "^0.28.1",
     "react-toastify": "^8.1.0",
     "slick-carousel": "^1.8.1",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.3",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -32,9 +32,10 @@ const HeaderBottom = () => {
 
     const searchHandler = (e) => {
    e.preventDefault();
-   
-   navigate("/products")
-   dispatch(addKeyword(keyword));
+   if(keyword){
+     dispatch(addKeyword(keyword));
+     navigate("/products")
+   }
 
  }
 

@@ -1,76 +1,95 @@
-import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axiox from "axios";
-import {useNavigate, useLocation} from "react-router-dom"
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
+import { useNavigate, useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const Login = () => {
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  })
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: yup.object({
+      email: yup
+        .string()
+        .email("Email must be a valid email.")
+        .required("Email is required."),
+      password: yup
+        .string()
+        .min(8, "Password must have at least 8 characters.")
+        .required("Password is required."),
+    }),
+    onSubmit: (values, { resetForm }) => {
+  
+      const { email, password } = values;
+
+      axiox
+        .post("/api/v1/login", { email, password })
+        .then((res) => {
+          console.log(res);
+
+          if (res.status === 200) {
+            toast("Login successfull.");
+            localStorage.setItem(
+              "digimartToken",
+              JSON.stringify(res.data.token)
+            );
+
+            setTimeout(() => {
+              navigate(redirectPath, { replace: true });
+            }, 3000);
+          } else {
+            toast("Invalid login details");
+          }
+        })
+        .catch((err) => {
+          toast("Invalid login details");
+          console.log(err);
+        });
+
+      resetForm({ values: "" });
+    },
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const redirectPath = location.state?.path || "/products"
-
-  
-  let name, value;
-  const InputHandler = (e) => {
-    name = e.target.name;
-   value = e.target.value;
-   setData({...data, [name]: value})
-  }
-
-  const SubmitHandler = async(e) => {
-    e.preventDefault();
-    try{
-      const { email, password} = data;
-      if(!email || !password) {
-        toast("Fields can't be empty.")
-      }else{
-        const res = await axiox.post("/api/v1/login", {email, password});
-        // console.log(res);
-    if(res.status === 200) {
-      toast("Login successfull.")
-      localStorage.setItem("digimartToken", JSON.stringify(res.data.token))
-
-          setTimeout(() => {
-            navigate(redirectPath, {replace: true})
-          }, 3000);
-        }else{
-          toast("Invalid login details")
-        }
-      
-      }
-    }catch(err) {
-      toast("Invalid login details")
-      console.log(err);
-    }
-  }
+  const redirectPath = location.state?.path || "/products";
 
 
+ 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <LoginContainer>
         <ContainerTop>
           <FormContainer>
             <Title>Sign In </Title>
-            <Form onSubmit={SubmitHandler}>
+            <Form onSubmit={formik.handleSubmit}>
               <InputGroup>
                 <div>
                   <label htmlFor="email">Enter Your Email</label>
-                  <input type="email" name="email" onChange={InputHandler} value={data.email}/>
+                  <input
+                    type="email"
+                    name="email"
+                    onChange={formik.handleChange}
+                    value={formik.values.email}
+                  />
+                    { formik.touched.email && formik.errors.email && <p><span>i</span> {formik.errors.email} </p>}
                 </div>
                 <div>
                   <label htmlFor="password">Password</label>
-                  <input type="password" name="password" onChange={InputHandler} value={data.password}/>
+                  <input
+                    type="password"
+                    name="password"
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                  />
+                    { formik.touched.password && formik.errors.password && <p><span>i</span> {formik.errors.password} </p>}
                 </div>
               </InputGroup>
               <Button>
@@ -94,8 +113,6 @@ const Login = () => {
             </div>
           </ButtonContainer>
         </ContainerTop>
-
-     
       </LoginContainer>
     </>
   );
@@ -126,7 +143,6 @@ const ButtonContainer = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
- 
 
     & p {
       font-size: 1.2rem;
@@ -135,18 +151,17 @@ const ButtonContainer = styled.div`
     }
     & a {
       text-align: center;
-     
+
       font-size: 1.2rem;
       background: var(--bg-secondary);
       border: 1px solid #666;
       width: 100%;
       border-radius: 3px;
       padding: 1rem;
-      transition: all .3s;
-        &:hover{
- 
- box-shadow: #66666683 0px -50px 36px -30px inset;
-        }
+      transition: all 0.3s;
+      &:hover {
+        box-shadow: #66666683 0px -50px 36px -30px inset;
+      }
     }
   }
 `;
@@ -186,6 +201,17 @@ const InputGroup = styled.div`
           rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
       }
     }
+
+    p{
+      font-size: 1.1rem;
+      span{
+        font-style: italic;
+        color: tomato;
+        margin: 1.3rem .4rem 0 0;
+        font-weight: 700;
+      font-size: 1.3rem;
+      }
+    }
   }
 `;
 const Button = styled.div`
@@ -220,4 +246,3 @@ const Message = styled.div`
     text-decoration: underline;
   }
 `;
-
