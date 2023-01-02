@@ -232,7 +232,6 @@ const BottomRight = styled.div`
   }
   &:last-child .button button {
     margin-right: 0;
-    backgorund: blue;
   }
   @media screen and (max-width: 768px) {
     display: none;
