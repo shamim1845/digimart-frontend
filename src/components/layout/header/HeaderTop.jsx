@@ -2,41 +2,38 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
 import { addAuth } from "../../../features/auth/authSlice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HeaderTop = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {authenticated} = useSelector(( state ) => state.auth);
+  const { authenticated } = useSelector((state) => state.auth);
 
   const digimartToken = localStorage.getItem("digimartToken");
   // console.log(digimartToken);
-  if(digimartToken) {
-    dispatch(addAuth(true))
+  if (digimartToken) {
+    dispatch(addAuth(true));
   }
 
-  const LogOutHandler = async(e) => {
+  const LogOutHandler = async (e) => {
     e.preventDefault();
     const res = await axios.get("/api/v1/logout");
     console.log(res);
-if(res.status === 200) {
-  toast(res.data.message);
-   dispatch(addAuth(false));
-   localStorage.removeItem("digimartToken")
+    if (res.status === 200) {
+      toast(res.data.message);
+      dispatch(addAuth(false));
+      localStorage.removeItem("digimartToken");
 
-   setTimeout(() => {
-     navigate("/")
-     window.location.reload();
-   }, 3000);
-  }
-  }
-
+      setTimeout(() => {
+        navigate("/");
+        window.location.reload();
+      }, 3000);
+    }
+  };
 
   return (
     <HeaderTopContainer>
@@ -55,15 +52,16 @@ if(res.status === 200) {
         <div className="right">
           <div className="register_login">
             <img src="/images/icons/person-fill.svg" alt="" />
-            {
-              authenticated ?   <p style={{cursor: "pointer"}} onClick={LogOutHandler}>Log Out </p> : 
+            {authenticated ? (
+              <p style={{ cursor: "pointer" }} onClick={LogOutHandler}>
+                Log Out{" "}
+              </p>
+            ) : (
               <p>
-              <NavLink to={"/register"}> Register</NavLink> or
-              <NavLink to={"/login"}> Login</NavLink>
-            </p>
-            }
-            
-         
+                <NavLink to={"/register"}> Register</NavLink> or
+                <NavLink to={"/login"}> Login</NavLink>
+              </p>
+            )}
           </div>
           <div className="currency">
             <select name="" id="">
@@ -77,12 +75,10 @@ if(res.status === 200) {
         </div>
       </HeaderTopBar>
     </HeaderTopContainer>
-  )
-}
+  );
+};
 
 export default HeaderTop;
-
-
 
 const HeaderTopContainer = styled.div`
   display: flex;
@@ -90,11 +86,10 @@ const HeaderTopContainer = styled.div`
   width: 100%;
   border-top: 5px solid tomato;
   border-bottom: 1px solid #e4e9eb;
-  
-
+  padding: 0 3rem;
   @media screen and (max-width: 768px) {
-      display: none;
-      }
+    display: none;
+  }
 `;
 const HeaderTopBar = styled.div`
   width: 100%;
@@ -104,9 +99,6 @@ const HeaderTopBar = styled.div`
   align-items: center;
   font-size: 1.2rem;
   color: #666;
-  @media screen and (max-width:1440px) {
-        padding: 0 1rem;
-      }
 
   img {
     margin-right: 0.5rem;
@@ -117,14 +109,12 @@ const HeaderTopBar = styled.div`
     flex: 2;
     align-items: center;
     border-right: 1px solid #e4e9eb;
-    padding: 1rem;
 
-    p{
+    p {
       margin-bottom: 0;
     }
     & div {
       display: flex;
-    
 
       align-items: center;
       &:first-child {
@@ -135,7 +125,7 @@ const HeaderTopBar = styled.div`
   .right {
     display: flex;
     align-items: center;
-    p{
+    p {
       margin-bottom: 0;
     }
 
@@ -145,8 +135,8 @@ const HeaderTopBar = styled.div`
       padding: 1rem;
       font-size: 1.1rem;
       font-weight: 500;
-      transition: all .5s;
-      & a:hover{
+      transition: all 0.5s;
+      & a:hover {
         color: tomato;
       }
     }

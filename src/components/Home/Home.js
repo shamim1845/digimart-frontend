@@ -1,49 +1,52 @@
-import React, {useEffect} from 'react';
-import styled from "styled-components"
-import Carousle from "./Slider";
-import {useDispatch} from "react-redux";
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import Carousle from "../slider/Slider";
+import { useDispatch } from "react-redux";
 
-import { fetchAsyncProducts } from '../../features/products/productSlice';
-  
-import CategoriesDisplay from './CategoriesDisplay';
-import FeaturedProducts from './FeaturedProducts';
-import PageContainer from '../utils/PageContainer';
+import { fetchAsyncProducts } from "../../features/products/productSlice";
 
-
+import PageContainer from "../utils/PageContainer";
+import NewArivals from "../newArivals/NewArivals";
 
 const Home = () => {
   const dispatch = useDispatch();
 
-    useEffect(() => {
-      dispatch(fetchAsyncProducts(1))
-  }, [dispatch])
+  useEffect(() => {
+    dispatch(fetchAsyncProducts(1));
+  }, [dispatch]);
 
   return (
     <>
-    <PageContainer>
-    {/* <Metadata title="DIGIMART | Find any thing what do you want?"/> */}
-    <CaruusleContainer>
-        <Carousle />
-    </CaruusleContainer>
+      <Container>
+        <CaruusleContainer>
+          <Carousle />
+        </CaruusleContainer>
+        <PageContainer>
+          {/* <Metadata title="DIGIMART | Find any thing what do you want?"/> */}
 
-    <CategoriesDisplay />
-    <FeaturedProducts />
-     </PageContainer>
-       
+          <NewArivals />
+        </PageContainer>
+      </Container>
     </>
-  )
-}
+  );
+};
 
 export default Home;
-
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const CaruusleContainer = styled.div`
-width: 100%;
-display: flex;
-justify-content: center;
-overflow: hidden;
-background-color: #666;
-@media screen and (max-width:1440px) {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #666;
 
+  @media screen and (max-width: 1440px) {
   }
-`
+`;

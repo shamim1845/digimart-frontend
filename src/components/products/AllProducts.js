@@ -1,11 +1,8 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-
-import {
-   getAllProducts,
-} from "../../features/products/productSlice";
+import { getAllProducts } from "../../features/products/productSlice";
 import PageContainer from "../utils/PageContainer";
 import Loading from "../utils/Loading";
 import Filter from "./Filter";
@@ -13,13 +10,10 @@ import Product from "./Product";
 
 const AllProductDisplay = () => {
   const [currentPage, setCurrentPage] = useState(1);
- 
 
   const productDetails = useSelector(getAllProducts);
   const { loading, fetchProduct } = productDetails;
   // console.log(fetchProduct);
-
-
 
   const paginationLinkHandler = (page) => {
     setCurrentPage(page);
@@ -39,75 +33,56 @@ const AllProductDisplay = () => {
     }
   };
 
-  
-  
-    return (
-      <>
-      {loading &&  <Loading /> }
+  return (
+    <>
+      {loading && <Loading />}
 
-   
       <PageContainer>
-        
-          <MainTitle>
+        <MainTitle>
           <h2>Products</h2>
         </MainTitle>
-   
+
         <ProductContainer>
           <FilterBox>
-       
-                 <Filter  currentPage={currentPage}/>
-             </FilterBox>
+            <Filter currentPage={currentPage} />
+          </FilterBox>
 
           <ProductBox>
-     
-          {fetchProduct.products && fetchProduct.products.map((product) => {
-              // console.log(product);
-              return (
-        <Product key={product._id} product={product}/>
-              )
-            })
-          }
-       
-
+            {fetchProduct.products &&
+              fetchProduct.products.map((product) => {
+                return <Product key={product._id} product={product} />;
+              })}
           </ProductBox>
         </ProductContainer>
-        
-          
-            <Pagination>
-        
-        <Prev>
-               <button onClick={prevHandler}>prev</button> 
-         </Prev>
-            <Page>
-              {
-               fetchProduct.page && fetchProduct.page.map((page) => {
-                  return (
-                    <p
-                      style={
-                        page === currentPage
-                          ? { background: "#666", color: "#fff", }
-                          : null
-                      }
-                      key={page}
-                      onClick={() => paginationLinkHandler(page)}
-                    >
-                      {page}
-                    </p>
-                  );
-                })}
-            </Page>
-       <Next>
-       
-              <button onClick={nextHandler}>Next</button>
-            </Next>
-          </Pagination>
 
-          
-       
-     
+        <Pagination>
+          <Prev>
+            <button onClick={prevHandler}>prev</button>
+          </Prev>
+          <Page>
+            {fetchProduct.page &&
+              fetchProduct.page.map((page) => {
+                return (
+                  <p
+                    style={
+                      page === currentPage
+                        ? { background: "#666", color: "#fff" }
+                        : null
+                    }
+                    key={page}
+                    onClick={() => paginationLinkHandler(page)}
+                  >
+                    {page}
+                  </p>
+                );
+              })}
+          </Page>
+          <Next>
+            <button onClick={nextHandler}>Next</button>
+          </Next>
+        </Pagination>
       </PageContainer>
-
-      </>
+    </>
   );
 };
 
@@ -124,7 +99,7 @@ const MainTitle = styled.div`
 const ProductContainer = styled.div`
   display: flex;
   justify-content: center;
- width: 100%;
+  width: 100%;
   max-width: 1440px;
   @media screen and (max-width: 768px) {
     flex-direction: column;
@@ -132,24 +107,21 @@ const ProductContainer = styled.div`
   }
 `;
 const FilterBox = styled.div`
-padding-left: 1.5rem;
-padding-right: 1rem;
-width: 10%;
-@media screen and (max-width: 768px) {
-   width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1rem;
+  width: 10%;
+  @media screen and (max-width: 768px) {
+    width: 100%;
   }
-`
+`;
 const ProductBox = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-flex-wrap: wrap;
-width: 90%;
-@media screen and (max-width: 768px) {
-   width: 100%;
-  }
-`
-
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  gap: 1rem;
+  margin-left: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+`;
 
 const Pagination = styled.div`
   display: flex;
@@ -176,9 +148,9 @@ const Page = styled.div`
 
   p {
     font-size: 2rem;
-    padding: 0 .7rem;
+    padding: 0 0.7rem;
     margin: 0 0.5rem;
-    border-radius: .3rem;
+    border-radius: 0.3rem;
     cursor: pointer;
     &:hover {
       background: #666;

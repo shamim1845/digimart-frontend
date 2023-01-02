@@ -3,27 +3,44 @@ import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 
 const HeaderMiddle = () => {
-    return (
-        <HeaderMidd>
+  return (
+    <HeaderMidContainer>
+      <HeaderMidd>
         <MiddleLeft>
           <div className="logo">
             <h2>
-              <Link to={"/"}> DIGI<span>MART</span></Link>
-             
+              <Link to={"/"}>
+                {" "}
+                DIGI<span>MART</span>
+              </Link>
             </h2>
           </div>
           <div className="menu">
             <ul>
               <li>
-                <NavLink className={({isActive}) => isActive ? "active" : ""} to={"/"}>HOME</NavLink>
+                <NavLink
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  to={"/"}
+                >
+                  HOME
+                </NavLink>
               </li>
               <li>
-                <NavLink className={({isActive}) => isActive ? "active" : ""}  to={"/blog"}>BLOG</NavLink>
+                <NavLink
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  to={"/blog"}
+                >
+                  BLOG
+                </NavLink>
               </li>
               <li>
-                <NavLink className={({isActive}) => isActive ? "active" : ""}  to={"/products"}>Products</NavLink>
+                <NavLink
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  to={"/products"}
+                >
+                  Products
+                </NavLink>
               </li>
-            
             </ul>
           </div>
         </MiddleLeft>
@@ -44,30 +61,36 @@ const HeaderMiddle = () => {
           </div>
         </MiddleRight>
       </HeaderMidd>
-    )
-}
+    </HeaderMidContainer>
+  );
+};
 
 export default HeaderMiddle;
 
-
-
+const HeaderMidContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 3rem;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const HeaderMidd = styled.div`
   width: 100%;
-  height: 8rem;
+  height: 6rem;
   max-width: 1440px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 1.5rem;
   color: #666;
-  @media screen and (max-width:1440px) {
-        padding: 0 1rem;
-      }
-  @media screen and (max-width: 768px) {
-      display: none;
-      }
 
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 const MiddleLeft = styled.div`
   width: 50%;
@@ -97,9 +120,8 @@ const MiddleLeft = styled.div`
         letter-spacing: 1px;
         font-weight: 600;
         color: #000;
-          }
+      }
     }
-  
   }
 `;
 const MiddleRight = styled.div`
@@ -129,5 +151,4 @@ const MiddleRight = styled.div`
   .call_center {
     display: flex;
   }
-
 `;
