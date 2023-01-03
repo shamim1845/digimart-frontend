@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { backendUrl } from "../../App";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -39,12 +40,10 @@ const Register = () => {
         ),
     }),
     onSubmit: (values, { resetForm }) => {
-
-
       const { name, email, password } = values;
 
       axiox
-        .post("/api/v1/register", { name, email, password })
+        .post(`${backendUrl}/api/v1/register`, { name, email, password })
         .then((res) => {
           console.log(res);
           if (res.status === 201) {

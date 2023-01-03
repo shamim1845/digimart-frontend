@@ -1,46 +1,42 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axiox from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { backendUrl } from "../../App";
 
 const Login = () => {
-  const [data, setData] = useState('');
- 
+  const [data, setData] = useState("");
 
   const InputHandler = (e) => {
-   let value = e.target.value;
-   setData(value)
-  }
+    let value = e.target.value;
+    setData(value);
+  };
 
-  const SubmitHandler = async(e) => {
+  const SubmitHandler = async (e) => {
     e.preventDefault();
-    try{
-    
-      if(!data) {
-        toast("Fields can't be empty.")
-      }else{
-        const res = await axiox.post("/api/v1/password/forgot", {email: data});
+    try {
+      if (!data) {
+        toast("Fields can't be empty.");
+      } else {
+        const res = await axiox.post(`${backendUrl}/api/v1/password/forgot`, {
+          email: data,
+        });
         console.log(res);
-    if(res.status === 200) {
-      toast(res.data.message);
-
-   
-        }else{
-          toast("Invalid email address")
+        if (res.status === 200) {
+          toast(res.data.message);
+        } else {
+          toast("Invalid email address");
         }
-      
       }
-    }catch(err) {
+    } catch (err) {
       console.log(err);
     }
-  }
-
+  };
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <LoginContainer>
         <ContainerTop>
           <FormContainer>
@@ -49,21 +45,20 @@ const Login = () => {
               <InputGroup>
                 <div>
                   <label htmlFor="email">Enter Your Email</label>
-                  <input type="email" name="email" onChange={InputHandler} value={data}/>
+                  <input
+                    type="email"
+                    name="email"
+                    onChange={InputHandler}
+                    value={data}
+                  />
                 </div>
-          
               </InputGroup>
               <Button>
                 <input type="submit" value="Submit" />
               </Button>
             </Form>
-  
           </FormContainer>
-
-
         </ContainerTop>
-
-    
       </LoginContainer>
     </>
   );
@@ -140,4 +135,3 @@ const Button = styled.div`
     }
   }
 `;
-

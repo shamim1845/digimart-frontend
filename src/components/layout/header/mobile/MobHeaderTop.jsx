@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addAuth } from "../../../../features/auth/authSlice";
 import axios from "axios";
+import { backendUrl } from "../../../../App";
 
 const MobHeaderTop = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const MobHeaderTop = () => {
 
   const LogOutHandler = async (e) => {
     e.preventDefault();
-    const res = await axios.get("/api/v1/logout");
+    const res = await axios.get(`${backendUrl}/api/v1/logout`);
     console.log(res);
     if (res.status === 200) {
       toast(res.data.message);

@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { backendUrl } from "../../App";
 
 export const fetchAsyncProducts = createAsyncThunk(
   "products/fetchAsyncProducts",
   async (page) => {
     const products = await axios.get(
-      `https://digimart-ecom-backend.onrender.com/api/v1/products?page=${page}`
+      `${backendUrl}/api/v1/products?page=${page}`
     );
 
     return products.data;
@@ -16,15 +17,15 @@ export const fetchAsyncProductForFilter = createAsyncThunk(
   "products/fetchAsyncProductForFilter",
   async ({ keyword, category, pricestart, priceend }) => {
     let link;
-    link = `api/v1/products?price[gte]=${pricestart}&price[lte]=${priceend}`;
+    link = `${backendUrl}/api/v1/products?price[gte]=${pricestart}&price[lte]=${priceend}`;
     if (keyword !== "") {
-      link = `api/v1/products?keyword=${keyword}&price[gte]=${pricestart}&price[lte]=${priceend}`;
+      link = `${backendUrl}/api/v1/products?keyword=${keyword}&price[gte]=${pricestart}&price[lte]=${priceend}`;
     }
     if (category !== "") {
-      link = `api/v1/products?category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}`;
+      link = `${backendUrl}/api/v1/products?category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}`;
     }
     if (keyword !== "" && category !== "") {
-      link = `api/v1/products?keyword=${keyword}&category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}`;
+      link = `${backendUrl}/api/v1/products?keyword=${keyword}&category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}`;
     }
     // console.log(link);
 
@@ -37,7 +38,7 @@ export const fetchAsyncProductForFilter = createAsyncThunk(
 export const fetchAsyncProductsDetails = createAsyncThunk(
   "products/fetchAsyncProductDetails",
   async (id) => {
-    const product = await axios.get(`/api/v1/product/${id}`);
+    const product = await axios.get(`${backendUrl}/api/v1/product/${id}`);
 
     return product.data;
   }

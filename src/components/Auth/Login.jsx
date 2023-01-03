@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { backendUrl } from "../../App";
 
 const Login = () => {
   const formik = useFormik({
@@ -24,11 +25,10 @@ const Login = () => {
         .required("Password is required."),
     }),
     onSubmit: (values, { resetForm }) => {
-  
       const { email, password } = values;
 
       axiox
-        .post("/api/v1/login", { email, password })
+        .post(`${backendUrl}/api/v1/login`, { email, password })
         .then((res) => {
           console.log(res);
 
@@ -60,8 +60,6 @@ const Login = () => {
 
   const redirectPath = location.state?.path || "/products";
 
-
- 
   return (
     <>
       <ToastContainer />
@@ -79,7 +77,11 @@ const Login = () => {
                     onChange={formik.handleChange}
                     value={formik.values.email}
                   />
-                    { formik.touched.email && formik.errors.email && <p><span>i</span> {formik.errors.email} </p>}
+                  {formik.touched.email && formik.errors.email && (
+                    <p>
+                      <span>i</span> {formik.errors.email}{" "}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="password">Password</label>
@@ -89,7 +91,11 @@ const Login = () => {
                     onChange={formik.handleChange}
                     value={formik.values.password}
                   />
-                    { formik.touched.password && formik.errors.password && <p><span>i</span> {formik.errors.password} </p>}
+                  {formik.touched.password && formik.errors.password && (
+                    <p>
+                      <span>i</span> {formik.errors.password}{" "}
+                    </p>
+                  )}
                 </div>
               </InputGroup>
               <Button>
@@ -202,14 +208,14 @@ const InputGroup = styled.div`
       }
     }
 
-    p{
+    p {
       font-size: 1.1rem;
-      span{
+      span {
         font-style: italic;
         color: tomato;
-        margin: 1.3rem .4rem 0 0;
+        margin: 1.3rem 0.4rem 0 0;
         font-weight: 700;
-      font-size: 1.3rem;
+        font-size: 1.3rem;
       }
     }
   }
