@@ -7,31 +7,13 @@ import PageContainer from "../utils/PageContainer";
 import Loading from "../utils/Loading";
 import Filter from "./Filter";
 import Product from "./Product";
+import Pagination from "../utils/Pagination";
 
 const AllProductDisplay = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const productDetails = useSelector(getAllProducts);
   const { loading, fetchProduct } = productDetails;
-  // console.log(fetchProduct);
-
-  const paginationLinkHandler = (page) => {
-    setCurrentPage(page);
-  };
-
-  const prevHandler = (e) => {
-    e.preventDefault();
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const nextHandler = (e) => {
-    e.preventDefault();
-    if (currentPage < fetchProduct.page.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
 
   return (
     <>
@@ -44,7 +26,7 @@ const AllProductDisplay = () => {
 
         <ProductContainer>
           <FilterBox>
-            <Filter currentPage={currentPage} />
+            <Filter currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </FilterBox>
 
           <ProductBox>
@@ -54,33 +36,13 @@ const AllProductDisplay = () => {
               })}
           </ProductBox>
         </ProductContainer>
-
-        <Pagination>
-          <Prev>
-            <button onClick={prevHandler}>prev</button>
-          </Prev>
-          <Page>
-            {fetchProduct.page &&
-              fetchProduct.page.map((page) => {
-                return (
-                  <p
-                    style={
-                      page === currentPage
-                        ? { background: "#666", color: "#fff" }
-                        : null
-                    }
-                    key={page}
-                    onClick={() => paginationLinkHandler(page)}
-                  >
-                    {page}
-                  </p>
-                );
-              })}
-          </Page>
-          <Next>
-            <button onClick={nextHandler}>Next</button>
-          </Next>
-        </Pagination>
+        {fetchProduct?.page?.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pages={fetchProduct.page}
+          />
+        )}
       </PageContainer>
     </>
   );
@@ -122,40 +84,3 @@ const ProductBox = styled.div`
   margin-left: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 `;
-
-const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem;
-  overflow: hidden;
-`;
-const Prev = styled.div`
-  button {
-    background-color: tomato;
-    border: none;
-    overflow-x: auto;
-    white-space: nowrap;
-    padding: 0.5rem 2rem;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-`;
-const Page = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 1rem;
-
-  p {
-    font-size: 2rem;
-    padding: 0 0.7rem;
-    margin: 0 0.5rem;
-    border-radius: 0.3rem;
-    cursor: pointer;
-    &:hover {
-      background: #666;
-      color: #fff;
-    }
-  }
-`;
-const Next = styled(Prev)``;

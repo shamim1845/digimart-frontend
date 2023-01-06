@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import SidebarMenu from "./SidebarMenu";
@@ -14,17 +14,8 @@ const MobHeaderTop = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const sidebarRef = useRef();
   const [sideBar, setSideBar] = useState(false);
   const [keyword, setKeyword] = useState("");
-
-  useEffect(() => {
-    window.addEventListener("mousedown", (e) => {
-      if (sidebarRef.current !== e.target) {
-        setSideBar(false);
-      }
-    });
-  }, []);
 
   const { authenticated } = useSelector((state) => state.auth);
 
@@ -62,9 +53,7 @@ const MobHeaderTop = () => {
   return (
     <>
       <ToastContainer />
-      {sideBar ? (
-        <SidebarMenu Ref={sidebarRef} setSideBar={setSideBar} />
-      ) : null}
+      {sideBar ? <SidebarMenu setSideBar={setSideBar} /> : null}
 
       <MobHeaderContainer>
         <MobLogoTop>
@@ -142,6 +131,7 @@ const Logo = styled.div`
   h2 {
     letter-spacing: 0.3rem;
     font-size: 2.2rem;
+    margin: 0;
 
     span {
       color: #fff;
@@ -151,6 +141,8 @@ const Logo = styled.div`
 
 const SidebarIcon = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   img {
     width: 2.5rem;
     margin-right: 1rem;

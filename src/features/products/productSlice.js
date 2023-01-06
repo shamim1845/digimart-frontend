@@ -15,17 +15,17 @@ export const fetchAsyncProducts = createAsyncThunk(
 
 export const fetchAsyncProductForFilter = createAsyncThunk(
   "products/fetchAsyncProductForFilter",
-  async ({ keyword, category, pricestart, priceend }) => {
+  async ({ keyword, category, pricestart, priceend, currentPage }) => {
     let link;
-    link = `${backendUrl}/api/v1/products?price[gte]=${pricestart}&price[lte]=${priceend}`;
+    link = `${backendUrl}/api/v1/products?price[gte]=${pricestart}&price[lte]=${priceend}&page=${currentPage}`;
     if (keyword !== "") {
-      link = `${backendUrl}/api/v1/products?keyword=${keyword}&price[gte]=${pricestart}&price[lte]=${priceend}`;
+      link = `${backendUrl}/api/v1/products?keyword=${keyword}&price[gte]=${pricestart}&price[lte]=${priceend}&page=${currentPage}`;
     }
     if (category !== "") {
-      link = `${backendUrl}/api/v1/products?category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}`;
+      link = `${backendUrl}/api/v1/products?category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}&page=${currentPage}`;
     }
     if (keyword !== "" && category !== "") {
-      link = `${backendUrl}/api/v1/products?keyword=${keyword}&category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}`;
+      link = `${backendUrl}/api/v1/products?keyword=${keyword}&category=${category}&price[gte]=${pricestart}&price[lte]=${priceend}&page=${currentPage}`;
     }
     // console.log(link);
 
@@ -44,12 +44,35 @@ export const fetchAsyncProductsDetails = createAsyncThunk(
   }
 );
 
+export const fetchAsyncNewArrivals = createAsyncThunk(
+  "products/fetchAsyncNewArrivals",
+  async ({ category, currentPage }) => {
+    const products = await axios.get(
+      `${backendUrl}/api/v1/products/new/arrivals?category=${category}&page=${currentPage}`
+    );
+
+    return products.data;
+  }
+);
+export const fetchAsyncCategories = createAsyncThunk(
+  "products/categories",
+  async () => {
+    const categories = await axios.get(
+      `${backendUrl}/api/v1/products/category`
+    );
+
+    return categories.data;
+  }
+);
+
 const localCartItem = JSON.parse(localStorage.getItem("cart-item"));
 const localFavouriteItem = JSON.parse(localStorage.getItem("favourite-item"));
 
 const initialState = {
+  newArrivals: [],
   fetchProduct: [],
   singleProduct: {},
+  allCategories: [],
   loading: true,
   keyword: "",
   category: "",
@@ -131,6 +154,12 @@ const productSlice = createSlice({
     },
   },
   extraReducers: {
+    [fetchAsyncNewArrivals.fulfilled]: (state, { payload }) => {
+      return { ...state, newArrivals: payload, loading: false };
+    },
+    [fetchAsyncNewArrivals.pending]: (state, { payload }) => {
+      return { ...state, loading: true };
+    },
     [fetchAsyncProducts.fulfilled]: (state, { payload }) => {
       return { ...state, fetchProduct: payload, loading: false };
     },
@@ -141,6 +170,9 @@ const productSlice = createSlice({
 
     [fetchAsyncProductsDetails.fulfilled]: (state, { payload }) => {
       return { ...state, singleProduct: payload, loading: false };
+    },
+    [fetchAsyncCategories.fulfilled]: (state, { payload }) => {
+      return { ...state, allCategories: payload, loading: false };
     },
   },
 });
@@ -153,7 +185,9 @@ export const {
   addFavouriteItem,
   deleteFavouriteItem,
 } = productSlice.actions;
+
 export const getAllProducts = (state) => state.products;
+export const getCategories = (state) => state.products.allCategories;
 export const getProductDetails = (state) => state.products.singleProduct;
 export const getCartItems = (state) => state.products.cartItem;
 export const getFavouriteItems = (state) => state.products.favouriteItem;

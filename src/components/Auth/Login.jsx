@@ -30,8 +30,6 @@ const Login = () => {
       axiox
         .post(`${backendUrl}/api/v1/login`, { email, password })
         .then((res) => {
-          console.log(res);
-
           if (res.status === 200) {
             toast("Login successfull.");
             localStorage.setItem(

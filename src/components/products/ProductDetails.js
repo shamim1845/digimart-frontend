@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { styled as btn } from "@mui/material/styles";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Slider from "react-slick";
 import Rating from "@mui/material/Rating";
@@ -36,27 +36,23 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   // console.log(productId);
 
- 
   useEffect(() => {
-    setFavourite(false)
-    
-    function localFavouriteItem () {
+    setFavourite(false);
+
+    function localFavouriteItem() {
       const favItems = JSON.parse(localStorage.getItem("favourite-item"));
-      favItems && favItems.find((item) => {
-        
-        if(item.product._id === productId) {
-          console.log(productId, item.product._id);
-          setFavourite(true)
-        }
-        return null
-      })
+      favItems &&
+        favItems.find((item) => {
+          if (item.product._id === productId) {
+            console.log(productId, item.product._id);
+            setFavourite(true);
+          }
+          return null;
+        });
     }
-    localFavouriteItem()
+    localFavouriteItem();
     dispatch(fetchAsyncProductsDetails(productId));
-
   }, [dispatch, productId]);
-
-  
 
   const { Product } = useSelector(getProductDetails);
 
@@ -95,28 +91,29 @@ const ProductDetails = () => {
   });
 
   const cartHandler = () => {
-    dispatch(addCartItem({product: Product,quantity: quantity}),
-     setQuantity(1));
-     
-     toast("Item is added in your cart.")
-  }
+    dispatch(
+      addCartItem({ product: Product, quantity: quantity }),
+      setQuantity(1)
+    );
+
+    toast("Item is added in your cart.");
+  };
 
   const addfavouriteItemHandler = () => {
     setFavourite(true);
-    dispatch(addFavouriteItem({product: Product}));
-  }
+    dispatch(addFavouriteItem({ product: Product }));
+  };
   const removefavouriteHandler = () => {
     setFavourite(false);
-    dispatch(deleteFavouriteItem({product: Product}))
-  }
+    dispatch(deleteFavouriteItem({ product: Product }));
+  };
 
   const directBuyHandler = () => {
-    let Item = {product: Product, quantity: quantity}
-    dispatch(addOrderItem({Item}));
+    let Item = { product: Product, quantity: quantity };
+    dispatch(addOrderItem({ Item }));
 
-    navigate("/order")
-  }
-
+    navigate("/order");
+  };
 
   return (
     <PageContainer>
@@ -205,8 +202,12 @@ const ProductDetails = () => {
               </div>
 
               <div className="order_button">
-                <BuyNow variant="contained" onClick={directBuyHandler}>Buy Now</BuyNow>
-                <AddToCart variant="contained" onClick={cartHandler}>Add to Cart</AddToCart>
+                <BuyNow variant="contained" onClick={directBuyHandler}>
+                  Buy Now
+                </BuyNow>
+                <AddToCart variant="contained" onClick={cartHandler}>
+                  Add to Cart
+                </AddToCart>
               </div>
             </PriceBox>
           </DetailsContainer>
@@ -254,7 +255,6 @@ const ImageContainer = styled.div`
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    
   }
 
   .img_thumbnail {
@@ -282,7 +282,6 @@ const SliderContainer = styled.div`
   .slick-next::before,
   .slick-prev::before {
     color: red;
-  
   }
 
   @media screen and (max-width: 768px) {
@@ -294,9 +293,6 @@ const SliderContainer = styled.div`
       width: 100%;
       height: 100%;
       max-height: 35rem;
-      
-      
-      
     }
   }
 `;
@@ -308,7 +304,6 @@ const DetailsContainer = styled.div`
   @media screen and (max-width: 576px) {
     width: 100%;
     margin-left: 0rem;
-    
   }
 `;
 

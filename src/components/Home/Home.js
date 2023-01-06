@@ -1,20 +1,10 @@
-import React, { useEffect } from "react";
 import styled from "styled-components";
 import Carousle from "../slider/Slider";
-import { useDispatch } from "react-redux";
-
-import { fetchAsyncProducts } from "../../features/products/productSlice";
 
 import PageContainer from "../utils/PageContainer";
 import NewArivals from "../newArivals/NewArivals";
 
 const Home = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAsyncProducts(1));
-  }, [dispatch]);
-
   return (
     <>
       <Container>

@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRef } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-const SidebarMenu = ({ setSideBar, Ref }) => {
+const SidebarMenu = ({ setSideBar }) => {
+  const sidebarRef = useRef(null);
+
+  useEffect(() => {
+    function sidebarHandler(e) {
+      if (!sidebarRef.current.contains(e.target)) {
+        setSideBar(false);
+      }
+    }
+    window.addEventListener("mousedown", sidebarHandler);
+
+    return () => {
+      window.removeEventListener("mousedown", sidebarHandler);
+    };
+  }, [setSideBar]);
   return (
     <>
-      <SidebarMenuContainer ref={Ref}>
+      <SidebarMenuContainer ref={sidebarRef}>
         <MobileMenuTop>
           <CloseButton onClick={() => setSideBar(false)}>
             <i className="bi bi-x"></i>

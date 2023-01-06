@@ -1,44 +1,43 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { backendUrl } from "../../App";
 import Product from "./Product";
 
-const RelatedProducts = ({category, id}) => {
+const RelatedProducts = ({ category, id }) => {
   const [products, setProducts] = useState();
-// console.log(products);
+  // console.log(products);
 
   useEffect(() => {
-      
-  const fetchProduct = async () => {
-    const res = await axios.get(
-      `/api/v1/products?category=${category}&price[gte]=0&price[lte]=50000`
-    );
-   
-    setProducts(res.data.products.filter((product) => product._id !== id).slice(0, 10));
-  };
+    const fetchProduct = async () => {
+      const res = await axios.get(
+        `${backendUrl}/api/v1/products?category=${category}&price[gte]=0&price[lte]=50000`
+      );
+
+      setProducts(
+        res.data.products.filter((product) => product._id !== id).slice(0, 10)
+      );
+    };
     fetchProduct();
   }, [category, id]);
   return (
     <>
-      <Container >
+      <Container>
         <div className="title">
           <h2>Related Products</h2>
         </div>
 
         <ProductBox>
-
-        {products &&
-          products.map((product) => {
-              return(
-                  <Product key={product._id} product={product} />
-                  ) 
-                }) }
-                
-                </ProductBox>
-                {products && products.length ===0 &&   <div className="no_products">
-                  <p>No products found.</p>
-              </div>}
-              
+          {products &&
+            products.map((product) => {
+              return <Product key={product._id} product={product} />;
+            })}
+        </ProductBox>
+        {products && products.length === 0 && (
+          <div className="no_products">
+            <p>No products found.</p>
+          </div>
+        )}
       </Container>
     </>
   );
@@ -47,9 +46,9 @@ const RelatedProducts = ({category, id}) => {
 export default RelatedProducts;
 
 const Container = styled.div`
-display: flex;
-flex-direction: column;
-
+  display: flex;
+  flex-direction: column;
+  /* overflow: hidden; */
   border-radius: 0.5rem;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
@@ -74,15 +73,15 @@ flex-direction: column;
     }
   }
 
-  .no_products{
+  .no_products {
     margin-left: 1rem;
   }
 `;
 
 const ProductBox = styled.div`
-display: flex;
-justify-content: center;
-flex-wrap: wrap;
-
-
-`
+  width: 100%;
+  display: grid;
+  justify-content: center;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+`;

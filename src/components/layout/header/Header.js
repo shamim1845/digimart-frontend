@@ -7,24 +7,25 @@ import HeaderBottom from "./HeaderBottom";
 
 import MobHeaderBottom from "./mobile/MobHeaderBottom";
 import MobHeaderTop from "./mobile/MobHeaderTop";
-
+import useWindowSize from "../../customHooks/useWindowSize";
 
 const Header = () => {
+  const windowSize = useWindowSize();
+
   return (
     <>
-
-      <HeaderContainer>
-        <HeaderTop />
-        <HeaderMiddle />
-        <HeaderBottom />
-      </HeaderContainer>
-
-      <MobileHeaderContainer>
-   
-       <MobHeaderTop />
-      <MobHeaderBottom />
-
-      </MobileHeaderContainer>
+      {windowSize > 768 ? (
+        <HeaderContainer>
+          <HeaderTop />
+          <HeaderMiddle />
+          <HeaderBottom />
+        </HeaderContainer>
+      ) : (
+        <MobileHeaderContainer>
+          <MobHeaderTop />
+          <MobHeaderBottom />
+        </MobileHeaderContainer>
+      )}
     </>
   );
 };
@@ -35,15 +36,6 @@ const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
   flex-direction: column;
- 
-
-
-  @media screen and (max-width: 576px) {
-      display: none;
-    }
 `;
 
-
-const MobileHeaderContainer = styled.div`
-
-`
+const MobileHeaderContainer = styled.div``;

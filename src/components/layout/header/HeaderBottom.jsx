@@ -6,6 +6,7 @@ import Department from "./Department";
 
 import {
   addKeyword,
+  fetchAsyncCategories,
   getCartItems,
   getFavouriteItems,
 } from "../../../features/products/productSlice";
@@ -24,7 +25,10 @@ const HeaderBottom = () => {
         setActiveDept(false);
       }
     });
-  });
+  }, []);
+  useEffect(() => {
+    dispatch(fetchAsyncCategories());
+  }, [dispatch]);
 
   const DepartmentHandler = (e) => {
     setActiveDept(!activeDept);
@@ -160,12 +164,11 @@ const BottomCenter = styled.div`
     & input {
       width: 100%;
       border: none;
-      padding-left: 0.5rem;
+      padding-left: 1rem;
       border-radius: 0.5rem;
       font-size: 1.4rem;
       &::placeholder {
         font-size: 1.4rem;
-        padding-left: 0.5rem;
       }
 
       &:focus {
