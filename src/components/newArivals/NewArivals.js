@@ -29,7 +29,7 @@ const NewArivals = () => {
   const productDetails = useSelector(getAllProducts);
   const { loading, newArrivals } = productDetails;
 
-  if (!category & !loading && newArrivals?.allCategories) {
+  if (!category && !loading && newArrivals?.allCategories.length > 0) {
     setCategory(newArrivals.allCategories[0]);
   }
 
