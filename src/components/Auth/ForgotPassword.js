@@ -3,7 +3,6 @@ import styled from "styled-components";
 import axiox from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { backendUrl } from "../../App";
 
 const Login = () => {
   const [data, setData] = useState("");
@@ -19,7 +18,7 @@ const Login = () => {
       if (!data) {
         toast("Fields can't be empty.");
       } else {
-        const res = await axiox.post(`${backendUrl}/api/v1/password/forgot`, {
+        const res = await axiox.post(`/api/v1/password/forgot`, {
           email: data,
         });
         console.log(res);

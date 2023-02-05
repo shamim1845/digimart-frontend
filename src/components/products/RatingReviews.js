@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Rating from "@mui/material/Rating";
+import TimeAgo from "timeago-react";
 
 const RatingReviews = ({ product }) => {
   const [imgUrl, setImgUrl] = useState("");
-  // console.log(product);
+  console.log(product);
   return (
     <Container>
       <Title>
@@ -43,7 +44,7 @@ const RatingReviews = ({ product }) => {
                     product.numOfReviews !== 0
                       ? `${
                           (100 / product.numOfReviews) *
-                          product.reviewDetails.rating5
+                          product.ratingDetails.rating5
                         }%`
                       : "0%",
                 }}
@@ -51,7 +52,7 @@ const RatingReviews = ({ product }) => {
             </div>
 
             <span className="rating_count">
-              {product.reviewDetails.rating5}
+              {product.ratingDetails.rating5}
             </span>
           </div>
           <div className="rating_Box">
@@ -65,14 +66,14 @@ const RatingReviews = ({ product }) => {
                     product.numOfReviews !== 0
                       ? `${
                           (100 / product.numOfReviews) *
-                          product.reviewDetails.rating4
+                          product.ratingDetails.rating4
                         }%`
                       : "0%",
                 }}
               ></div>
             </div>
             <span className="rating_count">
-              {product.reviewDetails.rating4}
+              {product.ratingDetails.rating4}
             </span>
           </div>
           <div className="rating_Box">
@@ -86,14 +87,14 @@ const RatingReviews = ({ product }) => {
                     product.numOfReviews !== 0
                       ? `${
                           (100 / product.numOfReviews) *
-                          product.reviewDetails.rating3
+                          product.ratingDetails.rating3
                         }%`
                       : "0%",
                 }}
               ></div>
             </div>
             <span className="rating_count">
-              {product.reviewDetails.rating3}
+              {product.ratingDetails.rating3}
             </span>
           </div>
           <div className="rating_Box">
@@ -107,14 +108,14 @@ const RatingReviews = ({ product }) => {
                     product.numOfReviews !== 0
                       ? `${
                           (100 / product.numOfReviews) *
-                          product.reviewDetails.rating2
+                          product.ratingDetails.rating2
                         }%`
                       : "0%",
                 }}
               ></div>
             </div>
             <span className="rating_count">
-              {product.reviewDetails.rating2}
+              {product.ratingDetails.rating2}
             </span>
           </div>
           <div className="rating_Box">
@@ -128,14 +129,14 @@ const RatingReviews = ({ product }) => {
                     product.numOfReviews !== 0
                       ? `${
                           (100 / product.numOfReviews) *
-                          product.reviewDetails.rating1
+                          product.ratingDetails.rating1
                         }%`
                       : "0%",
                 }}
               ></div>
             </div>
             <span className="rating_count">
-              {product.reviewDetails.rating1}
+              {product.ratingDetails.rating1}
             </span>
           </div>
         </div>
@@ -152,7 +153,9 @@ const RatingReviews = ({ product }) => {
           </div>
         )}
 
-        {product.reviews.map((review) => {
+        {product.reviews?.map((review) => {
+          // console.log(review);
+          // console.log(product);
           return (
             <ReviewContainer key={review._id}>
               <div className="review_rating">
@@ -162,11 +165,8 @@ const RatingReviews = ({ product }) => {
                   readOnly
                   size="large"
                 />
-                <p>
-                  {review.reviewedAt.toLocaleString("ko-KR", {
-                    timeZone: "UTC",
-                  })}
-                </p>
+
+                <TimeAgo datetime={review.reviewedAt} />
               </div>
 
               <div className="review_author">
@@ -186,10 +186,18 @@ const RatingReviews = ({ product }) => {
                       return (
                         <img
                           key={index}
-                          onClick={() => img.url===imgUrl ? setImgUrl('') : setImgUrl(img.url)}
+                          onClick={() =>
+                            img.url === imgUrl
+                              ? setImgUrl("")
+                              : setImgUrl(img.url)
+                          }
                           src={img.url}
                           alt=" review img"
-                          style={img.url===imgUrl ? {border: "1px solid red"} : {}}
+                          style={
+                            img.url === imgUrl
+                              ? { border: "1px solid red" }
+                              : {}
+                          }
                         />
                       );
                     })}
@@ -199,14 +207,10 @@ const RatingReviews = ({ product }) => {
                     review.images.map((img, index) => {
                       if (img.url === imgUrl) {
                         return (
-                          <img
-                            key={index}
-                            src={imgUrl}
-                            alt=" review img"
-                          />
+                          <img key={index} src={imgUrl} alt=" review img" />
                         );
                       }
-                      return null
+                      return null;
                     })}
                 </div>
               </div>
@@ -382,7 +386,6 @@ const ReviewContainer = styled.div`
       display: flex;
       flex-wrap: wrap;
       margin-bottom: 1rem;
-      
 
       img {
         width: 10rem;
@@ -393,12 +396,11 @@ const ReviewContainer = styled.div`
       }
     }
 
-    .full_img{
-      img{
+    .full_img {
+      img {
         width: auto;
         max-width: 90%;
         height: auto;
-    
       }
       @media screen and (max-width: 576px) {
         display: flex;

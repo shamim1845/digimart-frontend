@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,15 +7,15 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Department = () => {
-  const [category, setCategory] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { categories } = useSelector(getCategories);
+  function catHandler(cat) {
+    navigate("/products");
+    dispatch(addCategory(cat));
+  }
 
-  useEffect(() => {
-    dispatch(addCategory(category));
-  }, [category, dispatch]);
+  const { categories } = useSelector(getCategories);
 
   return (
     <DepartmentContainer>
@@ -25,12 +24,7 @@ const Department = () => {
           return (
             <DepartMent key={index}>
               <ul>
-                <li
-                  onClick={() => {
-                    navigate("/products");
-                    setCategory(cat);
-                  }}
-                >
+                <li onClick={() => catHandler(cat)}>
                   {/* <i className="bi bi-headset"></i> */}
                   {cat}
                 </li>
@@ -48,7 +42,7 @@ const DepartmentContainer = styled.div`
   position: absolute;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  width: 20rem;
+  min-width: 20rem;
   left: 0;
   top: 6.2rem;
   padding: 0 1rem;
@@ -57,7 +51,8 @@ const DepartmentContainer = styled.div`
 const DepartMent = styled.div`
   ul {
     & li {
-      padding: 1rem;
+      /* padding: 1rem; */
+      text-transform: capitalize;
       border-bottom: 2px solid #e4e9eb;
       display: flex;
       align-items: center;

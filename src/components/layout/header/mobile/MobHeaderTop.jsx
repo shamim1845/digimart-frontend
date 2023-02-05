@@ -6,9 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addKeyword } from "../../../../features/products/productSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addAuth } from "../../../../features/auth/authSlice";
+
 import axios from "axios";
-import { backendUrl } from "../../../../App";
 
 const MobHeaderTop = () => {
   const dispatch = useDispatch();
@@ -19,28 +18,18 @@ const MobHeaderTop = () => {
 
   const { authenticated } = useSelector((state) => state.auth);
 
-  const digimartToken = localStorage.getItem("digimartToken");
-  // console.log(digimartToken);
-  if (digimartToken) {
-    dispatch(addAuth(true));
-  }
-
   const LogOutHandler = async (e) => {
     e.preventDefault();
-    const res = await axios.get(`${backendUrl}/api/v1/logout`);
+    const res = await axios.get(`/api/v1/logout`);
     console.log(res);
     if (res.status === 200) {
       toast(res.data.message);
-      dispatch(addAuth(false));
-      localStorage.removeItem("digimartToken");
-
       setTimeout(() => {
         navigate("/");
         window.location.reload();
       }, 3000);
     }
   };
-
   const searchHandler = (e) => {
     e.preventDefault();
     navigate("/products");

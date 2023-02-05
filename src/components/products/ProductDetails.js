@@ -34,7 +34,6 @@ const ProductDetails = () => {
 
   const { productId } = useParams();
   const dispatch = useDispatch();
-  // console.log(productId);
 
   useEffect(() => {
     setFavourite(false);
@@ -44,7 +43,6 @@ const ProductDetails = () => {
       favItems &&
         favItems.find((item) => {
           if (item.product._id === productId) {
-            console.log(productId, item.product._id);
             setFavourite(true);
           }
           return null;
@@ -173,7 +171,7 @@ const ProductDetails = () => {
                   )}
                 </div>
               </div>
-              <p className="brand_name">Brand: No Brand</p>
+              <p className="brand_name">Brand: {Product.brand}</p>
               <p className="divider"></p>
             </TitleBox>
             <PriceBox>

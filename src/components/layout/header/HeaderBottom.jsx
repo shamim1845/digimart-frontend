@@ -6,7 +6,7 @@ import Department from "./Department";
 
 import {
   addKeyword,
-  fetchAsyncCategories,
+  getAllProducts,
   getCartItems,
   getFavouriteItems,
 } from "../../../features/products/productSlice";
@@ -15,31 +15,35 @@ const HeaderBottom = () => {
   let deptRef = useRef();
   const dispatch = useDispatch();
   const [activeDept, setActiveDept] = useState(false);
-  const [keyword, setKeyword] = useState("");
 
   const navigate = useNavigate();
+  const { keyword } = useSelector(getAllProducts);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  useEffect(() => {
+    setSearchKeyword(keyword);
+  }, [keyword]);
 
   useEffect(() => {
-    document.addEventListener("mousedown", (e) => {
-      if (!deptRef.current.contains(e.target)) {
+    function handleListener(e) {
+      if (!deptRef?.current?.contains(e.target)) {
         setActiveDept(false);
       }
-    });
+    }
+    document.addEventListener("mousedown", handleListener);
+    return () => {
+      document.removeEventListener("mousedown", handleListener);
+    };
   }, []);
-  useEffect(() => {
-    dispatch(fetchAsyncCategories());
-  }, [dispatch]);
 
-  const DepartmentHandler = (e) => {
+  const DepartmentHandler = () => {
     setActiveDept(!activeDept);
   };
 
   const searchHandler = (e) => {
     e.preventDefault();
-    if (keyword) {
-      dispatch(addKeyword(keyword));
-      navigate("/products");
-    }
+
+    dispatch(addKeyword(searchKeyword));
+    navigate("/products");
   };
 
   const cartItems = useSelector(getCartItems);
@@ -59,8 +63,9 @@ const HeaderBottom = () => {
           <form onSubmit={searchHandler}>
             <input
               type="text"
+              value={searchKeyword}
               placeholder="What are you looking for..."
-              onChange={(e) => setKeyword(e.target.value)}
+              onChange={(e) => setSearchKeyword(e.target.value)}
             />
           </form>
 

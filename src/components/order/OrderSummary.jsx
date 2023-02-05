@@ -1,33 +1,42 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllOrders, totalPayAmount } from "../../features/order/orderSlice";
+import { getAllOrders, paymentInfo } from "../../features/order/orderSlice";
+import { rate } from "../../App";
 
 const OrderSummary = () => {
   const [subtotal, setSubTotal] = useState(0);
   const [shipping, setShipping] = useState(0);
-  const [total, setTotal] = useState(0)
+  const [tax, setTax] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const dispatch = useDispatch();
 
   const orderdItems = useSelector(getAllOrders);
   console.log(orderdItems);
 
-
   useEffect(() => {
-    const calcSubtotal = orderdItems && orderdItems.reduce( (acc, item) => {
-      return acc + item.product.price * item.quantity
-    }, 0)
+    const calcSubtotal =
+      orderdItems &&
+      orderdItems?.reduce((acc, item) => {
+        return acc + item.product.price * item.quantity;
+      }, 0);
+    const calcShipping = calcSubtotal * (rate.shipping / 100);
+    const calcTax = calcSubtotal * (rate.tax / 100);
 
-      
-      
-      setSubTotal(calcSubtotal);
-    setShipping(50);
-  setTotal(calcSubtotal + shipping);
-  dispatch(totalPayAmount({amount: calcSubtotal + shipping}));
-
-}, [orderdItems, shipping, dispatch])
-
+    setSubTotal(calcSubtotal);
+    setShipping(calcShipping);
+    setTax(calcTax);
+    setTotal(calcSubtotal + shipping + tax);
+    dispatch(
+      paymentInfo({
+        products_price: calcSubtotal,
+        shipping_cost: calcShipping,
+        tax: calcTax,
+        totalPayAmount: calcSubtotal + shipping + tax,
+      })
+    );
+  }, [orderdItems, shipping, dispatch, tax]);
 
   return (
     <Container>
@@ -36,20 +45,23 @@ const OrderSummary = () => {
 
         <dl className="sub_total">
           <dt>Product price</dt>
-          <dd>USD ${subtotal}</dd>
+          <dd> ${subtotal}</dd>
         </dl>
 
         <dl className="shipping">
           <dt>Shipping cost</dt>
-          <dd>USD ${shipping}</dd>
+          <dd> ${shipping}</dd>
+        </dl>
+        <dl className="shipping">
+          <dt>Tax</dt>
+          <dd> ${tax}</dd>
         </dl>
         <div className="hr"></div>
 
         <dl className="total">
           <dt>Total</dt>
-          <dd>USD ${total}</dd>
+          <dd> ${total}</dd>
         </dl>
-     
       </div>
     </Container>
   );
@@ -67,8 +79,8 @@ const Container = styled.div`
     border-radius: 0.5rem;
 
     @media screen and (max-width: 768px) {
-  margin: 0;
-}
+      margin: 0;
+    }
 
     h2 {
       font-size: 2.5rem;
@@ -121,7 +133,7 @@ const Container = styled.div`
     }
   }
   @media screen and (max-width: 768px) {
-  width: 100%;
-  padding-right: .5rem;
-}
+    width: 100%;
+    padding-right: 0.5rem;
+  }
 `;

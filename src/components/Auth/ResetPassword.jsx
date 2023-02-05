@@ -3,7 +3,6 @@ import styled from "styled-components";
 import axiox from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { backendUrl } from "../../App";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -33,10 +32,10 @@ const ResetPassword = () => {
     onSubmit: async (values, { resetForm }) => {
       const { password, confirmPassword } = values;
 
-      const res = await axiox.put(
-        `${backendUrl}/api/v1/password/reset/${params.token}`,
-        { password, confirmPassword }
-      );
+      const res = await axiox.put(`/api/v1/password/reset/${params.token}`, {
+        password,
+        confirmPassword,
+      });
       console.log(res);
       if (res.status === 200) {
         toast("Password Update successfull.");

@@ -2,34 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { addAuth } from "../../../features/auth/authSlice";
+import { useSelector } from "react-redux";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { backendUrl } from "../../../App";
-
 const HeaderTop = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { authenticated } = useSelector((state) => state.auth);
 
-  const digimartToken = localStorage.getItem("digimartToken");
-  // console.log(digimartToken);
-  if (digimartToken) {
-    dispatch(addAuth(true));
-  }
-
   const LogOutHandler = async (e) => {
     e.preventDefault();
-    const res = await axios.get(`${backendUrl}/api/v1/logout`);
+    const res = await axios.get(`/api/v1/logout`);
     console.log(res);
     if (res.status === 200) {
       toast(res.data.message);
-      dispatch(addAuth(false));
-      localStorage.removeItem("digimartToken");
-
       setTimeout(() => {
         navigate("/");
         window.location.reload();

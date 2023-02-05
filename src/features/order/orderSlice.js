@@ -2,7 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   orderedItem: [],
-  totalPayAmount: 0,
+  paymentInfo: {
+    products_price: 0,
+    shipping_cost: 0,
+    tax: 0,
+    totalPayAmount: 0,
+  },
   shippingInformation: [],
 };
 
@@ -38,8 +43,8 @@ const orderSlice = createSlice({
     resetOrderItem: (state) => {
       state.orderedItem = [];
     },
-    totalPayAmount: (state, { payload }) => {
-      state.totalPayAmount = payload.amount;
+    paymentInfo: (state, { payload }) => {
+      state.paymentInfo = payload;
     },
     shippingInformation: (state, { payload }) => {
       state.shippingInformation = payload.shippingInfo;
@@ -51,11 +56,11 @@ export const {
   addOrderItem,
   removeOrderItem,
   resetOrderItem,
-  totalPayAmount,
+  paymentInfo,
   shippingInformation,
 } = orderSlice.actions;
 export default orderSlice.reducer;
 export const getAllOrders = (state) => state.order.orderedItem;
-export const getTotalPayAmount = (state) => state.order.totalPayAmount;
+export const getPaymentInfo = (state) => state.order.paymentInfo;
 export const getShippingInformation = (state) =>
   state.order.shippingInformation;

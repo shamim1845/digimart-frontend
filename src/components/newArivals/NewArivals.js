@@ -29,10 +29,6 @@ const NewArivals = () => {
   const productDetails = useSelector(getAllProducts);
   const { loading, newArrivals } = productDetails;
 
-  if (!category && !loading && newArrivals?.allCategories.length > 0) {
-    setCategory(newArrivals.allCategories[0]);
-  }
-
   return (
     <>
       {loading && <Loading />}
@@ -47,7 +43,10 @@ const NewArivals = () => {
                   <button
                     key={ind}
                     value={cat}
-                    className={`${cat === category && "active"}`}
+                    className={`${
+                      cat === (category || newArrivals.allCategories[0]) &&
+                      "active"
+                    }`}
                     onClick={categoryHandler}
                   >
                     {cat}

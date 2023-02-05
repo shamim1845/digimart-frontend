@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCategory,
+  addKeyword,
   fetchAsyncProductForFilter,
   fetchAsyncProducts,
   getAllProducts,
 } from "../../features/products/productSlice";
 
 export default function RangeSlider({ currentPage, setCurrentPage }) {
-  const [price, setPrice] = useState([0, 120000]);
+  const [price, setPrice] = useState([0, 200000]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,7 +29,7 @@ export default function RangeSlider({ currentPage, setCurrentPage }) {
       keyword === "" &&
       category === "" &&
       price[0] === 0 &&
-      price[1] === 120000
+      price[1] === 200000
     ) {
       dispatch(fetchAsyncProducts(currentPage));
     } else {
@@ -43,11 +44,25 @@ export default function RangeSlider({ currentPage, setCurrentPage }) {
       );
     }
   }, [category, dispatch, price, keyword, currentPage, navigate]);
+  function clearFilter() {
+    if (
+      keyword ||
+      category ||
+      currentPage !== 1 ||
+      price[0] !== 0 ||
+      price[1] !== 200000
+    ) {
+      dispatch(addKeyword(""));
+      dispatch(addCategory(""));
+      setPrice([0, 200000]);
+      setCurrentPage(1);
+    }
+  }
 
   return (
     <Container>
       {allCategories.categories && (
-        <>
+        <ContentWrapper>
           <Price>
             <p className="title">Price</p>
             <Slider
@@ -56,7 +71,7 @@ export default function RangeSlider({ currentPage, setCurrentPage }) {
               valueLabelDisplay="auto"
               aria-labelledby="range-slider"
               min={0}
-              max={120000}
+              max={200000}
             />
           </Price>
           <Categories>
@@ -75,18 +90,31 @@ export default function RangeSlider({ currentPage, setCurrentPage }) {
               })}
             </ul>
           </Categories>
-        </>
+          <ClearFilter>
+            <button onClick={clearFilter}>Clear filter</button>
+          </ClearFilter>
+        </ContentWrapper>
       )}
     </Container>
   );
 }
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
   .title {
     font-size: 14px;
     color: #212121;
     font-weight: 400;
+    width: 100%;
   }
+`;
+
+const ContentWrapper = styled.div`
+  min-width: 50%;
 `;
 
 const Price = styled.div`
@@ -96,10 +124,7 @@ const Price = styled.div`
     color: tomato;
   }
   @media screen and (max-width: 768px) {
-    width: 50%;
-    text-align: center;
-    margin: auto;
-    /* margin-bottom: 1.3rem; */
+    text-align: start;
   }
 `;
 
@@ -123,8 +148,7 @@ const Categories = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    width: 50%;
-    text-align: center;
+    text-align: start;
     margin: auto;
     ul {
       column-count: 3;
@@ -132,5 +156,21 @@ const Categories = styled.div`
       li {
       }
     }
+  }
+`;
+
+const ClearFilter = styled.div`
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: start;
+    margin: 2rem 0;
+    width: 100%;
+  }
+  button {
+    background: tomato;
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    font-size: 1.2rem;
   }
 `;

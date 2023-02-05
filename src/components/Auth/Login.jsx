@@ -6,9 +6,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { backendUrl } from "../../App";
+
+import { useDispatch } from "react-redux";
+import { addAuth } from "../../features/auth/authSlice";
 
 const Login = () => {
+
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -28,14 +32,13 @@ const Login = () => {
       const { email, password } = values;
 
       axiox
-        .post(`${backendUrl}/api/v1/login`, { email, password })
+        .post(`/api/v1/login`, { email, password })
         .then((res) => {
           if (res.status === 200) {
             toast("Login successfull.");
-            localStorage.setItem(
-              "digimartToken",
-              JSON.stringify(res.data.token)
-            );
+
+            // cookies.set("token", res.data.token, { path: "/" });
+            dispatch(addAuth(true));
 
             setTimeout(() => {
               navigate(redirectPath, { replace: true });

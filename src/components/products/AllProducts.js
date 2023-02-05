@@ -21,22 +21,28 @@ const AllProductDisplay = () => {
 
       <PageContainer>
         <MainTitle>
-          <h2>Products</h2>
+          <h2>Product List</h2>
         </MainTitle>
 
         <ProductContainer>
           <FilterBox>
             <Filter currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </FilterBox>
-
-          <ProductBox>
-            {fetchProduct.products &&
-              fetchProduct.products.map((product) => {
+          {fetchProduct?.products?.length > 0 && (
+            <ProductBox>
+              {fetchProduct.products.map((product) => {
                 return <Product key={product._id} product={product} />;
               })}
-          </ProductBox>
+            </ProductBox>
+          )}
+
+          {fetchProduct?.products?.length === 0 && (
+            <NoProduct>
+              <h3>No products found...</h3>
+            </NoProduct>
+          )}
         </ProductContainer>
-        {fetchProduct?.page?.length > 0 && (
+        {fetchProduct?.page?.length > 1 && (
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -49,6 +55,13 @@ const AllProductDisplay = () => {
 };
 
 export default AllProductDisplay;
+const NoProduct = styled.div`
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const MainTitle = styled.div`
   margin: 3rem 0 2rem 0;
@@ -63,15 +76,17 @@ const ProductContainer = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 1440px;
+  margin-bottom: 2rem;
+  /* background-color: rebeccapurple; */
+
   @media screen and (max-width: 768px) {
     flex-direction: column;
     align-items: center;
   }
 `;
 const FilterBox = styled.div`
-  padding-left: 1.5rem;
-  padding-right: 1rem;
-  width: 10%;
+  padding: 0 1.5rem;
+
   @media screen and (max-width: 768px) {
     width: 100%;
   }
@@ -80,7 +95,6 @@ const ProductBox = styled.div`
   width: 100%;
   display: grid;
   justify-content: center;
-  gap: 1rem;
-  margin-left: 2rem;
+  gap: 1.5rem;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 `;

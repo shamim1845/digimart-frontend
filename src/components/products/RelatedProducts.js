@@ -1,18 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { backendUrl } from "../../App";
+
 import Product from "./Product";
 
 const RelatedProducts = ({ category, id }) => {
   const [products, setProducts] = useState();
-  // console.log(products);
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await axios.get(
-        `${backendUrl}/api/v1/products?category=${category}&price[gte]=0&price[lte]=50000`
-      );
+      const res = await axios.get(`/api/v1/products?category=${category}`);
 
       setProducts(
         res.data.products.filter((product) => product._id !== id).slice(0, 10)
