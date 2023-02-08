@@ -16,7 +16,7 @@ const StripePayment = () => {
   const [clientSecret, setClientSecret] = useState("");
 
   const paymentInfo = useSelector(getPaymentInfo);
-  // console.log(totalAmount);
+
   useEffect(() => {
     axios.get("/api/v1/stripeappikey").then((res) => {
       setStripePromise(loadStripe(res.data.stripeApiKey));
@@ -33,7 +33,6 @@ const StripePayment = () => {
       .then((res) => res.data)
       .then((data) => setClientSecret(data.client_secret));
   }, [paymentInfo.totalPayAmount]);
-  console.log(clientSecret);
 
   const appearance = {
     theme: "stripe",

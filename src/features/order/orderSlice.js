@@ -1,5 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
+// Redux Thunk
+export const fetchAsyncMyAllOrders = createAsyncThunk(
+  "orders/fetchAsyncMyAllOrders",
+  async () => {
+    const allOrders = await axios.get("/api/v1/orders/me");
+
+    return allOrders.data;
+  }
+);
+
+// Initial State for Store
 const initialState = {
   orderedItem: [],
   paymentInfo: {
@@ -9,6 +21,10 @@ const initialState = {
     totalPayAmount: 0,
   },
   shippingInformation: [],
+  myAllOrders: {
+    loading: false,
+    allOrders: {},
+  },
 };
 
 const orderSlice = createSlice({
@@ -50,8 +66,16 @@ const orderSlice = createSlice({
       state.shippingInformation = payload.shippingInfo;
     },
   },
+  extraReducers: {
+    [fetchAsyncMyAllOrders.pending]: (state, { payload }) => {
+      return { ...state, myAllOrders: { loading: true, allOrders: {} } };
+    },
+    [fetchAsyncMyAllOrders.fulfilled]: (state, { payload }) => {
+      return { ...state, myAllOrders: { loading: false, allOrders: payload } };
+    },
+  },
 });
-
+// actions
 export const {
   addOrderItem,
   removeOrderItem,
@@ -59,8 +83,12 @@ export const {
   paymentInfo,
   shippingInformation,
 } = orderSlice.actions;
+// Reducer
 export default orderSlice.reducer;
+
+//// method for selector
 export const getAllOrders = (state) => state.order.orderedItem;
 export const getPaymentInfo = (state) => state.order.paymentInfo;
 export const getShippingInformation = (state) =>
   state.order.shippingInformation;
+export const getUserOrderItems = (state) => state.order.myAllOrders;

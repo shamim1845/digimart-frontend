@@ -7,12 +7,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
-import { useDispatch } from "react-redux";
-import { addAuth } from "../../features/auth/authSlice";
-
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = location.state?.path || "/products";
 
-  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -37,11 +36,9 @@ const Login = () => {
           if (res.status === 200) {
             toast("Login successfull.");
 
-            // cookies.set("token", res.data.token, { path: "/" });
-            dispatch(addAuth(true));
-
             setTimeout(() => {
               navigate(redirectPath, { replace: true });
+              window.location.reload();
             }, 3000);
           } else {
             toast("Invalid login details");
@@ -55,11 +52,6 @@ const Login = () => {
       resetForm({ values: "" });
     },
   });
-
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const redirectPath = location.state?.path || "/products";
 
   return (
     <>

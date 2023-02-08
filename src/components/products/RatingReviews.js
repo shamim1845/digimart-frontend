@@ -5,7 +5,7 @@ import TimeAgo from "timeago-react";
 
 const RatingReviews = ({ product }) => {
   const [imgUrl, setImgUrl] = useState("");
-  console.log(product);
+  // console.log(product);
   return (
     <Container>
       <Title>

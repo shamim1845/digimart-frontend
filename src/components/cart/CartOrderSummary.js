@@ -1,39 +1,27 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { styled as btn } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { useSelector, } from "react-redux";
-import {useNavigate} from "react-router-dom"
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getAllOrders } from "../../features/order/orderSlice";
-
 
 const CartOrderSummary = () => {
   const [subtotal, setSubTotal] = useState(0);
-  const [shipping, setShipping] = useState(0);
-  const [total, setTotal] = useState(0)
 
   const navigate = useNavigate();
 
-
   const orderdItems = useSelector(getAllOrders);
-  console.log(orderdItems);
-
 
   useEffect(() => {
-    const calcSubtotal = orderdItems && orderdItems.reduce( (acc, item) => {
-      return acc + item.product.price * item.quantity
-    }, 0)
-    // const calcShipping = orderdItems && orderdItems.reduce( (acc, item) => {
-      //   return acc + item.product.price * item.quantity
-      //   }, 0)
-      
-      
-      
-      setSubTotal(calcSubtotal)
-    setShipping(50)
-  setTotal(calcSubtotal + shipping)
-}, [orderdItems, shipping])
+    const calcSubtotal =
+      orderdItems &&
+      orderdItems.reduce((acc, item) => {
+        return acc + item.product.price * item.quantity;
+      }, 0);
 
+    setSubTotal(calcSubtotal);
+  }, [orderdItems]);
 
   const AddToCart = btn(Button)({
     backgroundColor: "tomato",
@@ -48,30 +36,25 @@ const CartOrderSummary = () => {
   });
 
   const orderHandler = () => {
-    navigate("/order")
-  }
+    navigate("/order");
+  };
 
   return (
     <Container>
       <div className="content">
-        <h2>Order Summary</h2>
+        <h2>Cart Summary</h2>
 
         <dl className="sub_total">
           <dt>Product price</dt>
-          <dd>USD ${subtotal}</dd>
+          <dd> ${subtotal}</dd>
         </dl>
 
-        <dl className="shipping">
-          <dt>Shipping cost</dt>
-          <dd>USD ${shipping}</dd>
-        </dl>
-        <div className="hr"></div>
-
-        <dl className="total">
-          <dt>Total</dt>
-          <dd>USD ${total}</dd>
-        </dl>
-        <AddToCart onClick={() => orderdItems.length>0 && orderHandler()} variant="contained">BUY ({orderdItems.length})</AddToCart>
+        <AddToCart
+          onClick={() => orderdItems.length > 0 && orderHandler()}
+          variant="contained"
+        >
+          BUY ({orderdItems.length})
+        </AddToCart>
       </div>
     </Container>
   );
@@ -82,9 +65,9 @@ export default CartOrderSummary;
 const Container = styled.div`
   width: 25%;
   max-width: 35rem;
-    @media screen and (max-width: 768px) {
-width: 100%;
-}
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
   .content {
     background: #fff;
     padding: 1rem 2rem;

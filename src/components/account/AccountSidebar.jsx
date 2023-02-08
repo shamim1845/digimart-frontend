@@ -23,7 +23,7 @@ const AccountSidebar = ({ setSidebar, sidebar, sidebarRef }) => {
         </div>
         <h4>My Orders</h4>
         <div className="links_box">
-          <NavLink to={"/account/orders"}>Orders</NavLink>
+          <NavLink to={"/account/myorder"}>Orders</NavLink>
         </div>
       </AccSidebaContent>
     </AccountSidebarContainer>
@@ -60,10 +60,15 @@ const AccUserName = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
+  @media screen and (max-width: 450px) {
+    p {
+      margin-top: 1rem;
+    }
+  }
   i {
     font-size: 2.5rem;
     position: absolute;
-    right: 0;
+    right: -1rem;
     top: -2rem;
     cursor: pointer;
     display: none;

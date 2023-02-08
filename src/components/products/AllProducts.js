@@ -93,8 +93,11 @@ const FilterBox = styled.div`
 `;
 const ProductBox = styled.div`
   width: 100%;
+  height: 100%;
   display: grid;
   justify-content: center;
+  align-content: center;
+  place-items: center;
   gap: 1.5rem;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 `;

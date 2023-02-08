@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -10,9 +10,11 @@ import {
 import { useSelector } from "react-redux";
 import {
   getAllOrders,
+  getPaymentInfo,
   getShippingInformation,
 } from "../../features/order/orderSlice";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function CheckoutForm({ clientSecret }) {
   const stripe = useStripe();
@@ -25,14 +27,12 @@ export default function CheckoutForm({ clientSecret }) {
 
   const shippingInfo = useSelector(getShippingInformation);
   const orderdItem = useSelector(getAllOrders);
+  const paymentInfo = useSelector(getPaymentInfo);
+  // console.log(paymentInfo);
 
   // Create a Order After complete the payment
   const createNewOrder = (paymentIntent) => {
     let orderItems = [];
-    let itemsPrice = 0;
-    let taxPrice;
-    let shippingPrice;
-
     orderdItem.map((item) => {
       orderItems.push({
         productId: item.product._id,
@@ -42,29 +42,37 @@ export default function CheckoutForm({ clientSecret }) {
         image: item.product.images[0].url,
       });
 
-      itemsPrice += item.product.price;
       return null;
     });
-    taxPrice = Math.round(Number(itemsPrice * (7 / 100)));
-    shippingPrice = Math.round(Number(itemsPrice * (5 / 100)));
+
     const newOrder = {
       shippingInfo,
       orderItems,
       paymentInfo: {
         id: paymentIntent.id,
         status: paymentIntent.status,
-        itemsPrice,
-        taxPrice,
-        shippingPrice,
-        totalPrice: itemsPrice + taxPrice + shippingPrice,
+        itemsPrice: paymentInfo.products_price,
+        taxPrice: paymentInfo.tax,
+        shippingPrice: paymentInfo.shipping_cost,
+        totalPrice: paymentInfo.totalPayAmount,
       },
     };
 
-    axios.post("/api/v1/order/new", newOrder).then((res) => {
-      setTimeout(() => {
-        navigate("/order/sucess");
-      }, 5000);
-    });
+    axios
+      .post("/api/v1/order/new", newOrder)
+      .then((res) => {
+        if (res.status === 201) {
+          setIsLoading(false);
+          toast("Your order has been Successfully created.");
+          setTimeout(() => {
+            navigate("/order/sucess");
+          }, 3000);
+        }
+      })
+      .catch((err) => {
+        toast("Your order have not created.");
+        console.log(err);
+      });
   };
 
   const handleSubmit = async (e) => {
@@ -86,12 +94,11 @@ export default function CheckoutForm({ clientSecret }) {
       },
       redirect: "if_required",
     });
+
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent.status) {
         case "succeeded":
           setMessage("Payment succeeded!");
-          // alert("payment complete ");
-
           break;
         case "processing":
           setMessage("Your payment is processing.");
@@ -118,11 +125,9 @@ export default function CheckoutForm({ clientSecret }) {
       }
     }
 
-    if (paymentIntent && paymentIntent.status === "succeeded") {
+    if (!error && paymentIntent && paymentIntent.status === "succeeded") {
       createNewOrder(paymentIntent);
     }
-
-    setIsLoading(false);
   };
 
   return (

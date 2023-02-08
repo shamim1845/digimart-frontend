@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import ChangePassword from "../Auth/ChangePassword";
 const MyProfile = () => {
-
+  const [isChangePassword, setIsChangePassword] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const MyProfile = () => {
   }, []);
   //   console.log(user);
   return (
-    <ProfileContainer >
+    <ProfileContainer>
       <Title>
         <h2>My Profile</h2>
       </Title>
@@ -54,11 +54,18 @@ const MyProfile = () => {
             <button className="edit_profile">EDIT PROFILE</button>
           </Link>
 
-          <button className="change_password">CHANGE PASSWORD</button>
+          <button
+            className="change_password"
+            onClick={() => setIsChangePassword((prev) => !prev)}
+          >
+            CHANGE PASSWORD
+          </button>
         </ButtonContainer>
-        <ChangePasswordContainer>
-          <ChangePassword />
-        </ChangePasswordContainer>
+        {isChangePassword && (
+          <ChangePasswordContainer>
+            <ChangePassword />
+          </ChangePasswordContainer>
+        )}
       </Content>
     </ProfileContainer>
   );
@@ -76,7 +83,6 @@ const ProfileContainer = styled.div`
   max-width: 800px;
   margin-bottom: 3rem;
 
-
   @media screen and (max-width: 768px) {
   }
 `;
@@ -85,14 +91,12 @@ const Content = styled.div`
   border-radius: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   padding: 5rem;
-  margin: 2rem ;
+  margin: 2rem;
   width: 90%;
   @media screen and (max-width: 768px) {
     margin: 0 5rem;
-  
   }
   @media screen and (max-width: 450px) {
-  
     padding: 2rem;
   }
 `;
@@ -100,15 +104,15 @@ const Content = styled.div`
 const Title = styled.div`
   margin-top: 2rem;
 
-   width: 90%;
+  width: 90%;
 
   h2 {
     text-align: left;
   }
   @media screen and (max-width: 768px) {
     h2 {
-    text-align: center;
-  }
+      text-align: center;
+    }
   }
 `;
 
@@ -131,7 +135,6 @@ const UserDetails = styled.div`
   margin-bottom: 3rem;
   gap: 1rem;
   .detils_group {
-  
     p {
       font-size: 1.2rem;
     }
@@ -143,7 +146,6 @@ const UserDetails = styled.div`
     grid-template-columns: repeat(1, 1fr);
     gap: 2.5rem;
   }
-
 `;
 
 const ButtonContainer = styled.div`
@@ -166,12 +168,9 @@ const ButtonContainer = styled.div`
       border: 2px solid #177e92;
     }
     @media screen and (max-width: 450px) {
-   width: 18rem;
-  }
+      width: 18rem;
+    }
   }
 `;
 
-
-const ChangePasswordContainer = styled.div`
-  
-`
+const ChangePasswordContainer = styled.div``;

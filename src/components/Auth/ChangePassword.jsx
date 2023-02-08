@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import axiox from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,55 +7,56 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 const ChangePassword = () => {
-    const formik = useFormik({
-        initialValues: {
-            oldPassword: "",
-            newPassword: "",
-            confirmPassword: ""
-        },
-        validationSchema: yup.object({
-            oldPassword: yup
-            .string()
-            .min(8, "Old password must have at least 8 characters.")
-            .required("Old password is required."),
-            newPassword: yup
-            .string()
-            .min(8, "New password must have at least 8 characters.")
-            .required("new password is required."),
-            confirmPassword: yup
-            .string()
-            .min(8, "Confirm password must have at least 8 characters.")
-            .required("Confirm password is required.")
-            .oneOf(
-              [yup.ref("newPassword"), null],
-              "New password and Confirm password must match."
-            ),
-        }),
-        onSubmit: (values, { resetForm }) => {
-          const { oldPassword, newPassword, confirmPassword } = values;
-          console.log(values);
-    
-          axiox
-            .put(`/api/v1/password/update`, { oldPassword, newPassword, confirmPassword })
-            .then((res) => {
-                console.log(res);
-              if (res.status === 200) {
-                toast("Password update successfull.");
-            
-              } else {
-                toast("Invalid login details");
-              }
-            })
-            .catch((err) => {
-              toast("Invalid login details");
-              console.log(err);
-            });
-    
-        //   resetForm({ values: "" });
-        },
-      });
-    
+  const formik = useFormik({
+    initialValues: {
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    validationSchema: yup.object({
+      oldPassword: yup
+        .string()
+        .min(8, "Old password must have at least 8 characters.")
+        .required("Old password is required."),
+      newPassword: yup
+        .string()
+        .min(8, "New password must have at least 8 characters.")
+        .required("new password is required."),
+      confirmPassword: yup
+        .string()
+        .min(8, "Confirm password must have at least 8 characters.")
+        .required("Confirm password is required.")
+        .oneOf(
+          [yup.ref("newPassword"), null],
+          "New password and Confirm password must match."
+        ),
+    }),
+    onSubmit: (values, { resetForm }) => {
+      const { oldPassword, newPassword, confirmPassword } = values;
+      console.log(values);
 
+      axiox
+        .put(`/api/v1/password/update`, {
+          oldPassword,
+          newPassword,
+          confirmPassword,
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            toast("Password update successfull.");
+          } else {
+            toast("Invalid login details");
+          }
+        })
+        .catch((err) => {
+          toast("Invalid login details");
+          console.log(err);
+        });
+
+      //   resetForm({ values: "" });
+    },
+  });
 
   return (
     <>
@@ -75,7 +76,7 @@ const ChangePassword = () => {
                     value={formik.values.oldPassword}
                     placeholder="$12345678"
                   />
-                        {formik.touched.oldPassword && formik.errors.oldPassword && (
+                  {formik.touched.oldPassword && formik.errors.oldPassword && (
                     <p>
                       <span>i</span> {formik.errors.oldPassword}{" "}
                     </p>
@@ -92,7 +93,7 @@ const ChangePassword = () => {
                     value={formik.values.newPassword}
                     placeholder="@98524789"
                   />
-                        {formik.touched.newPassword && formik.errors.newPassword && (
+                  {formik.touched.newPassword && formik.errors.newPassword && (
                     <p>
                       <span>i</span> {formik.errors.newPassword}{" "}
                     </p>
@@ -101,7 +102,9 @@ const ChangePassword = () => {
               </InputGroup>
               <InputGroup>
                 <div>
-                  <label htmlFor="confirmNewPassword">Confirm new password</label>
+                  <label htmlFor="confirmNewPassword">
+                    Confirm new password
+                  </label>
                   <input
                     type="password"
                     name="confirmPassword"
@@ -109,11 +112,12 @@ const ChangePassword = () => {
                     value={formik.values.confirmPassword}
                     placeholder="@98524789"
                   />
-                        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                    <p>
-                      <span>i</span> {formik.errors.confirmPassword}{" "}
-                    </p>
-                  )}
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <p>
+                        <span>i</span> {formik.errors.confirmPassword}{" "}
+                      </p>
+                    )}
                 </div>
               </InputGroup>
               <Button>
@@ -133,7 +137,7 @@ const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
- margin-top: 5rem;
+  margin-top: 5rem;
 `;
 const ContainerTop = styled.div`
   width: 100%;

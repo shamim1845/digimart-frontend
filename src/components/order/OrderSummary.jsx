@@ -5,38 +5,36 @@ import { getAllOrders, paymentInfo } from "../../features/order/orderSlice";
 import { rate } from "../../App";
 
 const OrderSummary = () => {
-  const [subtotal, setSubTotal] = useState(0);
-  const [shipping, setShipping] = useState(0);
+  const [productPrice, setProductPrice] = useState(0);
+  const [shippingCost, setShippingCost] = useState(0);
   const [tax, setTax] = useState(0);
   const [total, setTotal] = useState(0);
 
   const dispatch = useDispatch();
-
   const orderdItems = useSelector(getAllOrders);
-  console.log(orderdItems);
 
   useEffect(() => {
-    const calcSubtotal =
+    const calcProductPrice =
       orderdItems &&
       orderdItems?.reduce((acc, item) => {
-        return acc + item.product.price * item.quantity;
+        return acc + (item.product.price * item.quantity);
       }, 0);
-    const calcShipping = calcSubtotal * (rate.shipping / 100);
-    const calcTax = calcSubtotal * (rate.tax / 100);
+    const calcShippingCost = Math.round(calcProductPrice * (rate.shipping / 100));
+    const calcTax = Math.round(calcProductPrice * (rate.tax / 100));
 
-    setSubTotal(calcSubtotal);
-    setShipping(calcShipping);
+    setProductPrice(calcProductPrice);
+    setShippingCost(calcShippingCost);
     setTax(calcTax);
-    setTotal(calcSubtotal + shipping + tax);
+    setTotal(calcProductPrice + calcShippingCost + calcTax);
     dispatch(
       paymentInfo({
-        products_price: calcSubtotal,
-        shipping_cost: calcShipping,
+        products_price: calcProductPrice,
+        shipping_cost: calcShippingCost,
         tax: calcTax,
-        totalPayAmount: calcSubtotal + shipping + tax,
+        totalPayAmount: calcProductPrice + calcShippingCost + tax,
       })
     );
-  }, [orderdItems, shipping, dispatch, tax]);
+  }, [orderdItems, shippingCost, dispatch, tax]);
 
   return (
     <Container>
@@ -45,12 +43,12 @@ const OrderSummary = () => {
 
         <dl className="sub_total">
           <dt>Product price</dt>
-          <dd> ${subtotal}</dd>
+          <dd> ${productPrice}</dd>
         </dl>
 
         <dl className="shipping">
           <dt>Shipping cost</dt>
-          <dd> ${shipping}</dd>
+          <dd> ${shippingCost}</dd>
         </dl>
         <dl className="shipping">
           <dt>Tax</dt>

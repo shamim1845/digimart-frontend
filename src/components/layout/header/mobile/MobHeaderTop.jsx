@@ -16,7 +16,7 @@ const MobHeaderTop = () => {
   const [sideBar, setSideBar] = useState(false);
   const [keyword, setKeyword] = useState("");
 
-  const { authenticated } = useSelector((state) => state.auth);
+  const { authenticated } = useSelector((state) => state.user);
 
   const LogOutHandler = async (e) => {
     e.preventDefault();

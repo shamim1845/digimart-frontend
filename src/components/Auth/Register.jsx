@@ -44,26 +44,19 @@ const Register = () => {
       axiox
         .post(`/api/v1/register`, { name, email, password })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.status === 201) {
             toast("Registration Sucessfull");
-
-            localStorage.setItem(
-              "digimartToken",
-              JSON.stringify(res.data.token)
-            );
 
             setTimeout(() => {
               navigate("/");
             }, 3000);
-          } else if (res.status === 202) {
-            toast(res.data.message);
-            setTimeout(() => {
-              navigate("/login");
-            }, 3000);
+          } else {
+            toast("Registration failed.");
           }
         })
         .catch((err) => {
+          toast("Registration failed.");
           console.log(err.message);
         });
 

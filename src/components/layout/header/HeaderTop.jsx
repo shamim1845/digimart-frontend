@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 const HeaderTop = () => {
   const navigate = useNavigate();
 
-  const { authenticated } = useSelector((state) => state.auth);
+  const { authenticated } = useSelector((state) => state.user);
 
   const LogOutHandler = async (e) => {
     e.preventDefault();

@@ -1,9 +1,8 @@
-import React, { useEffect, useState , useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import PageContainer from "../utils/PageContainer";
 import AccountSidebar from "./AccountSidebar";
-
 
 const Account = () => {
   const [sidebar, setSidebar] = useState(false);
@@ -30,9 +29,17 @@ const Account = () => {
     <PageContainer>
       <AccountContainer>
         <AccountHamberger onClick={accountSidebarHandler}>
-          {sidebar ? <i className="bi bi-x"></i> : <i className="bi bi-list"></i>}
+          {sidebar ? (
+            <i className="bi bi-x"></i>
+          ) : (
+            <i className="bi bi-list"></i>
+          )}
         </AccountHamberger>
-        <AccountSidebar setSidebar={setSidebar} sidebar={sidebar}  sidebarRef={sidebarRef}/>
+        <AccountSidebar
+          setSidebar={setSidebar}
+          sidebar={sidebar}
+          sidebarRef={sidebarRef}
+        />
 
         <AccountContent>
           <Outlet />
@@ -65,7 +72,8 @@ const AccountContent = styled.div`
 const AccountHamberger = styled.div`
   margin-top: 2rem;
   display: none;
-  i{
+  cursor: pointer;
+  i {
     font-size: 2.5rem;
   }
   @media screen and (max-width: 768px) {

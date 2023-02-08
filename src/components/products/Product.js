@@ -66,8 +66,11 @@ const CardContainer = styled.div`
 
 const CardHead = styled.div`
   img {
-    height: 24rem;
-    width: 27rem;
+    min-height: 24rem;
+    max-height: 100%;
+    width: 100%;
+    max-width: 24rem;
+    object-fit: cover;
     transition: all 0.5s;
     margin-bottom: 0.5rem;
   }

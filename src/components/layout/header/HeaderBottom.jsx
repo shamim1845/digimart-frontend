@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import Department from "./Department";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 import {
   addKeyword,
@@ -19,6 +20,10 @@ const HeaderBottom = () => {
   const navigate = useNavigate();
   const { keyword } = useSelector(getAllProducts);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const { role } = useSelector((state) => state.user.userInfo);
+  const auth = useSelector((state) => state.auth);
+  console.log(auth);
+
   useEffect(() => {
     setSearchKeyword(keyword);
   }, [keyword]);
@@ -101,6 +106,15 @@ const HeaderBottom = () => {
               </button>
             </div>
           </Link>
+          {role === "admin" && (
+            <Link to="/admin/dashboard">
+              <div className="button">
+                <button type="submit">
+                  <DashboardIcon color="info" fontSize="large" />
+                </button>
+              </div>
+            </Link>
+          )}
         </BottomRight>
       </HeaderBottoms>
     </HeaderBottomContainer>
