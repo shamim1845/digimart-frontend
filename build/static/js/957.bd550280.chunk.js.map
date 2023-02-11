@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/957.bd550280.chunk.js","mappings":"iIAMA,UAJmB,WACjB,OAAO","sources":["components/admin/products/allProducts/AllProduct.js"],"sourcesContent":["import React from \"react\";\r\n\r\nconst AllProduct = () => {\r\n  return <div> Admin all Product</div>;\r\n};\r\n\r\nexport default AllProduct;\r\n"],"names":[],"sourceRoot":""}

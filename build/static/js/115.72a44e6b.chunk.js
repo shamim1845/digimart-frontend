@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkmy_app=self.webpackChunkmy_app||[]).push([[115],{8115:function(e,n,r){r.r(n);r(2791);var u=r(184);n.default=function(){return(0,u.jsx)("div",{children:" Admin Orders"})}}}]);
+//# sourceMappingURL=115.72a44e6b.chunk.js.map

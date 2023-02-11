@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { fetchAsyncCategories } from "./features/products/productSlice";
 import { fetchAsyncLoggedIn, fetchAsyncUser } from "./features/user/userSlice";
 
-// export const backendUrl = process.env.REACT_APP_SERVER_URL;
+export const backendUrl = process.env.REACT_APP_SERVER_URL;
 export const rate = {
   shipping: 1,
   tax: 0.5,

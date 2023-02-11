@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/115.72a44e6b.chunk.js","mappings":"iIAMA,UAJe,WACb,OAAO","sources":["components/admin/orders/Orders.jsx"],"sourcesContent":["import React from \"react\";\r\n\r\nconst Orders = () => {\r\n  return <div> Admin Orders</div>;\r\n};\r\n\r\nexport default Orders;\r\n"],"names":[],"sourceRoot":""}
