@@ -14,9 +14,7 @@ const HeaderBottom = () => {
   const [activeDept, setActiveDept] = useState(false);
 
   // select data from redux store
-  const {
-    userInfo: { role },
-  } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.user);
   const { authenticated } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.user);
   const { favouriteItems } = useSelector((state) => state.user);
@@ -38,7 +36,7 @@ const HeaderBottom = () => {
   const categorytHandler = () => {
     setActiveDept((prev) => !prev);
   };
-  console.log(role);
+  console.log(userInfo);
   return (
     <HeaderBottomContainer>
       <HeaderBottoms>
@@ -76,7 +74,7 @@ const HeaderBottom = () => {
               </button>
             </div>
           </Link>
-          {authenticated && role === "admin" && (
+          {authenticated && userInfo.role === "admin" && (
             <Link to="/admin/dashboard">
               <div className="button">
                 <button type="submit">
