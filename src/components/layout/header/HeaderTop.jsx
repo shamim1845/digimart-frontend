@@ -1,66 +1,30 @@
-import React from "react";
 import styled from "styled-components";
-import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useSelector } from "react-redux";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import AuthMenu from "./headerUtils/AuthMenu";
+import Currency from "./headerUtils/Currency.jsx";
 
 const HeaderTop = () => {
-  const navigate = useNavigate();
-
-  const { authenticated } = useSelector((state) => state.user);
-
-  const LogOutHandler = async (e) => {
-    e.preventDefault();
-    const res = await axios.get(`/api/v1/logout`);
-    console.log(res);
-    if (res.status === 200) {
-      toast(res.data.message);
-      setTimeout(() => {
-        navigate("/");
-        window.location.reload();
-      }, 3000);
-    }
-  };
-
   return (
     <HeaderTopContainer>
-      <ToastContainer />
       <HeaderTopBar>
         <div className="left">
           <div>
             <img src="/images/icons/email-envelop.svg" alt="" />
-            <p>Email: support@gmail.com</p>
+            <span>Email: support@digimart.com</span>
           </div>
           <div>
             <img src="/images/icons/tag-fill.svg" alt="" />
-            <p>Today Deals</p>
+            <span>Today Deals</span>
           </div>
         </div>
         <div className="right">
-          <div className="register_login">
-            <img src="/images/icons/person-fill.svg" alt="" />
-            {authenticated ? (
-              <p style={{ cursor: "pointer" }} onClick={LogOutHandler}>
-                Log Out{" "}
-              </p>
-            ) : (
-              <p>
-                <NavLink to={"/register"}> Register</NavLink> or
-                <NavLink to={"/login"}> Login</NavLink>
-              </p>
-            )}
+          <div className="authmenu_container">
+            <AuthMenu />
           </div>
-          <div className="currency">
-            <select name="" id="">
-              <option value="usd">USD</option>
-              <option value="bdt">BDT</option>
-            </select>
+          <div className="currency_container">
+            <Currency />
           </div>
           <div className="site_language">
-            <img src="/images/icons/bd-flag.svg" alt="" />
+            <img src="/images/icons/bd-flag.svg" alt="Country flag" />
           </div>
         </div>
       </HeaderTopBar>
@@ -74,12 +38,9 @@ const HeaderTopContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 0 3rem;
   border-top: 5px solid tomato;
   border-bottom: 1px solid #e4e9eb;
-  padding: 0 3rem;
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
 `;
 const HeaderTopBar = styled.div`
   width: 100%;
@@ -90,54 +51,46 @@ const HeaderTopBar = styled.div`
   font-size: 1.2rem;
   color: #666;
 
-  img {
-    margin-right: 0.5rem;
-  }
-
   .left {
+    height: 100%;
     display: flex;
-    flex: 2;
+    justify-content: start;
     align-items: center;
+    gap: 2rem;
+    flex: 2;
     border-right: 1px solid #e4e9eb;
 
-    p {
-      margin-bottom: 0;
-    }
-    & div {
+    div {
       display: flex;
-
+      justify-content: center;
       align-items: center;
-      &:first-child {
-        margin-right: 1rem;
+
+      img {
+        margin-right: 0.5rem;
+      }
+      span {
+        margin-bottom: 0;
       }
     }
   }
   .right {
+    height: 100%;
     display: flex;
     align-items: center;
-    p {
-      margin-bottom: 0;
+    justify-content: center;
+
+    .authmenu_container {
+      border-right: 1px solid #e4e9eb;
+    }
+    .currency_container {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #e4e9eb;
+      padding: 0 1rem;
     }
 
-    .register_login {
-      display: flex;
-      border-right: 1px solid #e4e9eb;
-      padding: 1rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-      transition: all 0.5s;
-      & a:hover {
-        color: tomato;
-      }
-    }
-    .currency {
-      padding: 1rem;
-      border-right: 1px solid #e4e9eb;
-      & select {
-        border: none;
-        font-size: 1.2rem;
-      }
-    }
     .site_language {
       display: flex;
       align-items: center;

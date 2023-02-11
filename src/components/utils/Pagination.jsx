@@ -26,7 +26,7 @@ const Pagination = ({ currentPage, setCurrentPage, pages }) => {
       </Prev>
       <Page>
         {pages &&
-          pages.map((page) => {
+          pages?.map((page) => {
             return (
               <p
                 style={
@@ -56,7 +56,10 @@ const PaginationContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 1rem;
+  padding: 1rem;
   overflow: hidden;
+  width: 100%;
+  max-width: 1440px;
 `;
 const Prev = styled.div`
   button {
@@ -72,7 +75,6 @@ const Prev = styled.div`
 const Page = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin: 0 1rem;
 
   p {
     font-size: 2rem;

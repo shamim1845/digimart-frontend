@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addCartItem } from "../../features/products/productSlice";
+
 import {
   addOrderItem,
   getAllOrders,
@@ -15,6 +15,7 @@ import { IconButton } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DefaultShippingAddress from "./DefaultShippingAddress";
 import StripePayment from "./StripePayment";
+import { addCartItem } from "../../features/user/userSlice";
 
 const OrderDetails = () => {
   const [isShipping, setIsShipping] = useState(false);
@@ -27,7 +28,7 @@ const OrderDetails = () => {
     dispatch(shippingInformation({ shippingInfo: shippingInf }));
   }, [dispatch]);
 
-  const { authenticated } = useSelector((state) => state.auth);
+  const { authenticated } = useSelector((state) => state.user);
 
   const orderdItem = useSelector(getAllOrders);
   const shippingInfo = useSelector(getShippingInformation);

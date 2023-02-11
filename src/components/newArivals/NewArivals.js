@@ -2,13 +2,10 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  fetchAsyncNewArrivals,
-  getAllProducts,
-} from "../../features/products/productSlice";
+import { fetchAsyncNewArrivals } from "../../features/products/productSlice";
 
 import Loading from "../utils/Loading";
-import Product from "../products/Product";
+import Product from "../products/ProductCard";
 import Pagination from "../utils/Pagination";
 
 const NewArivals = () => {
@@ -26,7 +23,7 @@ const NewArivals = () => {
     dispatch(fetchAsyncNewArrivals({ category, currentPage }));
   }, [dispatch, category, currentPage]);
 
-  const productDetails = useSelector(getAllProducts);
+  const productDetails = useSelector((state) => state.products);
   const { loading, newArrivals } = productDetails;
 
   return (

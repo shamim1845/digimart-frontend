@@ -4,12 +4,13 @@ import Slider from "@mui/material/Slider";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addCategory,
-  addKeyword,
   fetchAsyncProductForFilter,
   fetchAsyncProducts,
-  getAllProducts,
 } from "../../features/products/productSlice";
+import {
+  addCategory,
+  addKeyword,
+} from "../../features/productFilter/productFilterSlice";
 
 export default function RangeSlider({ currentPage, setCurrentPage }) {
   const [price, setPrice] = useState([0, 200000]);
@@ -19,7 +20,8 @@ export default function RangeSlider({ currentPage, setCurrentPage }) {
   const handleChange = (event, newValue) => {
     setPrice(newValue);
   };
-  const { keyword, category, allCategories } = useSelector(getAllProducts);
+  const { allCategories } = useSelector((state) => state.products);
+  const { keyword, category } = useSelector((state) => state.productFilter);
   const catHandler = (cat) => {
     setCurrentPage(1);
     dispatch(addCategory(cat));

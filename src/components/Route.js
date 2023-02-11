@@ -27,12 +27,23 @@ const LazyOrderDetails = React.lazy(() =>
 );
 
 //For Admin Routes
-const LazyDashboard = React.lazy(() => import("./admin/dashboard/Dashboard"));
+const LazyAdminDashboard = React.lazy(() =>
+  import("./admin/dashboard/Dashboard")
+);
+const LazyAdminAllProducts = React.lazy(() =>
+  import("./admin/products/allProducts/AllProduct")
+);
+const LazyAdminCreateProduct = React.lazy(() =>
+  import("./admin/products/CreateProduct")
+);
+const LazyAdminOrders = React.lazy(() => import("./admin/orders/Orders"));
+const LazyAdminUsers = React.lazy(() => import("./admin/users/Users"));
+const LazyAdminReviews = React.lazy(() => import("./admin/reviews/Reviews"));
 
 // For Products Routes
 const LazyAllProducts = React.lazy(() => import("./products/AllProducts"));
 const LazyProductDetails = React.lazy(() =>
-  import("./products/ProductDetails.js")
+  import("./products/product/ProductDetails")
 );
 
 // For Order Routes
@@ -81,8 +92,17 @@ const index = () => {
             </ProtectedAdmin>
           }
         >
-          <Route path="dashboard" element={<LazyDashboard />} />
-          <Route path="invoices" element={<h1>InVoiceList</h1>} />
+          {/* Dashboard */}
+          <Route path="dashboard" element={<LazyAdminDashboard />} />
+          {/* Product */}
+          <Route path="products/all" element={<LazyAdminAllProducts />} />
+          <Route path="products/create" element={<LazyAdminCreateProduct />} />
+          {/* Orders */}
+          <Route path="orders" element={<LazyAdminOrders />} />
+          {/* Users */}
+          <Route path="users" element={<LazyAdminUsers />} />
+          {/* Reviews */}
+          <Route path="reviews" element={<LazyAdminReviews />} />
         </Route>
 
         {/* Product Routes */}

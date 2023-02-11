@@ -34,18 +34,18 @@ const Login = () => {
         .post(`/api/v1/login`, { email, password })
         .then((res) => {
           if (res.status === 200) {
-            toast("Login successfull.");
+            toast.success("Login successfull.");
 
             setTimeout(() => {
               navigate(redirectPath, { replace: true });
               window.location.reload();
             }, 3000);
           } else {
-            toast("Invalid login details");
+            toast.error("Invalid login details");
           }
         })
         .catch((err) => {
-          toast("Invalid login details");
+          toast.error("Invalid login details");
           console.log(err);
         });
 

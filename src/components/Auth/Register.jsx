@@ -46,17 +46,18 @@ const Register = () => {
         .then((res) => {
           // console.log(res);
           if (res.status === 201) {
-            toast("Registration Sucessfull");
+            toast.success("Registration Sucessfull");
 
             setTimeout(() => {
               navigate("/");
+              window.location.reload();
             }, 3000);
           } else {
-            toast("Registration failed.");
+            toast.error("Registration failed.");
           }
         })
         .catch((err) => {
-          toast("Registration failed.");
+          toast.error("Registration failed.");
           console.log(err.message);
         });
 

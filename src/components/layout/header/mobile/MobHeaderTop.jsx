@@ -1,95 +1,40 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { NavLink, useNavigate } from "react-router-dom";
 import SidebarMenu from "./SidebarMenu";
-import { useDispatch, useSelector } from "react-redux";
-import { addKeyword } from "../../../../features/products/productSlice";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import axios from "axios";
+import ProductSearch from "../../../products/ProductSearch";
+import AuthMenu from "../headerUtils/AuthMenu";
 
 const MobHeaderTop = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [sideBar, setSideBar] = useState(false);
-  const [keyword, setKeyword] = useState("");
-
-  const { authenticated } = useSelector((state) => state.user);
-
-  const LogOutHandler = async (e) => {
-    e.preventDefault();
-    const res = await axios.get(`/api/v1/logout`);
-    console.log(res);
-    if (res.status === 200) {
-      toast(res.data.message);
-      setTimeout(() => {
-        navigate("/");
-        window.location.reload();
-      }, 3000);
-    }
-  };
-  const searchHandler = (e) => {
-    e.preventDefault();
-    navigate("/products");
-    dispatch(addKeyword(keyword));
-  };
 
   const SidebarHandler = () => {
-    setSideBar(!sideBar);
+    setSideBar((prev) => !prev);
   };
   return (
     <>
-      <ToastContainer />
       {sideBar ? <SidebarMenu setSideBar={setSideBar} /> : null}
 
       <MobHeaderContainer>
-        <MobLogoTop>
-          <SidebarIcon>
+        <HeaderTop>
+          <HeaderTopLeft>
             <img
               onClick={SidebarHandler}
               src="/images/icons/hamberger.svg"
-              alt=""
+              alt="sidebar icon"
             />
             <Logo>
               <h2>
                 DIGI<span>MART</span>
               </h2>
             </Logo>
-          </SidebarIcon>
+          </HeaderTopLeft>
 
-          <SignIn>
-            {authenticated ? (
-              <div className="log_out">
-                <p style={{ cursor: "pointer" }} onClick={LogOutHandler}>
-                  Log Out{" "}
-                </p>{" "}
-              </div>
-            ) : (
-              <div>
-                <NavLink to={"/register"}>Register</NavLink> or
-                <NavLink to={"/login"}> Login </NavLink>
-              </div>
-            )}
+          <AuthMenu />
+        </HeaderTop>
 
-            <img src="/images/icons/person-fill.svg" alt="" />
-          </SignIn>
-        </MobLogoTop>
-
-        <SearchBar onSubmit={searchHandler}>
-          <input
-            type="text"
-            placeholder="Search"
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-
-          <div className="search_button">
-            <button type="submit" onClick={searchHandler}>
-              <img src="/images/icons/search.svg" alt="" />
-            </button>
-          </div>
-        </SearchBar>
+        <HeaderBottom>
+          <ProductSearch />
+        </HeaderBottom>
       </MobHeaderContainer>
     </>
   );
@@ -104,13 +49,13 @@ const MobHeaderContainer = styled.div`
   background-color: tomato;
   width: 100%;
   position: sticky;
-  padding: 0 1rem 1rem 1rem;
+  padding: 1rem;
   @media screen and (min-width: 769px) {
     display: none;
   }
 `;
 
-const MobLogoTop = styled.div`
+const HeaderTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -128,7 +73,7 @@ const Logo = styled.div`
   }
 `;
 
-const SidebarIcon = styled.div`
+const HeaderTopLeft = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,46 +115,10 @@ const SignIn = styled.div`
   }
 `;
 
-const SearchBar = styled.form`
+const HeaderBottom = styled.div`
   display: flex;
   justify-content: center;
   background-color: #fff;
   border-radius: 0.5rem;
-
-  & input {
-    width: 100%;
-    border: none;
-    padding-left: 0.5rem;
-    border-radius: 0.5rem;
-
-    &::placeholder {
-      /* padding-left: 0.5rem; */
-    }
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .search_button {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 0.3rem;
-
-    button {
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: tomato;
-      border: none;
-      padding: 1rem;
-      border-radius: 0.3rem;
-      transition: all 0.5s;
-      &:hover {
-        background-color: #ff6347c1;
-        transform: scale(1.2);
-      }
-    }
-  }
+  height: 4.5rem;
 `;

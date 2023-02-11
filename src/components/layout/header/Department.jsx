@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addCategory,
-  getCategories,
-} from "../../../features/products/productSlice";
+
 import { useNavigate } from "react-router-dom";
+import { addCategory } from "../../../features/productFilter/productFilterSlice";
 
 const Department = () => {
   const dispatch = useDispatch();
@@ -15,7 +13,7 @@ const Department = () => {
     dispatch(addCategory(cat));
   }
 
-  const { categories } = useSelector(getCategories);
+  const { categories } = useSelector((state) => state.products.allCategories);
 
   return (
     <DepartmentContainer>

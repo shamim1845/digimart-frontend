@@ -1,36 +1,28 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import Department from "./Department";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 
-import {
-  addKeyword,
-  getAllProducts,
-  getCartItems,
-  getFavouriteItems,
-} from "../../../features/products/productSlice";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import Department from "./Department";
+
+import ProductSearch from "../../products/ProductSearch";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const HeaderBottom = () => {
-  let deptRef = useRef();
-  const dispatch = useDispatch();
+  let categoryRef = useRef();
+
   const [activeDept, setActiveDept] = useState(false);
 
-  const navigate = useNavigate();
-  const { keyword } = useSelector(getAllProducts);
-  const [searchKeyword, setSearchKeyword] = useState("");
+  // select data from redux store
   const { role } = useSelector((state) => state.user.userInfo);
-  const auth = useSelector((state) => state.auth);
-  console.log(auth);
+  const { authenticated } = useSelector((state) => state.user);
+  const { cartItems } = useSelector((state) => state.user);
+  const { favouriteItems } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    setSearchKeyword(keyword);
-  }, [keyword]);
-
+  //  hide category container when mouseDown outside of category Container
   useEffect(() => {
     function handleListener(e) {
-      if (!deptRef?.current?.contains(e.target)) {
+      if (!categoryRef?.current?.contains(e.target)) {
         setActiveDept(false);
       }
     }
@@ -40,50 +32,26 @@ const HeaderBottom = () => {
     };
   }, []);
 
-  const DepartmentHandler = () => {
-    setActiveDept(!activeDept);
+  //  toogle category
+  const categorytHandler = () => {
+    setActiveDept((prev) => !prev);
   };
-
-  const searchHandler = (e) => {
-    e.preventDefault();
-
-    dispatch(addKeyword(searchKeyword));
-    navigate("/products");
-  };
-
-  const cartItems = useSelector(getCartItems);
-  const favItems = useSelector(getFavouriteItems);
 
   return (
     <HeaderBottomContainer>
       <HeaderBottoms>
-        <BottomLeftContainer ref={deptRef}>
-          <BottomLeft onClick={DepartmentHandler}>
+        <BottomLeftContainer ref={categoryRef}>
+          <BottomLeft onClick={categorytHandler}>
             <img src="/images/icons/menu-down.svg" alt="" />
             <h4>ALL CATEGORIES</h4>
           </BottomLeft>
           {activeDept ? <Department /> : null}
         </BottomLeftContainer>
         <BottomCenter>
-          <form onSubmit={searchHandler}>
-            <input
-              type="text"
-              value={searchKeyword}
-              placeholder="What are you looking for..."
-              onChange={(e) => setSearchKeyword(e.target.value)}
-            />
-          </form>
-
-          <CategoryContainer>
-            <div className="search_button">
-              <button onClick={searchHandler} type="submit">
-                <img src="/images/icons/search.svg" alt="" />
-              </button>
-            </div>
-          </CategoryContainer>
+          <ProductSearch />
         </BottomCenter>
         <BottomRight>
-          <Link to="/account">
+          <Link to="/account/myprofile">
             <div className="button">
               <button type="submit">
                 <img src="/images/icons/person.svg" alt="" />
@@ -94,7 +62,7 @@ const HeaderBottom = () => {
             <div className="button">
               <button type="submit">
                 <img src="/images/icons/favourite.svg" alt="" />
-                <span>{favItems.length}</span>
+                <span>{favouriteItems?.length}</span>
               </button>
             </div>
           </Link>
@@ -102,11 +70,11 @@ const HeaderBottom = () => {
             <div className="button">
               <button>
                 <img src="/images/icons/cart.svg" alt="" />
-                <span>{cartItems.length}</span>
+                <span>{cartItems?.length}</span>
               </button>
             </div>
           </Link>
-          {role === "admin" && (
+          {authenticated && role === "admin" && (
             <Link to="/admin/dashboard">
               <div className="button">
                 <button type="submit">
@@ -197,29 +165,6 @@ const BottomCenter = styled.div`
   }
 `;
 
-const CategoryContainer = styled.div`
-  .search_button {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-    button {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      background-color: tomato;
-      border: none;
-      padding: 1.1rem;
-      margin-right: 0.4rem;
-      border-radius: 0.3rem;
-      transition: all 0.5s;
-      &:hover {
-        background-color: #ff6347c1;
-        transform: scale(1.2);
-      }
-    }
-  }
-`;
 const BottomRight = styled.div`
   display: flex;
   justify-content: space-between;

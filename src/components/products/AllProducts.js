@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-import { getAllProducts } from "../../features/products/productSlice";
 import PageContainer from "../utils/PageContainer";
 import Loading from "../utils/Loading";
 import Filter from "./Filter";
-import Product from "./Product";
+import Product from "./ProductCard";
 import Pagination from "../utils/Pagination";
 
 const AllProductDisplay = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const productDetails = useSelector(getAllProducts);
-  const { loading, fetchProduct } = productDetails;
+  const productDetails = useSelector((state) => state.products);
+  const { loading, allProducts } = productDetails;
 
   return (
     <>
@@ -28,25 +27,25 @@ const AllProductDisplay = () => {
           <FilterBox>
             <Filter currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </FilterBox>
-          {fetchProduct?.products?.length > 0 && (
+          {allProducts?.products?.length > 0 && (
             <ProductBox>
-              {fetchProduct.products.map((product) => {
+              {allProducts.products.map((product) => {
                 return <Product key={product._id} product={product} />;
               })}
             </ProductBox>
           )}
 
-          {fetchProduct?.products?.length === 0 && (
+          {allProducts?.products?.length === 0 && (
             <NoProduct>
               <h3>No products found...</h3>
             </NoProduct>
           )}
         </ProductContainer>
-        {fetchProduct?.page?.length > 1 && (
+        {allProducts?.page?.length > 1 && (
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            pages={fetchProduct.page}
+            pages={allProducts.page}
           />
         )}
       </PageContainer>

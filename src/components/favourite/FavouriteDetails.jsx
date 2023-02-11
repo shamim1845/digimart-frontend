@@ -2,21 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch } from "react-redux";
 import {
   addCartItem,
-   deleteFavouriteItem,
-} from "../../features/products/productSlice";
+  deleteFavouriteItem,
+} from "../../features/user/userSlice";
 
 const FavouriteDetails = ({ cartItem }) => {
   const dispatch = useDispatch();
 
   const addToCart = (Item) => {
-    dispatch(addCartItem({product: Item.product,quantity: 1}));
+    dispatch(addCartItem({ product: Item.product, quantity: 1 }));
     dispatch(deleteFavouriteItem({ product: Item.product }));
-  }
+  };
 
   const deleteProduct = (Item) => {
     dispatch(deleteFavouriteItem({ product: Item.product }));
@@ -26,12 +26,12 @@ const FavouriteDetails = ({ cartItem }) => {
     <Container>
       <Wraper>
         <CartTitle>
-          <h2>Default Wish List ({cartItem.length})</h2>
+          <h2>Default Wish List ({cartItem?.length || 0})</h2>
         </CartTitle>
       </Wraper>
 
       {cartItem &&
-        cartItem.map((Item) => {
+        cartItem?.map((Item) => {
           return (
             <Wraper key={Item.product._id}>
               <CartProducts>
@@ -57,7 +57,11 @@ const FavouriteDetails = ({ cartItem }) => {
                 </div>
 
                 <div className="fav_controller">
-                  <IconButton onClick={() => addToCart(Item)} aria-label="favourite" size="large">
+                  <IconButton
+                    onClick={() => addToCart(Item)}
+                    aria-label="favourite"
+                    size="large"
+                  >
                     <ShoppingCartIcon fontSize="large" />
                   </IconButton>
                   <IconButton
@@ -100,40 +104,40 @@ const CartProducts = styled.div`
   display: flex;
   justify-content: space-between;
 
-  .fav_details_box{
-      display: flex;
+  .fav_details_box {
+    display: flex;
     .img_box {
-    padding: 0 1rem;
-    img {
-      width: 12rem;
-      height: 12rem;
-    }
-  }
-  .dtails_box {
-    .title {
-      a {
-        font-size: 1.4rem;
+      padding: 0 1rem;
+      img {
+        width: 12rem;
+        height: 12rem;
       }
     }
-    .price {
-      margin: 1rem 0;
-      span {
-        font-weight: 600;
-        font-size: 1.6rem;
+    .dtails_box {
+      .title {
+        a {
+          font-size: 1.4rem;
+        }
       }
-    }
-    .shiping {
-      span {
-        margin-right: 5px;
-        color: #2e9cc3;
-        font-weight: 500;
-        line-height: 18px;
-        font-size: 12px;
+      .price {
+        margin: 1rem 0;
+        span {
+          font-weight: 600;
+          font-size: 1.6rem;
+        }
+      }
+      .shiping {
+        span {
+          margin-right: 5px;
+          color: #2e9cc3;
+          font-weight: 500;
+          line-height: 18px;
+          font-size: 12px;
+        }
       }
     }
   }
-  }
- 
+
   .fav_controller {
     width: 12rem;
   }
