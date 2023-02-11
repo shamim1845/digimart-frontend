@@ -14,7 +14,9 @@ const HeaderBottom = () => {
   const [activeDept, setActiveDept] = useState(false);
 
   // select data from redux store
-  const { role } = useSelector((state) => state.user.userInfo);
+  const {
+    userInfo: { role },
+  } = useSelector((state) => state.user);
   const { authenticated } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.user);
   const { favouriteItems } = useSelector((state) => state.user);
@@ -36,7 +38,7 @@ const HeaderBottom = () => {
   const categorytHandler = () => {
     setActiveDept((prev) => !prev);
   };
-
+  console.log(role);
   return (
     <HeaderBottomContainer>
       <HeaderBottoms>
