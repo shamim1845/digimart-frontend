@@ -31,21 +31,23 @@ const ResetPassword = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       const { password, confirmPassword } = values;
+      try {
+        const res = await axiox.put(`/api/v1/password/reset/${params.token}`, {
+          password,
+          confirmPassword,
+        });
+        console.log(res);
+        if (res.status === 200) {
+          toast("Password Update successfull.");
 
-      const res = await axiox.put(`/api/v1/password/reset/${params.token}`, {
-        password,
-        confirmPassword,
-      });
-      console.log(res);
-      if (res.status === 200) {
-        toast("Password Update successfull.");
-        localStorage.setItem("digimartToken", JSON.stringify(res.data.token));
-
-        setTimeout(() => {
-          navigate("/");
-        }, 3000);
-      } else {
-        toast("Invalid Password Reset Details");
+          setTimeout(() => {
+            navigate("/");
+            window.location.reload();
+          }, 3000);
+        }
+      } catch (err) {
+        toast.error("Invalid Password Reset Details");
+        console.log(err);
       }
 
       resetForm({ values: "" });

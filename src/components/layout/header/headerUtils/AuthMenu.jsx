@@ -83,9 +83,12 @@ const AuthMenuContainer = styled.div`
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-      /* & a:hover {
+      & a:hover {
         color: tomato;
-      } */
+        @media screen and (max-width: 768px) {
+          color: #fff;
+        }
+      }
 
       .activeNavLink {
         color: tomato;

@@ -1,18 +1,13 @@
 import styled from "styled-components";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import Logo from "../../logo/Logo";
 
 const HeaderMiddle = () => {
   return (
     <HeaderMidContainer>
       <HeaderMidd>
         <MiddleLeft>
-          <div className="logo">
-            <h2>
-              <Link to={"/"}>
-                DIGI<span>MART</span>
-              </Link>
-            </h2>
-          </div>
+          <Logo />
         </MiddleLeft>
         <MiddleRight>
           <ul className="menu">
@@ -70,19 +65,6 @@ const MiddleLeft = styled.div`
   display: flex;
   align-items: center;
   border-right: 1px solid #e4e9eb;
-
-  .logo {
-    h2 {
-      letter-spacing: 0.2rem;
-      font-size: 3rem;
-      color: var(--text-primary);
-      margin: 0;
-
-      span {
-        color: tomato;
-      }
-    }
-  }
 `;
 const MiddleRight = styled.div`
   flex: 1;

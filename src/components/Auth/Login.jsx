@@ -2,15 +2,24 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import axiox from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const redirectPath = location.state?.path || "/products";
+  console.log(redirectPath);
+  const { authenticated } = useSelector((state) => state.user);
+  // console.log(authenticated);
+  useEffect(() => {
+    if (!authenticated) return;
+    navigate(redirectPath);
+  }, [authenticated, redirectPath, navigate]);
 
   const formik = useFormik({
     initialValues: {

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import SidebarMenu from "./SidebarMenu";
 import ProductSearch from "../../../products/ProductSearch";
 import AuthMenu from "../headerUtils/AuthMenu";
+import Logo from "../../../logo/Logo";
 
 const MobHeaderTop = () => {
   const [sideBar, setSideBar] = useState(false);
@@ -22,11 +23,7 @@ const MobHeaderTop = () => {
               src="/images/icons/hamberger.svg"
               alt="sidebar icon"
             />
-            <Logo>
-              <h2>
-                DIGI<span>MART</span>
-              </h2>
-            </Logo>
+            <Logo />
           </HeaderTopLeft>
 
           <AuthMenu />
@@ -49,9 +46,15 @@ const MobHeaderContainer = styled.div`
   background-color: tomato;
   width: 100%;
   position: sticky;
-  padding: 1rem;
+  padding: 1rem 2rem;
   @media screen and (min-width: 769px) {
     display: none;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 1 2rem;
+  }
+  @media screen and (max-width: 576px) {
+    padding: 1rem;
   }
 `;
 
@@ -60,17 +63,6 @@ const HeaderTop = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
-`;
-const Logo = styled.div`
-  h2 {
-    letter-spacing: 0.3rem;
-    font-size: 2.2rem;
-    margin: 0;
-
-    span {
-      color: #fff;
-    }
-  }
 `;
 
 const HeaderTopLeft = styled.div`
@@ -81,37 +73,6 @@ const HeaderTopLeft = styled.div`
     width: 2.5rem;
     margin-right: 1rem;
     cursor: pointer;
-  }
-`;
-const SignIn = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #666;
-  font-size: 1.2rem;
-  .log_out {
-    margin-right: 1rem;
-    p {
-      margin-bottom: 0;
-      color: #fff;
-      transition: all 0.5s;
-      &:hover {
-        color: #666;
-      }
-    }
-  }
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    a {
-      color: #fff;
-      margin: 0 0.5rem;
-    }
-  }
-  img {
-    width: 2rem;
   }
 `;
 

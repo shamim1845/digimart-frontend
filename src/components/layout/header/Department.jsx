@@ -47,6 +47,7 @@ const DepartmentContainer = styled.div`
   z-index: 100;
 `;
 const DepartMent = styled.div`
+  overflow-y: auto;
   ul {
     & li {
       /* padding: 1rem; */

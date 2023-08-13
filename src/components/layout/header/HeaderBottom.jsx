@@ -36,7 +36,7 @@ const HeaderBottom = () => {
   const categorytHandler = () => {
     setActiveDept((prev) => !prev);
   };
-  console.log(userInfo);
+  // console.log(userInfo);
   return (
     <HeaderBottomContainer>
       <HeaderBottoms>

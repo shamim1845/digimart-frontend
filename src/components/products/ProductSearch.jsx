@@ -56,14 +56,18 @@ const ProductSearchContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
 
     input {
       flex: 1;
       height: 100%;
+      /* width: 6rem; */
       border: none;
       padding-left: 1rem;
-      border-radius: 0.5rem;
+      border-radius: 0.5rem 0 0 0.5rem;
       font-size: 1.4rem;
+      /* background: #000; */
       &::placeholder {
         font-size: 1.4rem;
       }
@@ -73,20 +77,21 @@ const ProductSearchContainer = styled.div`
       }
     }
     .search_button {
-      width: 5rem;
       height: 100%;
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      margin-right: 0.3rem;
+      margin-right: 0.5rem;
 
       button {
+        width: 100%;
+        height: 100%;
         cursor: pointer;
         display: flex;
         align-items: center;
         background-color: tomato;
         border: none;
-        padding: 1.1rem;
+        padding: 0 1.1rem;
         border-radius: 0.3rem;
         transition: all 0.5s;
         &:hover {

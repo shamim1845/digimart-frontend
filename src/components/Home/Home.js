@@ -3,6 +3,7 @@ import Carousle from "../slider/Slider";
 
 import PageContainer from "../utils/PageContainer";
 import NewArivals from "../newArivals/NewArivals";
+import NewsLetter from "./NewsLetter";
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
 
           <NewArivals />
         </PageContainer>
+        <NewsLetter />
       </Container>
     </>
   );
@@ -35,8 +37,5 @@ const CaruusleContainer = styled.div`
   display: flex;
   justify-content: center;
   overflow: hidden;
-  background-color: #666;
-
-  @media screen and (max-width: 1440px) {
-  }
+  background-color: #eeede9;
 `;

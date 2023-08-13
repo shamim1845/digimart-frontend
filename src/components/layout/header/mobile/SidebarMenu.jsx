@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import { useRef } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import Logo from "../../../logo/Logo";
+import { useSelector } from "react-redux";
 
 const SidebarMenu = ({ setSideBar }) => {
   const sidebarRef = useRef(null);
+  const { categories } = useSelector((state) => state.products.allCategories);
 
   useEffect(() => {
     function sidebarHandler(e) {
@@ -25,49 +28,23 @@ const SidebarMenu = ({ setSideBar }) => {
           <CloseButton onClick={() => setSideBar(false)}>
             <i className="bi bi-x"></i>
           </CloseButton>
-          <div className="logo_sidebar">
-            <h3>Browse</h3>
-            <h2>
-              DIGI <span>MART</span>
-            </h2>
-          </div>
+          <Logo />
         </MobileMenuTop>
 
         <MobileMenu>
           <TrendingDept>
-            <h4>Trending</h4>
-            <ul>
-              <NavLink to={"/"}>
-                {" "}
-                <li>Movers & Shakers</li>{" "}
-              </NavLink>
-            </ul>
+            <h4>Browse All Categories</h4>
+            {categories &&
+              categories.map((cat, index) => {
+                return (
+                  <DepartMent key={index}>
+                    <ul>
+                      <li>{cat}</li>
+                    </ul>
+                  </DepartMent>
+                );
+              })}
           </TrendingDept>
-          <TopDepartment>
-            <h4>Top Departments</h4>
-            <ul>
-              <NavLink to={"/"}>
-                <li>Home</li>{" "}
-              </NavLink>
-              <NavLink to={"/"}>
-                <li>Health & HouseHold</li>{" "}
-              </NavLink>
-              <NavLink to={"/"}>
-                <li>Books</li>{" "}
-              </NavLink>
-              <NavLink to={"/"}>
-                <li>PC</li>{" "}
-              </NavLink>
-            </ul>
-          </TopDepartment>
-          <AllDepartments>
-            <ul>
-              <NavLink to={"/"}>
-                {" "}
-                <li>Movers & Shakers </li>{" "}
-              </NavLink>
-            </ul>
-          </AllDepartments>
         </MobileMenu>
       </SidebarMenuContainer>
     </>
@@ -76,9 +53,13 @@ const SidebarMenu = ({ setSideBar }) => {
 
 export default SidebarMenu;
 
+const DepartMent = styled.div``;
+
 const SidebarMenuContainer = styled.div`
   height: 100%;
-  width: 70%;
+  /* width: 100%;
+  max-width: 30rem; */
+
   background: #fff;
   left: 0;
   position: fixed;
@@ -86,7 +67,7 @@ const SidebarMenuContainer = styled.div`
 `;
 
 const MobileMenuTop = styled.div`
-  height: 10rem;
+  height: 8rem;
   background-color: tomato;
   padding-left: 2rem;
   display: flex;
@@ -110,9 +91,6 @@ const MobileMenuTop = styled.div`
 `;
 
 const CloseButton = styled.div`
-  /* display: flex;
-justify-content: flex-end; */
-  /* position: fixed; */
   i {
     font-size: 3.5rem;
     margin-right: 0.5rem;
@@ -126,6 +104,23 @@ justify-content: flex-end; */
 `;
 const MobileMenu = styled.div`
   margin: 2rem;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 20rem;
+  padding-right: 1rem;
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: tomato;
+  }
+
   a {
     color: #666;
     width: 100%;
@@ -135,21 +130,16 @@ const MobileMenu = styled.div`
     }
   }
   h4 {
-    font-size: 1.7rem;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
   ul {
     li {
       font-size: 1.4rem;
-      line-height: 4rem;
-
-      /* background: #000; */
+      text-transform: capitalize;
     }
   }
 `;
-const TrendingDept = styled.div``;
-
-const TopDepartment = styled.div`
-  margin-top: 2rem;
+const TrendingDept = styled.div`
+  /* position: relative; */
 `;
-
-const AllDepartments = styled.div``;

@@ -16,19 +16,17 @@ const Login = () => {
     e.preventDefault();
     try {
       if (!data) {
-        toast("Fields can't be empty.");
-      } else {
-        const res = await axiox.post(`/api/v1/password/forgot`, {
-          email: data,
-        });
-        console.log(res);
-        if (res.status === 200) {
-          toast(res.data.message);
-        } else {
-          toast("Invalid email address");
-        }
+        return toast("Fields can't be empty.");
+      }
+      const res = await axiox.post(`/api/v1/password/forgot`, {
+        email: data,
+      });
+      // console.log(res);
+      if (res.status === 200) {
+        toast(res.data.message);
       }
     } catch (err) {
+      toast.error("Invalid email address.");
       console.log(err);
     }
   };

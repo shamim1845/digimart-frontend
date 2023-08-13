@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { styled as btn } from "@mui/material/styles";
 
 const Carousle = () => {
-  var settings = {
+  const settings = {
     dots: true,
     infinite: true,
     speed: 500,
@@ -20,11 +20,12 @@ const Carousle = () => {
   };
   const AddToCart = btn(Button)({
     backgroundColor: "tomato",
-    color: "#fff",
+    color: "#000",
     fontSize: "1.4rem",
     padding: "1rem 3rem",
     "&:hover": {
-      backgroundColor: "#A9333A",
+      backgroundColor: "#585555",
+      color: "#fff",
     },
   });
 
@@ -33,15 +34,18 @@ const Carousle = () => {
       <SliderContainer>
         <Slider {...settings}>
           {sliderData?.map((slide, index) => (
-            <CarousleItems key={index} imgUrl={slide.image}>
+            <CarousleItems key={index}>
               <div className="slider">
                 <div className="slider_info">
-                  <h3>{slide.heading}</h3>
-                  <p>{slide.desc}</p>
-                  <hr />
-                  <Link to="/products">
+                  <h1>{slide.heading}</h1>
+                  <h3>{slide.desc}</h3>
+                  <br />
+                  <Link style={{ marginTop: "2rem" }} to="/products">
                     <AddToCart variant="contained">Shop Now</AddToCart>
                   </Link>
+                </div>
+                <div className="slider_image">
+                  <img src={slide.image} alt={slide.heading} />
                 </div>
               </div>
             </CarousleItems>
@@ -56,28 +60,33 @@ export default Carousle;
 
 const SliderContainer = styled.div`
   width: 100%;
-  max-width: calc(1440px + 6rem);
+  max-width: 1440px;
 
-  background-color: transparent;
-  padding: 0 5rem 5rem;
-
-  ul li button {
+  /* slider default style modify */
+  .slick-arrow.slick-prev {
+    background-color: transparent;
+  }
+  .slick-arrow.slick-prev::before,
+  .slick-arrow.slick-next::before {
+    color: #5a5858;
+  }
+  .slick-dots li button {
     &::before {
       font-size: 10px;
-      color: rgb(150, 158, 171);
+      color: #5a5858;
     }
   }
-  li.slick-active button::before {
-    color: #fff;
+  ul li.slick-active button::before {
+    color: tomato;
   }
   .slick-list {
-    overflow: visible;
+    /* overflow: hidden; */
   }
   button {
     z-index: 1;
   }
 
-  @media screen and (min-width: 576px) {
+  @media screen and (min-width: 769px) {
     padding: 0 3rem 3rem;
   }
   @media screen and (max-width: 576px) {
@@ -87,52 +96,81 @@ const SliderContainer = styled.div`
 `;
 
 const CarousleItems = styled.div`
-  height: 55vh;
-  @media screen and (max-width: 769px) {
-    height: 40rem;
-  }
-  @media screen and (max-width: 576px) {
-    height: 30rem;
-  }
+  height: 100%;
+  padding: 5rem 0;
 
   .slider {
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: ${(props) => `url(${props.imgUrl})`};
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    object-fit: contain;
+    width: 100%;
+    height: 100% !important;
+
+    @media screen and (max-width: 769px) {
+      flex-direction: column-reverse;
+    }
+    @media screen and (max-width: 576px) {
+    }
 
     .slider_info {
-      height: 20rem;
-      width: 70vw;
-      max-width: 60rem;
+      width: 40%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
-      color: #fff;
-      box-shadow: rgb(0 0 0 / 69%) 0px 26px 30px -10px,
-        rgb(0 0 0 / 73%) 0px 16px 10px -10px;
-      background: rgba(0, 0, 0, 0.432);
+      color: #000;
+      padding-left: 5rem;
+
+      @media screen and (max-width: 769px) {
+        align-items: center;
+        padding-left: 0rem;
+        padding-top: 2rem;
+        width: 100%;
+        max-height: 20rem;
+      }
 
       @media screen and (max-width: 576px) {
-        height: 17rem;
+        display: none;
+      }
+      h1 {
+        font-size: 4rem;
+        font-weight: 600;
+        margin-bottom: 1.5;
+        color: var(--text-primary);
+
+        @media screen and (max-width: 769px) {
+          font-size: 3rem;
+        }
       }
       h3 {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        color: var(--text-primary);
+
+        @media screen and (max-width: 769px) {
+          font-size: 1.7rem;
+        }
       }
-      p {
-        font-size: 1.2rem;
+    }
+    .slider_image {
+      width: 60%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media screen and (max-width: 769px) {
+        width: 100%;
       }
 
-      hr {
-        background: #fff;
-        width: 20rem;
-        height: 0.3rem;
+      img {
+        width: 100%;
+        max-width: 60rem;
+        object-fit: cover;
+        padding: 0 1rem;
+
+        @media screen and (max-width: 769px) {
+          max-width: 50rem;
+        }
       }
     }
   }

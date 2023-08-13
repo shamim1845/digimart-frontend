@@ -26,55 +26,61 @@ const NewArivals = () => {
   const productDetails = useSelector((state) => state.products);
   const { loading, newArrivals } = productDetails;
 
-  return (
-    <>
-      {loading && <Loading />}
+  if (loading) {
+    return <Loading />;
+  }
 
-      <Container>
-        <div className="new_arivals">
-          <div className="arivals_header">
-            <h2>NEW ARRIVALS</h2>
-            <div className="arivals_categori_list">
-              {!loading &&
-                newArrivals?.allCategories?.map((cat, ind) => (
-                  <button
-                    key={ind}
-                    value={cat}
-                    className={`${
-                      cat === (category || newArrivals.allCategories[0]) &&
-                      "active"
-                    }`}
-                    onClick={categoryHandler}
-                  >
-                    {cat}
-                  </button>
-                ))}
+  if (!loading && newArrivals?.products?.length > 0) {
+    return (
+      <>
+        <Container>
+          <div className="new_arivals">
+            <div className="arivals_header">
+              <h2>NEW ARRIVALS</h2>
+              <div className="arivals_categori_list">
+                {!loading &&
+                  newArrivals?.allCategories?.map((cat, ind) => (
+                    <button
+                      key={ind}
+                      value={cat}
+                      className={`${
+                        cat === (category || newArrivals.allCategories[0]) &&
+                        "active"
+                      }`}
+                      onClick={categoryHandler}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+              </div>
             </div>
+
+            <ProductContainer>
+              <ProductBox>
+                {!loading && newArrivals.products ? (
+                  newArrivals.products.map((product) => {
+                    return <Product key={product._id} product={product} />;
+                  })
+                ) : (
+                  <p>No products found...</p>
+                )}
+              </ProductBox>
+            </ProductContainer>
+
+            {!loading && newArrivals?.pages?.length > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                pages={newArrivals.pages}
+              />
+            )}
           </div>
+        </Container>
+      </>
+    );
+  }
 
-          <ProductContainer>
-            <ProductBox>
-              {!loading && newArrivals.products ? (
-                newArrivals.products.map((product) => {
-                  return <Product key={product._id} product={product} />;
-                })
-              ) : (
-                <p>No products found...</p>
-              )}
-            </ProductBox>
-          </ProductContainer>
-
-          {!loading && newArrivals?.pages?.length > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              pages={newArrivals.pages}
-            />
-          )}
-        </div>
-      </Container>
-    </>
-  );
+  return null;
 };
 
 export default NewArivals;

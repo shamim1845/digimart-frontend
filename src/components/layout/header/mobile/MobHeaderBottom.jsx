@@ -88,9 +88,17 @@ const BottomHeaderContainer = styled.div`
   position: fixed;
   background-color: #fff;
   z-index: 10000;
+  padding: 0 2rem;
 
   @media screen and (min-width: 769px) {
     display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 1 2rem;
+  }
+  @media screen and (max-width: 576px) {
+    /* padding: 1rem 1rem; */
   }
 `;
 const BottomLeft = styled.div`
@@ -107,8 +115,8 @@ const BottomLeft = styled.div`
       border: none;
       height: 4.5rem;
       width: 4.5rem;
-      margin: 0 1rem;
-      padding-top: 0.5rem;
+      /* margin: 0 1rem; */
+      padding-top: 1rem;
       &:hover {
         box-shadow: rgba(255, 155, 155, 0.3) 0px -50px 36px -28px inset;
       }
@@ -139,7 +147,7 @@ const BottomRight = styled.div`
       height: 4.5rem;
       min-width: 4.5rem;
       margin-right: 1rem;
-      padding-top: 0.5rem;
+      padding-top: 1rem;
       position: relative;
       &:hover {
         box-shadow: rgba(255, 155, 155, 0.3) 0px -50px 36px -28px inset;
