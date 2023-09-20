@@ -1,26 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import PageContainer from "../../utils/PageContainer";
-import Loading from "../../utils/Loading";
+import Loading from "../../utils/fetchUtils/Loading";
 import ProductDescription from "./ProductDescription";
 import RatingReviews from "./RatingReviews";
 import RelatedProducts from "./RelatedProducts";
-
 import ProductImageSlider from "./ProductImageSlider";
 import ProductHandler from "./ProductHandler";
-import { fetchAsyncProductsDetails } from "../../../features/products/productSlice";
+import { useGetProductQuery } from "../../../redux/api/products/productsAPI";
+import Error from "../../utils/fetchUtils/Error";
 
 const ProductDetails = () => {
-  const sliderRef = useRef();
-  const dispatch = useDispatch();
   const [favourite, setFavourite] = useState(false);
 
-  const { productId } = useParams();
+  const sliderRef = useRef();
+  const dispatch = useDispatch();
 
-  const { Product } = useSelector((state) => state.products.singleProduct);
+  const { productId } = useParams();
+  const { data, isLoading, isError } = useGetProductQuery(productId);
+  console.log(data);
+
   useEffect(() => {
     setFavourite(false);
 
@@ -35,11 +37,14 @@ const ProductDetails = () => {
         });
     }
     localFavouriteItem();
-    dispatch(fetchAsyncProductsDetails(productId));
   }, [dispatch, productId]);
 
-  if (!Product) {
+  if (isLoading) {
     return <Loading />;
+  }
+
+  if (isError) {
+    return Error;
   }
 
   return (
@@ -47,19 +52,23 @@ const ProductDetails = () => {
       <ProductDetailsContainer>
         <ContainerTop>
           <SliderContainer>
-            <ProductImageSlider Product={Product} sliderRef={sliderRef} />
+            <ProductImageSlider
+              productImages={data?.product?.images}
+              sliderRef={sliderRef}
+            />
           </SliderContainer>
           <DetailsContainer>
             <ProductHandler
-              Product={Product}
+              product={data?.product}
               favourite={favourite}
               setFavourite={setFavourite}
             />
           </DetailsContainer>
         </ContainerTop>
-        <ProductDescription product={Product} />
-        <RatingReviews product={Product} />
-        <RelatedProducts category={Product.category} id={productId} />
+
+        <ProductDescription product={data.product} />
+        <RatingReviews product={data.product} />
+        <RelatedProducts category={data.product.category} id={productId} />
       </ProductDetailsContainer>
     </PageContainer>
   );
@@ -68,27 +77,20 @@ const ProductDetails = () => {
 export default ProductDetails;
 
 const ProductDetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   max-width: 1440px;
-  margin-top: 2rem;
-
-  @media screen and (max-width: 1440px) {
-    padding: 0 2rem;
-  }
 `;
 const ContainerTop = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 2rem;
+  gap: 7rem;
+  padding: 2rem 0 3rem;
+  margin-bottom: 3rem;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1024px) {
     flex-direction: column;
-    margin-bottom: 2rem;
+    gap: 3rem;
   }
 `;
 const SliderContainer = styled.div`
@@ -96,7 +98,6 @@ const SliderContainer = styled.div`
   flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
-  margin-bottom: 3rem;
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
@@ -104,12 +105,6 @@ const SliderContainer = styled.div`
 `;
 
 const DetailsContainer = styled.div`
-  margin-left: 5rem;
-  @media screen and (max-width: 768px) {
-    width: 90vw;
-  }
-  @media screen and (max-width: 576px) {
-    width: 100%;
-    margin-left: 0rem;
-  }
+  width: 100%;
+  height: 100%;
 `;

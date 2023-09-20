@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Button from "./reUseableComponents/Buttons";
 
 const EmptyItems = ({ text, link, btnText }) => {
   const navigate = useNavigate();
@@ -9,18 +10,18 @@ const EmptyItems = ({ text, link, btnText }) => {
   };
 
   return (
-    <NoFavouriteContainer>
+    <EmptyItemContainer>
       <EmptyContainer>
         <h4>{text}</h4>
-        <button onClick={() => goToProduct()}>{btnText}</button>
+        <Button text={btnText} onClick={goToProduct} />
       </EmptyContainer>
-    </NoFavouriteContainer>
+    </EmptyItemContainer>
   );
 };
 
 export default EmptyItems;
 
-const NoFavouriteContainer = styled.div`
+const EmptyItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,13 +35,6 @@ const EmptyContainer = styled.div`
   height: 100%;
 
   h4 {
-  }
-  button {
-    margin-top: 1rem;
-    border: none;
-    background-color: tomato;
-    padding: 1rem 2rem;
-    font-size: 1.3rem;
-    border-radius: 0.5rem;
+    font-size: 2rem;
   }
 `;

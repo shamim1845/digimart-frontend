@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllOrders, paymentInfo } from "../../features/order/orderSlice";
+import { getAllOrders, paymentInfo } from "../../redux/order/orderSlice";
 import { rate } from "../../App";
 
 const OrderSummary = () => {
@@ -17,9 +17,11 @@ const OrderSummary = () => {
     const calcProductPrice =
       orderdItems &&
       orderdItems?.reduce((acc, item) => {
-        return acc + (item.product.price * item.quantity);
+        return acc + item.product.price * item.quantity;
       }, 0);
-    const calcShippingCost = Math.round(calcProductPrice * (rate.shipping / 100));
+    const calcShippingCost = Math.round(
+      calcProductPrice * (rate.shipping / 100)
+    );
     const calcTax = Math.round(calcProductPrice * (rate.tax / 100));
 
     setProductPrice(calcProductPrice);

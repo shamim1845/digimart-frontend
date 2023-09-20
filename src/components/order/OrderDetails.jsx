@@ -9,13 +9,13 @@ import {
   getShippingInformation,
   removeOrderItem,
   shippingInformation,
-} from "../../features/order/orderSlice";
+} from "../../redux/order/orderSlice";
 import ShippingInfo from "./ShippingInfo";
 import { IconButton } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DefaultShippingAddress from "./DefaultShippingAddress";
 import StripePayment from "./StripePayment";
-import { addCartItem } from "../../features/user/userSlice";
+import { addCartItem } from "../../redux/user/userSlice";
 
 const OrderDetails = () => {
   const [isShipping, setIsShipping] = useState(false);

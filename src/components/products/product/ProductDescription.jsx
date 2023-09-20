@@ -1,14 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import Title from "../../utils/reUseableComponents/Title";
 
 const ProductDescription = ({ product }) => {
   return (
     <Container>
-      <div className="title">
-        <h2>
-          Product Details of <span>{` ${product.name}`}</span>
-        </h2>
-      </div>
+      <Title
+        variant="h2"
+        text={`Product Details of  ${product.name}`}
+        style={{ padding: "1.3rem", color: "#333", background: "#fafafa" }}
+      />
 
       <article>
         <div
@@ -31,35 +32,12 @@ const Container = styled.div`
   @media screen and (max-width: 768px) {
     width: 90vw;
   }
-  .title {
-    background: #fafafa;
-    color: #212121;
-    min-height: 5rem;
-    display: grid;
-    align-items: center;
-    padding: 0 1rem;
-
-    h2 {
-      font-weight: 500;
-      font-family: roboto;
-      font-size: 1.6rem;
-
-      span {
-        font-weight: 500;
-        font-family: roboto;
-        font-size: 1.6rem;
-        text-transform: capitalize;
-      }
-    }
-  }
 
   .description {
-    padding: 1rem 1rem;
-
+    padding: 1rem;
     font-size: 1.3rem;
-    p {
-      /* font-size: 1.3rem; */
-    }
+    line-height: 1.4;
+
     ul {
       -webkit-columns: 2;
       -moz-columns: 2;
@@ -79,8 +57,24 @@ const Container = styled.div`
 
       li {
         list-style: disc;
+        list-style-position: inside;
         font-size: 1.3rem;
       }
     }
   }
 `;
+
+// const Title = styled.div`
+//   background: #fafafa;
+//   color: #212121;
+//   min-height: 5rem;
+//   display: grid;
+//   align-items: center;
+//   padding: 0 1rem;
+
+//   h2 {
+//     font-weight: 500;
+//     font-size: 1.5rem;
+//     text-transform: capitalize;
+//   }
+// `;

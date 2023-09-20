@@ -15,7 +15,7 @@ const AuthMenu = () => {
     const res = await axios.get(`/api/v1/logout`);
 
     if (res.status === 200) {
-      toast.info(res.data.message);
+      toast.success(res.data.message);
       setTimeout(() => {
         navigate("/");
         window.location.reload();
@@ -25,34 +25,33 @@ const AuthMenu = () => {
 
   return (
     <AuthMenuContainer>
-      <div className="register_login_logout">
-        <img src="/images/icons/person-fill.svg" alt="Register/login Avatar" />
-        {authenticated ? (
-          <button className="logout_button" onClick={LogOutHandler}>
-            Log Out
-          </button>
-        ) : (
-          <span>
-            <NavLink
-              className={({ isActive }) =>
-                isActive ? "activeNavLink" : undefined
-              }
-              to={"/register"}
-            >
-              Register
-            </NavLink>
-            or
-            <NavLink
-              className={({ isActive }) =>
-                isActive ? "activeNavLink" : undefined
-              }
-              to={"/login"}
-            >
-              Login
-            </NavLink>
-          </span>
-        )}
-      </div>
+      <img src="/images/icons/person-fill.svg" alt="Register/login Avatar" />
+
+      {authenticated ? (
+        <button className="logout_button" onClick={LogOutHandler}>
+          Log Out
+        </button>
+      ) : (
+        <div className="register_login">
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "activeNavLink" : undefined
+            }
+            to={"/register"}
+          >
+            Register
+          </NavLink>
+          or
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "activeNavLink" : undefined
+            }
+            to={"/login"}
+          >
+            Login
+          </NavLink>
+        </div>
+      )}
     </AuthMenuContainer>
   );
 };
@@ -60,54 +59,46 @@ const AuthMenu = () => {
 export default AuthMenu;
 const AuthMenuContainer = styled.div`
   display: flex;
-
-  .register_login_logout {
-    display: flex;
-    padding: 1rem;
-    font-size: 1.2rem;
-    font-weight: 500;
-    transition: all 0.5s;
-    img {
-      margin-right: 0.5rem;
-    }
-    .logout_button {
-      width: 7rem;
-      border: none;
-      &:hover {
-        color: tomato;
-      }
-    }
-    span {
-      margin-bottom: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      & a:hover {
-        color: tomato;
-        @media screen and (max-width: 768px) {
-          color: #fff;
-        }
-      }
-
-      .activeNavLink {
-        color: tomato;
-        @media screen and (max-width: 768px) {
-          color: #fff;
-        }
-      }
+  align-items: center;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: all 0.5s;
+  img {
+    margin-right: 0.5rem;
+  }
+  .logout_button {
+    width: 7rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    font-size: 1.3rem;
+    &:hover {
+      color: tomato;
     }
   }
-  .currency {
-    padding: 1rem;
-    border-right: 1px solid #e4e9eb;
-    @media screen and (max-width: 768px) {
-      border: none;
+  .register_login {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    & a {
+      font-size: 1.3rem;
+      &:hover {
+        color: tomato;
+        @media screen and (max-width: 768px) {
+          color: #fff;
+        }
+      }
     }
-    & select {
-      cursor: pointer;
-      border: none;
-      font-size: 1.2rem;
+
+    .activeNavLink {
+      color: tomato;
+      @media screen and (max-width: 768px) {
+        color: #fff;
+      }
     }
   }
 `;

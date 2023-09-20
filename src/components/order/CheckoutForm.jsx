@@ -12,7 +12,7 @@ import {
   getAllOrders,
   getPaymentInfo,
   getShippingInformation,
-} from "../../features/order/orderSlice";
+} from "../../redux/order/orderSlice";
 import axios from "axios";
 import { toast } from "react-toastify";
 

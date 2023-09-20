@@ -11,12 +11,12 @@ import {
   getAllOrders,
   removeOrderItem,
   resetOrderItem,
-} from "../../features/order/orderSlice";
+} from "../../redux/order/orderSlice";
 import {
   addCartItem,
   addFavouriteItem,
   deleteCartItem,
-} from "../../features/user/userSlice";
+} from "../../redux/user/userSlice";
 
 const CartDetails = ({ cartItem }) => {
   const [checkList, setCheckList] = useState([]);

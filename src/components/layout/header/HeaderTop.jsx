@@ -3,16 +3,18 @@ import AuthMenu from "./headerUtils/AuthMenu";
 import Currency from "./headerUtils/Currency.jsx";
 
 const HeaderTop = () => {
+  console.log("HeaderTop.js render =>");
+
   return (
     <HeaderTopContainer>
       <HeaderTopBar>
         <div className="left">
           <div>
-            <img src="/images/icons/email-envelop.svg" alt="" />
+            <img src="/images/icons/email-envelop.svg" alt="envelop" />
             <span>Email: support@digimart.com</span>
           </div>
           <div>
-            <img src="/images/icons/tag-fill.svg" alt="" />
+            <img src="/images/icons/tag-fill.svg" alt="Tag" />
             <span>Today Deals</span>
           </div>
         </div>
@@ -20,12 +22,12 @@ const HeaderTop = () => {
           <div className="authmenu_container">
             <AuthMenu />
           </div>
-          <div className="currency_container">
+          {/* <div className="currency_container">
             <Currency />
-          </div>
-          <div className="site_language">
+          </div> */}
+          {/* <div className="site_language">
             <img src="/images/icons/bd-flag.svg" alt="Country flag" />
-          </div>
+          </div> */}
         </div>
       </HeaderTopBar>
     </HeaderTopContainer>
@@ -48,7 +50,6 @@ const HeaderTopBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.2rem;
   color: #666;
 
   .left {
@@ -67,6 +68,7 @@ const HeaderTopBar = styled.div`
 
       img {
         margin-right: 0.5rem;
+        width: 1.3rem;
       }
       span {
         margin-bottom: 0;

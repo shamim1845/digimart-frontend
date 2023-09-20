@@ -1,40 +1,39 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import Logo from "../../logo/Logo";
+import Logo from "../../utils/logo/Logo";
+
+const navLinks = [
+  {
+    name: "Home",
+    link: "/",
+  },
+  {
+    name: "Products",
+    link: "/products",
+  },
+];
 
 const HeaderMiddle = () => {
+  console.log("HeaderMiddle.js render =>");
+
   return (
     <HeaderMidContainer>
       <HeaderMidd>
         <MiddleLeft>
-          <Logo />
+          <Logo variant="dark" />
         </MiddleLeft>
         <MiddleRight>
           <ul className="menu">
-            <li>
-              <NavLink
-                className={({ isActive }) => (isActive ? "active" : "")}
-                to={"/"}
-              >
-                HOME
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => (isActive ? "active" : "")}
-                to={"/blog"}
-              >
-                BLOG
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) => (isActive ? "active" : "")}
-                to={"/products"}
-              >
-                Products
-              </NavLink>
-            </li>
+            {navLinks.map((navLink) => (
+              <li key={navLink.link}>
+                <NavLink
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                  to={navLink.link}
+                >
+                  {navLink.name}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </MiddleRight>
       </HeaderMidd>
@@ -79,10 +78,11 @@ const MiddleRight = styled.div`
 
     li {
       padding: 0 1rem;
-      font-size: 1.3rem;
       letter-spacing: 1px;
       font-weight: 600;
-      color: #000;
+      a {
+        text-transform: capitalize;
+      }
     }
   }
 `;

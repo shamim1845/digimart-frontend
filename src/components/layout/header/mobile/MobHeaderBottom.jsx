@@ -87,7 +87,7 @@ const BottomHeaderContainer = styled.div`
   width: 100%;
   position: fixed;
   background-color: #fff;
-  z-index: 10000;
+  z-index: 1000;
   padding: 0 2rem;
 
   @media screen and (min-width: 769px) {

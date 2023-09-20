@@ -1,11 +1,13 @@
 import styled from "styled-components";
-import Carousle from "../slider/Slider";
+import Carousle from "../utils/slider/homeSlider/Slider";
 
 import PageContainer from "../utils/PageContainer";
-import NewArivals from "../newArivals/NewArivals";
+import NewArivals from "./newArivals/NewArivals";
 import NewsLetter from "./NewsLetter";
 
 const Home = () => {
+  console.log("Home.js render =>");
+
   return (
     <>
       <Container>

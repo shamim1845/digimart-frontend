@@ -5,8 +5,8 @@ import styled from "styled-components";
 import {
   fetchAsyncMyAllOrders,
   getUserOrderItems,
-} from "../../../features/order/orderSlice";
-import Loading from "../../utils/Loading";
+} from "../../../redux/order/orderSlice";
+import Loading from "../../utils/fetchUtils/Loading";
 import Order from "./Order";
 
 const MyOrder = () => {

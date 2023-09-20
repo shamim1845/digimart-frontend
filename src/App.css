@@ -1,14 +1,17 @@
+/* Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+/* Bootstrap icons */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
 
+/* Reset*/
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
-  /* font-family: 'Roboto', sans-serif; */
-  /*modified */
 }
+
+/* CSS variable */
 :root {
   --bg-primary: tomato;
   --bg-secondary: #eff0f5;
@@ -18,38 +21,59 @@
 
 html {
   font-size: 62.5%;
+  line-height: 1.15;
 }
 body {
-  color: #0f1111;
+  color: var(--text-secondary);
   font-size: 1.3rem;
+  overflow-x: hidden;
 }
 
+/* Scrollbar customization */
 /* body::-webkit-scrollbar {
-  width: 6px;
+  width: 10px;
 }
 
-::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: tomato;
+body::-webkit-scrollbar-thumb {
+  background-color: teal;
+  border-radius: 5px;
+  width: 5px;
 } */
 
+/* default style  */
 ul {
   list-style: none;
 }
+
 a {
   text-decoration: none;
-  color: #0f1111;
+  color: var(--text-primary);
 }
 
+/* utility class */
 .active {
   color: tomato;
 }
 
+/* Scrool to top Button customization */
 .styles_scroll-to-top__2A70v {
   @media screen and (max-width: 768px) {
     bottom: 6rem !important;
+  }
+}
+
+/* animation  */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* keyframes */
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
   }
 }

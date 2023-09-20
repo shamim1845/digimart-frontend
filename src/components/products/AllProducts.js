@@ -1,102 +1,101 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-
 import PageContainer from "../utils/PageContainer";
-import Loading from "../utils/Loading";
-import Filter from "./Filter";
-import Product from "./ProductCard";
-import Pagination from "../utils/Pagination";
+import ProductPerPage from "./ProductPerPage";
+import MetaData from "../utils/Metadata";
+import TuneIcon from "@mui/icons-material/Tune";
+import FilterBox from "./FilterBox";
+import ProductBox from "./ProductBox";
 
-const AllProductDisplay = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+const AllProducts = () => {
+  const [activeFilter, setActiveFilter] = useState(false);
 
-  const productDetails = useSelector((state) => state.products);
-  const { loading, allProducts } = productDetails;
+  console.log("AllProducts page render. =>");
 
   return (
     <>
-      {loading && <Loading />}
-
+      <MetaData title="Products" />
       <PageContainer>
-        <MainTitle>
-          <h2>Product List</h2>
-        </MainTitle>
+        <Header>
+          <FilterButton onClick={() => setActiveFilter(true)}>
+            <TuneIcon />
+            <span>Filter</span>
+          </FilterButton>
+          <ProductPerPage />
+        </Header>
 
-        <ProductContainer>
-          <FilterBox>
-            <Filter currentPage={currentPage} setCurrentPage={setCurrentPage} />
-          </FilterBox>
-          {allProducts?.products?.length > 0 && (
-            <ProductBox>
-              {allProducts.products.map((product) => {
-                return <Product key={product._id} product={product} />;
-              })}
-            </ProductBox>
-          )}
-
-          {allProducts?.products?.length === 0 && (
-            <NoProduct>
-              <h3>No products found...</h3>
-            </NoProduct>
-          )}
-        </ProductContainer>
-        {allProducts?.page?.length > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            pages={allProducts.page}
+        <Container>
+          <FilterBox
+            activeFilter={activeFilter}
+            setActiveFilter={setActiveFilter}
           />
-        )}
+
+          <ProductBox />
+        </Container>
       </PageContainer>
     </>
   );
 };
 
-export default AllProductDisplay;
-const NoProduct = styled.div`
-  width: 100%;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+export default AllProducts;
 
-const MainTitle = styled.div`
-  margin: 3rem 0 2rem 0;
-  h2 {
-    border-bottom: 4px solid #ddd;
-    font-size: 3rem;
-  }
-`;
-
-const ProductContainer = styled.div`
-  display: flex;
-  justify-content: center;
+const Header = styled.div`
   width: 100%;
   max-width: 1440px;
-  margin-bottom: 2rem;
-  /* background-color: rebeccapurple; */
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+
+  z-index: 10;
+  background-color: #f2f2f2;
+  @media screen and (max-width: 768px) {
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+  }
+`;
+
+const FilterButton = styled.div`
+  display: none;
 
   @media screen and (max-width: 768px) {
-    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+      rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+    display: flex;
     align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.5s ease-in-out;
   }
-`;
-const FilterBox = styled.div`
-  padding: 0 1.5rem;
 
-  @media screen and (max-width: 768px) {
-    width: 100%;
+  &:hover {
+    background-color: tomato;
+    svg {
+      fill: #fff;
+    }
+    span {
+      color: #fff;
+    }
+  }
+
+  svg {
+    font-size: 2rem;
+  }
+  span {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    font-weight: 600;
   }
 `;
-const ProductBox = styled.div`
+const Container = styled.div`
   width: 100%;
-  height: 100%;
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  place-items: center;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  max-width: 1440px;
+  min-height: 80vh;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  padding: 1rem 0;
+  position: relative;
 `;

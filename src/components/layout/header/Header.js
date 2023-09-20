@@ -8,15 +8,15 @@ import HeaderBottom from "./HeaderBottom";
 // Mobile Header
 import MobHeaderBottom from "./mobile/MobHeaderBottom";
 import MobHeaderTop from "./mobile/MobHeaderTop";
-import useWindowSize from "../../customHooks/useWindowSize";
-import { ToastContainer } from "react-toastify";
+
+import useWindowSize from "../../utils/customHooks/useWindowSize";
 
 const Header = () => {
   const windowSize = useWindowSize();
+  console.log("Header.js render =>");
 
   return (
     <>
-      <ToastContainer />
       {windowSize > 768 ? (
         <HeaderContainer>
           <HeaderTop />

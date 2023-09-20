@@ -1,56 +1,56 @@
 import React from "react";
-import { useEffect } from "react";
-import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import ChangePassword from "../Auth/ChangePassword";
+import Title from "../utils/reUseableComponents/Title";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../../redux/user/userSelector";
 const MyProfile = () => {
   const [isChangePassword, setIsChangePassword] = useState(false);
-  const [user, setUser] = useState(null);
+  const user = useSelector(selectUserInfo);
 
-  useEffect(() => {
-    axios.get("/api/v1/me").then((res) => {
-      setUser(res.data.user);
-    });
-  }, []);
-  //   console.log(user);
   return (
     <ProfileContainer>
-      <Title>
-        <h2>My Profile</h2>
-      </Title>
+      <Title
+        variant="h2"
+        text="My Profile"
+        style={{ textAlign: "center", marginTop: "2rem" }}
+      />
+
       <Content>
         <UserImage>
           <img src={user?.avatar?.url} alt="profile_picture" />
         </UserImage>
+
         <UserDetails>
           <div className="detils_group">
-            <p>Full name</p>
-            <h6>{user?.name}</h6>
+            <span>Full name</span>
+            <span>{user?.name}</span>
           </div>
           <div className="detils_group">
-            <p>Email Address</p>
-            <h6>{user?.email}</h6>
+            <span>Email Address</span>
+            <span>{user?.email}</span>
           </div>
           <div className="detils_group">
-            <p>Mobile</p>
-            <h6>{user?.mobile}</h6>
+            <span>Mobile</span>
+            <span>{user?.mobile}</span>
           </div>
         </UserDetails>
+
         <UserDetails>
           <div className="detils_group">
-            <p>Birthday</p>
-            <h6>{user?.birthday}</h6>
+            <span>Birthday</span>
+            <span>{user?.birthday}</span>
           </div>
           <div className="detils_group">
-            <p>Gender</p>
-            <h6>{user?.gender}</h6>
+            <span>Gender</span>
+            <span>{user?.gender}</span>
           </div>
         </UserDetails>
+
         <ButtonContainer>
           <Link to={"/account/updateProfile"}>
-            {" "}
             <button className="edit_profile">EDIT PROFILE</button>
           </Link>
 
@@ -61,11 +61,8 @@ const MyProfile = () => {
             CHANGE PASSWORD
           </button>
         </ButtonContainer>
-        {isChangePassword && (
-          <ChangePasswordContainer>
-            <ChangePassword />
-          </ChangePasswordContainer>
-        )}
+
+        {isChangePassword && <ChangePassword />}
       </Content>
     </ProfileContainer>
   );
@@ -82,9 +79,6 @@ const ProfileContainer = styled.div`
   width: 100%;
   max-width: 800px;
   margin-bottom: 3rem;
-
-  @media screen and (max-width: 768px) {
-  }
 `;
 
 const Content = styled.div`
@@ -96,23 +90,8 @@ const Content = styled.div`
   @media screen and (max-width: 768px) {
     margin: 0 5rem;
   }
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 576px) {
     padding: 2rem;
-  }
-`;
-
-const Title = styled.div`
-  margin-top: 2rem;
-
-  width: 90%;
-
-  h2 {
-    text-align: left;
-  }
-  @media screen and (max-width: 768px) {
-    h2 {
-      text-align: center;
-    }
   }
 `;
 
@@ -122,8 +101,8 @@ const UserImage = styled.div`
   align-items: center;
   margin-bottom: 2rem;
   img {
-    width: 15rem;
-    height: 15rem;
+    width: 13rem;
+    height: 13rem;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -134,12 +113,16 @@ const UserDetails = styled.div`
   grid-template-columns: repeat(3, 1fr);
   margin-bottom: 3rem;
   gap: 1rem;
+
   .detils_group {
-    p {
-      font-size: 1.2rem;
-    }
-    h6 {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    span:last-child {
       font-size: 1.4rem;
+      color: var(--text-primary);
+      font-weight: 500;
     }
   }
   @media screen and (max-width: 850px) {
@@ -163,6 +146,8 @@ const ButtonContainer = styled.div`
     border: 2px solid #1a9cb7;
     color: #fff;
     transition: all 0.5s ease-in-out;
+    cursor: pointer;
+
     &:hover {
       background-color: #177e92;
       border: 2px solid #177e92;
@@ -172,5 +157,3 @@ const ButtonContainer = styled.div`
     }
   }
 `;
-
-const ChangePasswordContainer = styled.div``;

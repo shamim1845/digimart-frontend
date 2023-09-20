@@ -1,99 +1,62 @@
-import React, { useEffect } from "react";
 import { useRef } from "react";
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import Logo from "../../../logo/Logo";
-import { useSelector } from "react-redux";
+import Logo from "../../../utils/logo/Logo";
+import useSidebarHandler from "../../../utils/customHooks/useSidebarHandler";
+import Categories from "./Categories";
 
-const SidebarMenu = ({ setSideBar }) => {
+const SidebarMenu = ({ sideBar, setSideBar }) => {
   const sidebarRef = useRef(null);
-  const { categories } = useSelector((state) => state.products.allCategories);
 
-  useEffect(() => {
-    function sidebarHandler(e) {
-      if (!sidebarRef.current.contains(e.target)) {
-        setSideBar(false);
-      }
-    }
-    window.addEventListener("mousedown", sidebarHandler);
+  // Custom hooks for handling sidebar when mousedown inside of sidebar
+  useSidebarHandler(sidebarRef, setSideBar);
 
-    return () => {
-      window.removeEventListener("mousedown", sidebarHandler);
-    };
-  }, [setSideBar]);
   return (
     <>
-      <SidebarMenuContainer ref={sidebarRef}>
+      <Container sideBar={sideBar} ref={sidebarRef}>
         <MobileMenuTop>
+          <Logo primaryColor="#000" secondaryColor="#fff" />
           <CloseButton onClick={() => setSideBar(false)}>
             <i className="bi bi-x"></i>
           </CloseButton>
-          <Logo />
         </MobileMenuTop>
 
-        <MobileMenu>
+        <Content>
           <TrendingDept>
             <h4>Browse All Categories</h4>
-            {categories &&
-              categories.map((cat, index) => {
-                return (
-                  <DepartMent key={index}>
-                    <ul>
-                      <li>{cat}</li>
-                    </ul>
-                  </DepartMent>
-                );
-              })}
+            <Categories setSidebar={setSideBar} />
           </TrendingDept>
-        </MobileMenu>
-      </SidebarMenuContainer>
+        </Content>
+      </Container>
     </>
   );
 };
 
 export default SidebarMenu;
 
-const DepartMent = styled.div``;
-
-const SidebarMenuContainer = styled.div`
-  height: 100%;
-  /* width: 100%;
-  max-width: 30rem; */
-
+const Container = styled.div`
+  height: 100vh;
+  width: 100%;
+  max-width: 30rem;
+  transition: all 0.3s ease-in-out;
   background: #fff;
-  left: 0;
+  left: ${({ sideBar }) => (sideBar ? "0" : "-30rem")};
   position: fixed;
   z-index: 10000;
 `;
 
 const MobileMenuTop = styled.div`
-  height: 8rem;
+  height: 5.5rem;
   background-color: tomato;
   padding-left: 2rem;
   display: flex;
-  flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
-
-  .logo_sidebar {
-    h3 {
-      color: #fff;
-      font-size: 2.2rem;
-    }
-    h2 {
-      letter-spacing: 0.1rem;
-      font-size: 2.7rem;
-      span {
-        color: #fff;
-      }
-    }
-  }
 `;
 
 const CloseButton = styled.div`
+  margin-right: 1rem;
   i {
     font-size: 3.5rem;
-    margin-right: 0.5rem;
     color: #000;
     cursor: pointer;
     transition: all 250ms;
@@ -102,12 +65,12 @@ const CloseButton = styled.div`
     }
   }
 `;
-const MobileMenu = styled.div`
-  margin: 2rem;
-  height: 100%;
+
+const Content = styled.div`
+  background-color: aliceblue;
+  padding: 2rem;
+  height: calc(100vh - 5.5rem);
   overflow-y: auto;
-  padding-bottom: 20rem;
-  padding-right: 1rem;
 
   ::-webkit-scrollbar {
     width: 4px;
@@ -120,26 +83,10 @@ const MobileMenu = styled.div`
   ::-webkit-scrollbar-thumb {
     background-color: tomato;
   }
-
-  a {
-    color: #666;
-    width: 100%;
-    padding: 0.5rem 0;
-    &:hover {
-      color: tomato;
-    }
-  }
-  h4 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-  }
-  ul {
-    li {
-      font-size: 1.4rem;
-      text-transform: capitalize;
-    }
-  }
 `;
 const TrendingDept = styled.div`
-  /* position: relative; */
+  h4 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
 `;

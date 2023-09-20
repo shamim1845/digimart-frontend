@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import SidebarMenu from "./SidebarMenu";
-import ProductSearch from "../../../products/ProductSearch";
+import ProductSearch from "../headerUtils/ProductSearch";
 import AuthMenu from "../headerUtils/AuthMenu";
-import Logo from "../../../logo/Logo";
+import Logo from "../../../utils/logo/Logo";
 
 const MobHeaderTop = () => {
   const [sideBar, setSideBar] = useState(false);
@@ -11,9 +11,10 @@ const MobHeaderTop = () => {
   const SidebarHandler = () => {
     setSideBar((prev) => !prev);
   };
+
   return (
     <>
-      {sideBar ? <SidebarMenu setSideBar={setSideBar} /> : null}
+      <SidebarMenu sideBar={sideBar} setSideBar={setSideBar} />
 
       <MobHeaderContainer>
         <HeaderTop>
@@ -23,7 +24,7 @@ const MobHeaderTop = () => {
               src="/images/icons/hamberger.svg"
               alt="sidebar icon"
             />
-            <Logo />
+            <Logo primaryColor="#000" secondaryColor="#fff" />
           </HeaderTopLeft>
 
           <AuthMenu />

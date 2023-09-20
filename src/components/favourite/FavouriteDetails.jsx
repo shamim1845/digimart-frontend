@@ -5,10 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch } from "react-redux";
-import {
-  addCartItem,
-  deleteFavouriteItem,
-} from "../../features/user/userSlice";
+import { addCartItem, deleteFavouriteItem } from "../../redux/user/userSlice";
 
 const FavouriteDetails = ({ cartItem }) => {
   const dispatch = useDispatch();

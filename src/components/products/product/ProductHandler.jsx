@@ -1,245 +1,274 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { addOrderItem } from "../../../features/order/orderSlice";
+import { addOrderItem } from "../../../redux/order/orderSlice";
 import {
   addCartItem,
   addFavouriteItem,
+  deleteCartItem,
   deleteFavouriteItem,
-} from "../../../features/user/userSlice";
+} from "../../../redux/user/userSlice";
 import { styled as btn } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { toast } from "react-toastify";
 
 import Rating from "@mui/material/Rating";
-const ProductHandler = ({ Product, favourite, setFavourite }) => {
+import Title from "../../utils/reUseableComponents/Title";
+import { selectMemoCartItemQuantity } from "../../../redux/user/userSelector";
+
+// MUI customize button
+const BuyNow = btn(Button)({
+  backgroundColor: "#585555",
+  color: "#fff",
+  marginRight: "2rem",
+  fontSize: "1.4rem",
+  fontWeight: "600",
+  padding: "1rem 3rem",
+  "&:hover": {
+    backgroundColor: "tomato",
+    color: "#000",
+  },
+});
+
+const AddToCart = btn(Button)({
+  backgroundColor: "tomato",
+  color: "#000",
+  fontSize: "1.4rem",
+  fontWeight: "600",
+  padding: "1rem 3rem",
+  "&:hover": {
+    backgroundColor: "#585555",
+    color: "#fff",
+  },
+});
+
+const ProductHandler = ({ product, favourite, setFavourite }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [quantity, setQuantity] = useState(1);
-
+  // Add item to favourite list
   const addfavouriteItemHandler = () => {
     setFavourite(true);
-    dispatch(addFavouriteItem({ product: Product }));
-  };
-  const removefavouriteHandler = () => {
-    setFavourite(false);
-    dispatch(deleteFavouriteItem({ product: Product }));
+    dispatch(addFavouriteItem({ product }));
   };
 
+  // Remove item from favourite lis
+  const removefavouriteHandler = () => {
+    setFavourite(false);
+    dispatch(deleteFavouriteItem({ product }));
+  };
+
+  // Buy product directly
   const directBuyHandler = () => {
-    let Item = { product: Product, quantity: quantity };
+    let Item = { product, quantity };
     dispatch(addOrderItem({ Item }));
 
     navigate("/order");
   };
 
-  const BuyNow = btn(Button)({
-    backgroundColor: "#EAEAEA",
-    color: "black",
-    marginRight: "2rem",
-    fontSize: "1.4rem",
-    padding: "1rem 3rem",
-    "&:hover": {
-      backgroundColor: "#EAEAEA",
-      color: "tomato",
-    },
-  });
-  const AddToCart = btn(Button)({
-    backgroundColor: "tomato",
-    color: "#fff",
-    fontSize: "1.4rem",
-    padding: "1rem 3rem",
-    "&:hover": {
-      backgroundColor: "#A9333A",
-    },
-  });
+  const memoCartItem = useMemo(selectMemoCartItemQuantity, []);
 
-  const cartHandler = () => {
-    dispatch(
-      addCartItem({ product: Product, quantity: quantity }),
-      setQuantity(1)
-    );
+  const quantity = useSelector((state) => memoCartItem(state, product?._id));
 
-    toast("Item is added in your cart.");
+  console.log("Product card render =>", quantity);
+
+  const addToCartHandler = () => {
+    if (quantity === product?.stock) return;
+
+    const currQty = quantity + 1;
+
+    dispatch(addCartItem({ product, quantity: currQty }));
+
+    if (currQty === 1) {
+      toast.success(`New item added in your cart.`);
+    } else {
+      toast.info(`Quantity increase in your existing cart item.`);
+    }
+  };
+
+  const removeFromCartHandler = () => {
+    if (quantity === 0) return;
+    const currQty = quantity > 1 ? quantity - 1 : 0;
+
+    if (currQty === 0) {
+      dispatch(deleteCartItem({ product }));
+      toast.warn(`Item removed from your cart.`);
+    } else {
+      dispatch(addCartItem({ product, quantity: currQty }));
+      toast.info(`Quantity decrease in your existing cart item.`);
+    }
   };
 
   return (
-    <div>
-      <TitleBox>
-        <h1 className="title">{Product.name}</h1>
-        <div className="rating">
-          <div>
-            <Rating
-              name="half-rating-read"
-              size="large"
-              value={Product.avgRatings}
-              precision={0.1}
-              readOnly
-            />
-            <p>{`${Product.numOfReviews} Ratings`}</p>
-          </div>
-          <div
-            className="favourite"
-            onClick={() => addfavouriteItemHandler()}
-            onDoubleClick={() => removefavouriteHandler()}
-          >
-            {favourite ? (
-              <i className="bi bi-heart-fill"></i>
-            ) : (
-              <i className="bi bi-heart"></i>
-            )}
-          </div>
+    <Container>
+      <Title text={product?.name} style={{ paddingBottom: "1rem" }} />
+      <RatingAndFavourite>
+        <div>
+          <Rating
+            name="half-rating-read"
+            size="large"
+            value={product?.avgRating}
+            precision={0.1}
+            readOnly
+          />
+          <p className="total_ratings">{`${product?.totalReviews} Ratings`}</p>
         </div>
-        <p className="brand_name">Brand: {Product.brand}</p>
-        <p className="divider"></p>
-      </TitleBox>
+
+        <div
+          className="favourite"
+          onClick={addfavouriteItemHandler}
+          onDoubleClick={removefavouriteHandler}
+        >
+          {favourite ? (
+            <i className="bi bi-heart-fill"></i>
+          ) : (
+            <i className="bi bi-heart"></i>
+          )}
+        </div>
+      </RatingAndFavourite>
+
+      <p className="brand_name">Brand: {product?.brand}</p>
+
       <PriceBox>
-        <div className="price">
-          <h2>{`৳ ${Product.price}`}</h2>
-        </div>
-
-        <div className="quantity">
-          <p>Quantity</p>
-          <div className="set_quantity">
-            <button>
-              <i
-                className="bi bi-dash"
-                onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-              ></i>
-            </button>
-            <p>{quantity}</p>
-            <button>
-              <i
-                className="bi bi-plus"
-                onClick={() => quantity < 10 && setQuantity(quantity + 1)}
-              ></i>
-            </button>
-          </div>
-          {quantity === 10 && <span>Maximum 10 Products</span>}
-        </div>
-
-        <div className="order_button">
-          <BuyNow variant="contained" onClick={directBuyHandler}>
-            Buy Now
-          </BuyNow>
-          <AddToCart variant="contained" onClick={cartHandler}>
-            Add to Cart
-          </AddToCart>
+        <div className="price_box">
+          <span className="price_symbol">$</span>
+          <span className="price">{`${product?.price}`}</span>
         </div>
       </PriceBox>
-    </div>
+      <Quantity>
+        <p>Quantity</p>
+        <div className="set_quantity">
+          <button>
+            <i className="bi bi-dash" onClick={removeFromCartHandler}></i>
+          </button>
+          <p>{quantity}</p>
+          <button>
+            <i className="bi bi-plus" onClick={addToCartHandler}></i>
+          </button>
+        </div>
+        {quantity >= product?.stock && (
+          <span>Maximum {product?.stock} Products</span>
+        )}
+      </Quantity>
+
+      <ButtonGroup>
+        <BuyNow
+          variant="contained"
+          onClick={directBuyHandler}
+          disabled={quantity === 0}
+        >
+          Buy Now
+        </BuyNow>
+
+        <AddToCart
+          variant="contained"
+          onClick={addToCartHandler}
+          disabled={quantity > 0}
+        >
+          Add to Cart
+        </AddToCart>
+      </ButtonGroup>
+    </Container>
   );
 };
 
 export default ProductHandler;
-const TitleBox = styled.div`
-  .title {
-    color: #212121;
-    font-weight: 400;
-    text-transform: capitalize;
-    word-wrap: break-word;
-    font-size: 2.2rem;
-    @media screen and (max-width: 576px) {
-      font-size: 1.8rem;
-    }
-  }
-  .rating {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      p {
-        padding-left: 1rem;
-        margin-bottom: 0;
-        font-size: 1.2rem;
-      }
-    }
 
-    .favourite {
-      i {
-        font-size: 2.2rem;
-        cursor: pointer;
-      }
-      .bi-heart-fill {
-        color: tomato;
-      }
-    }
-  }
-  .brand_name {
-    color: #9e9e9e;
-    font-size: 1.3rem;
-    font-weight: 400;
-    font-family: "Roboto", "san-serif";
-  }
-  .divider {
-    color: tomato;
-    margin: 1rem 0;
-    border-bottom: 1px solid #eff0f5;
-  }
+const Container = styled.div`
+  height: 100%;
 `;
-const PriceBox = styled.div`
-  .price {
-    margin-bottom: 3rem;
-    h2 {
-      color: tomato;
-      font-size: 2.5rem;
-      @media screen and (max-width: 576px) {
-        font-size: 2rem;
-      }
-    }
-  }
-  .quantity {
+
+const RatingAndFavourite = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  div {
+    flex: 1;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin: 1rem 0;
-    p {
-      font-family: "Roboto", "san-serif";
-      color: #757575;
-      word-wrap: break-word;
-      font-size: 1.4rem;
-      font-weight: 400;
+
+    .total_ratings {
+      margin-left: 2rem;
     }
-    .set_quantity {
+  }
+
+  .favourite {
+    justify-content: center;
+    i {
+      font-size: 2.2rem;
+      cursor: pointer;
+    }
+    .bi-heart-fill {
+      color: tomato;
+    }
+  }
+`;
+const PriceBox = styled.div`
+  margin-top: 2rem;
+  .price_box {
+    display: flex;
+    color: var(--text-primary);
+
+    .price_symbol {
+      font-size: 1.3rem;
+    }
+    .price {
+      font-size: 2.8rem;
+    }
+  }
+`;
+
+const Quantity = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 1rem 0;
+  p {
+    color: var(--text-primary);
+    font-weight: 400;
+  }
+  .set_quantity {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5rem;
+
+    button {
+      margin: 0 1rem;
+      width: 3rem;
+      height: 3rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-left: 5rem;
-
-      button {
-        margin: 0 1rem;
-        width: 3rem;
-        height: 3rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: none;
-        cursor: pointer;
-        i {
-          font-size: 2rem;
-          color: #757575;
+      border: none;
+      background-color: #dadada;
+      cursor: pointer;
+      i {
+        font-size: 2rem;
+        color: var(--text-primary);
+        &:hover {
+          color: tomato;
         }
       }
-      p {
-        padding: 0 1rem;
-        margin-bottom: 0;
-        color: #666;
-      }
+    }
+    p {
+      padding: 0 1rem;
+      margin-bottom: 0;
+      color: var(--text-primary);
     }
   }
-  .order_button {
-    margin-top: 2rem;
+`;
 
-    @media screen and (max-width: 576px) {
-      button {
-        margin-top: 1rem;
-        width: 100%;
-      }
+const ButtonGroup = styled.div`
+  margin-top: 2rem;
+
+  @media screen and (max-width: 576px) {
+    button {
+      margin-top: 1rem;
+      width: 100%;
     }
   }
 `;

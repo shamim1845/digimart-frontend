@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import MediaUpload from "../utils/MediaUpload";
+import MediaUpload from "../utils/helperFunction/MediaUpload";
 import { useNavigate } from "react-router-dom";
+import Title from "../utils/reUseableComponents/Title";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserInfo } from "../../redux/user/userSelector";
+import { fetchAsyncUser } from "../../redux/user/userSlice";
 
 const MyProfile = () => {
-  const [user, setUser] = useState(null);
   const [isProfile, setIsProfile] = useState(false);
   const [profilePic, setProfilePic] = useState(null);
-  const [btnDissable, setBtnDissable] = useState(false)
+  const [btnDissable, setBtnDissable] = useState(false);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    axios.get("/api/v1/me").then((res) => {
-      setUser(res.data.user);
-    });
-  }, []);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUserInfo);
 
   const formik = useFormik({
     initialValues: {
@@ -33,20 +32,19 @@ const MyProfile = () => {
     validationSchema: yup.object({
       name: yup
         .string()
-        .min(3, "Name must have at least 3 characters.")
-        .required("Name is required."),
+        .required("Name is required.")
+        .min(3, "Name must have at least 3 characters."),
       email: yup
         .string()
-        .email("Email must be a valid email.")
-        .required("Email is required."),
+        .required("Email is required.")
+        .email("Email must be a valid email."),
       mobile: yup.string().max(11).required("Phone Number is required."),
-      birthday: yup.string().required("birthday  is required."),
+      birthday: yup.string().required("Date of birth is required."),
       gender: yup.string().required("Gender  is required."),
     }),
     onSubmit: (values, { resetForm }) => {
-      setBtnDissable(true)
+      setBtnDissable(true);
       const { name, email, mobile, birthday, gender } = values;
-      console.log(values);
 
       function updateProfile(mediaUrls = []) {
         const avatar = {
@@ -69,16 +67,19 @@ const MyProfile = () => {
           })
           .then((res) => {
             if (res.status === 200 && res.data.success) {
-              toast("Profile update Sucessfull");
+              toast.success("Profile update Sucessfully.");
+              dispatch(fetchAsyncUser());
+
               setTimeout(() => {
                 navigate("/account/myprofile");
               }, 3000);
             } else {
-              toast(res.data.message);
+              toast.info(res.data.message);
             }
           })
           .catch((err) => {
             console.log(err.message);
+            toast.error(err.message);
           });
       }
 
@@ -94,33 +95,29 @@ const MyProfile = () => {
 
   return (
     <UpdateProfileContainer>
-      <Title>
-        <h2>Update Profile</h2>
-      </Title>
+      <Title
+        variant="h2"
+        text="Update Profile"
+        style={{ textAlign: "center", marginTop: "2rem" }}
+      />
+
       <Content>
         <UserImage onClick={() => setIsProfile(true)}>
-          {
-            <>
-              <img src={user?.avatar?.url} alt="profile_picture" />
-              {isProfile && (
-                <div>
-                  <input
-                    type="file"
-                    name="profilePic"
-                    onChange={(e) => setProfilePic(e.target.files[0])}
-                  />
-                  {formik.touched.profilePic && formik.errors.profilePic && (
-                    <p>
-                      <span>i</span> {formik.errors.profilePic}{" "}
-                    </p>
-                  )}
-                </div>
-              )}
-            </>
-          }
+          <img src={user?.avatar?.url} alt="profile_picture" />
         </UserImage>
         <Form onSubmit={formik.handleSubmit}>
           <InputGroup>
+            {isProfile && (
+              <div>
+                <label htmlFor="profilePic">Profile Picture</label>
+                <input
+                  type="file"
+                  name="profilePic"
+                  onChange={(e) => setProfilePic(e.target.files)}
+                />
+              </div>
+            )}
+
             <div>
               <label htmlFor="name"> Full Name</label>
               <input
@@ -228,32 +225,16 @@ const Content = styled.div`
   border-radius: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   padding: 5rem;
-  margin: 2rem ;
+  margin: 2rem;
   width: 90%;
   @media screen and (max-width: 768px) {
     margin: 0 5rem;
-  
   }
-  @media screen and (max-width: 450px) {
-  
+  @media screen and (max-width: 576px) {
     padding: 2rem;
   }
 `;
 
-const Title = styled.div`
-  margin-top: 2rem;
-
-   width: 90%;
-
-  h2 {
-    text-align: left;
-  }
-  @media screen and (max-width: 768px) {
-    h2 {
-    text-align: center;
-  }
-  }
-`;
 const UserImage = styled.div`
   display: flex;
   justify-content: center;
@@ -263,9 +244,10 @@ const UserImage = styled.div`
   &:hover {
     cursor: pointer;
   }
+
   img {
-    width: 15rem;
-    height: 15rem;
+    width: 13rem;
+    height: 13rem;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -281,6 +263,7 @@ const InputGroup = styled.div`
       font-size: 1.3rem;
       color: var(--text-secondary);
     }
+
     & input {
       width: 100%;
       height: 3.5rem;
@@ -296,6 +279,10 @@ const InputGroup = styled.div`
         font-size: 1.3rem;
       }
     }
+    & input[type="file"] {
+      padding: 0.5rem 0;
+    }
+
     p {
       font-size: 1.1rem;
       span {

@@ -2,6 +2,35 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
+const accountNavlinksConstant = [
+  {
+    id: 1,
+    title: "Manage My Account",
+    links: [
+      {
+        id: 1,
+        name: "My Profile",
+        link: "/account/myprofile",
+      },
+      {
+        id: 2,
+        name: "Update Profile",
+        link: "/account/updateprofile",
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: "My Orders",
+    links: [
+      {
+        id: 1,
+        name: "Orders",
+        link: "/account/myorder",
+      },
+    ],
+  },
+];
 const AccountSidebar = ({ setSidebar, sidebar, sidebarRef }) => {
   return (
     <AccountSidebarContainer
@@ -14,17 +43,22 @@ const AccountSidebar = ({ setSidebar, sidebar, sidebarRef }) => {
       </AccUserName>
 
       <AccSidebaContent>
-        <h4>Manage My Account</h4>
-        <div className="links_box">
-          <NavLink to={"/account/myprofile"}>My Profile</NavLink>
-        </div>
-        <div className="links_box">
-          <NavLink to={"/account/updateprofile"}>Update Profile</NavLink>
-        </div>
-        <h4>My Orders</h4>
-        <div className="links_box">
-          <NavLink to={"/account/myorder"}>Orders</NavLink>
-        </div>
+        {accountNavlinksConstant.map((navlink) => {
+          return (
+            <div key={navlink?.id} className="navlink_group">
+              <h4>{navlink?.title}</h4>
+              <div className="links_box">
+                {navlink.links.map((child) => {
+                  return (
+                    <NavLink key={child?.id} to={child?.link}>
+                      {child?.name}
+                    </NavLink>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </AccSidebaContent>
     </AccountSidebarContainer>
   );
@@ -34,15 +68,7 @@ export default AccountSidebar;
 
 const AccountSidebarContainer = styled.div`
   min-width: 20rem;
-  h4 {
-    font-size: 1.6rem;
-  }
-  .links_box {
-    padding-left: 1rem;
-    a {
-      font-size: 1.4rem;
-    }
-  }
+
   @media screen and (max-width: 768px) {
     position: absolute;
     width: 50%;
@@ -78,4 +104,25 @@ const AccUserName = styled.div`
   }
 `;
 
-const AccSidebaContent = styled.div``;
+const AccSidebaContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .navlink_group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    h4 {
+      font-size: 1.6rem;
+    }
+    .links_box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      a {
+        font-size: 1.4rem;
+      }
+    }
+  }
+`;

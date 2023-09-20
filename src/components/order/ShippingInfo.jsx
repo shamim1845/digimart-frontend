@@ -9,10 +9,9 @@ import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import PublicIcon from "@mui/icons-material/Public";
 import TransferWithinAStationIcon from "@mui/icons-material/TransferWithinAStation";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import { shippingInformation } from "../../features/order/orderSlice";
+import { shippingInformation } from "../../redux/order/orderSlice";
 
-
-const ShippingInfo = ({ setIsShipping}) => {
+const ShippingInfo = ({ setIsShipping }) => {
   const [countryCode, setCountryCode] = useState("");
   const [stateCode, setStateCode] = useState("");
   const [shippingMsg, setShippingMsg] = useState("");
@@ -27,17 +26,11 @@ const ShippingInfo = ({ setIsShipping}) => {
 
   const dispatch = useDispatch();
 
- 
-
   useEffect(() => {
- 
-      setShippingData((prev) => {
-        return { ...prev, state: "", city: "" };
-      });
-      setStateCode("");
-   
-
-
+    setShippingData((prev) => {
+      return { ...prev, state: "", city: "" };
+    });
+    setStateCode("");
   }, [shippingData.country]);
 
   const shippingDataHandler = (e) => {
@@ -53,7 +46,7 @@ const ShippingInfo = ({ setIsShipping}) => {
     const value = e.target.value;
     setCountryCode(value);
     const country = Country.getCountryByCode(value);
-    console.log(country)
+    console.log(country);
     setShippingData((prev) => {
       return { ...prev, country: country.name };
     });
@@ -64,21 +57,27 @@ const ShippingInfo = ({ setIsShipping}) => {
     setStateCode(value);
 
     const state = State.getStateByCodeAndCountry(value, countryCode);
-      setShippingData((prev) => {
+    setShippingData((prev) => {
       return { ...prev, state: state.name };
     });
   };
 
   const saveShippingInfo = () => {
-    if(shippingData.address !== '' && shippingData.city !== "" && shippingData.state !== "" && shippingData.country !== "" && shippingData.postCode !== "" && shippingData.phoneNo !== ""){
+    if (
+      shippingData.address !== "" &&
+      shippingData.city !== "" &&
+      shippingData.state !== "" &&
+      shippingData.country !== "" &&
+      shippingData.postCode !== "" &&
+      shippingData.phoneNo !== ""
+    ) {
       setShippingMsg("Shipping information saved.");
-       localStorage.setItem("shippingInfo", JSON.stringify(shippingData));
-        dispatch(shippingInformation({shippingInfo: shippingData}))
-    }else{
-      setShippingMsg("Please filled all of this details")
+      localStorage.setItem("shippingInfo", JSON.stringify(shippingData));
+      dispatch(shippingInformation({ shippingInfo: shippingData }));
+    } else {
+      setShippingMsg("Please filled all of this details");
     }
   };
-  
 
   return (
     <ShippingContainer>
@@ -108,7 +107,6 @@ const ShippingInfo = ({ setIsShipping}) => {
               value={shippingData.phoneNo}
               onChange={shippingDataHandler}
               placeholder="Phone Number"
-           
             />
           </div>
           <div className="input_group">
@@ -167,11 +165,11 @@ const ShippingInfo = ({ setIsShipping}) => {
               </select>
             </div>
           )}
-          {
-            shippingMsg && <div>
+          {shippingMsg && (
+            <div>
               <p>{shippingMsg}</p>
             </div>
-          }
+          )}
           <div className="input_button" onClick={saveShippingInfo}>
             <input type="button" value="Save & Continue" />
           </div>
