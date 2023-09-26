@@ -26,13 +26,6 @@ const ratingConstant = [
 ];
 
 const ProductRating = ({ product }) => {
-  console.log(product);
-
-  let total_ratings = 0;
-  for (let key in product.ratings) {
-    total_ratings += product.ratings[key];
-  }
-
   return (
     <AvgarageRatingContainer>
       <div className="left">
@@ -49,7 +42,7 @@ const ProductRating = ({ product }) => {
             size="large"
           />
         </div>
-        <p>{total_ratings} Ratings</p>
+        <p>{product?.totalReviews} Ratings</p>
       </div>
 
       <div className="right">
@@ -69,7 +62,7 @@ const ProductRating = ({ product }) => {
                   width:
                     product.totalReviews !== 0
                       ? `${
-                          (100 / total_ratings) *
+                          (100 / product?.totalReviews) *
                           product.ratings[constant.rating]
                         }%`
                       : "0%",
@@ -93,10 +86,12 @@ const AvgarageRatingContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 1rem;
+  gap: 2rem;
+  padding: 1.5rem;
 
   @media screen and (max-width: 576px) {
     flex-direction: column;
+    align-items: start;
   }
   .left {
     flex: 1;

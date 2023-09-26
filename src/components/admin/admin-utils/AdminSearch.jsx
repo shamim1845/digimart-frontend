@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
+import Title from "../../utils/reUseableComponents/Title";
+import Button from "../../utils/reUseableComponents/Buttons";
 
-const AdminSearch = ({ setKeyWord, modalController }) => {
+const AdminSearch = ({ setKeyWord, modalController, label }) => {
   const [value, setValue] = useState("");
   const [focus, setFocus] = useState(false);
 
@@ -40,7 +42,7 @@ const AdminSearch = ({ setKeyWord, modalController }) => {
 
   return (
     <ProductSearchContainer>
-      <h1 className="title">Categories</h1>
+      <Title variant="h4" text={label} style={{ width: "auto" }} />
 
       <form onSubmit={(e) => e.preventDefault()}>
         <svg
@@ -61,7 +63,7 @@ const AdminSearch = ({ setKeyWord, modalController }) => {
           onBlur={() => setFocus(false)}
           value={value}
           type="text"
-          placeholder="Search product..."
+          placeholder={`Search ${label?.toLowerCase()}...`}
           required
         />
         {value && (
@@ -79,9 +81,7 @@ const AdminSearch = ({ setKeyWord, modalController }) => {
           </div>
         )}
       </form>
-      <Button type="button" onClick={modalController}>
-        Create
-      </Button>
+      <Button type="button" onClick={modalController} text="Create" />
     </ProductSearchContainer>
   );
 };
@@ -98,12 +98,6 @@ const ProductSearchContainer = styled.div`
   gap: 3rem;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.116) 1px 2px 7px;
-
-  .title {
-    font-size: 1.4rem;
-    color: var(--text-primary);
-    font-weight: 600;
-  }
 
   form {
     width: 100% !important;
@@ -144,19 +138,5 @@ const ProductSearchContainer = styled.div`
         }
       }
     }
-  }
-`;
-
-const Button = styled.button`
-  font-size: 1.3rem;
-  border: none;
-  background-color: var(--bg-primary);
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  &:hover {
-    color: #fff;
-    background-color: #ff6347f6;
   }
 `;

@@ -10,7 +10,7 @@ const ProductReviews = ({ product }) => {
       <Title
         variant="h2"
         text={`Customer Reviews`}
-        style={{ padding: "1.3rem", color: "#333", background: "#fafafa" }}
+        style={{ padding: "1.5rem", color: "#333", background: "#fafafa" }}
       />
 
       {product?.reviews?.length === 0 && (
@@ -30,7 +30,7 @@ export default ProductReviews;
 
 const AllReviewsContainer = styled.div`
   .no_review {
-    padding: 1rem;
+    padding: 1.5rem;
     p {
       font-size: 1.2rem;
     }

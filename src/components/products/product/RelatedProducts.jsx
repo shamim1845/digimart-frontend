@@ -1,39 +1,32 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import Product from "../ProductCard";
 import Title from "../../utils/reUseableComponents/Title";
+import { useGetProductsQuery } from "../../../redux/api/products/productsAPI";
 
 const RelatedProducts = ({ category, id }) => {
-  const [products, setProducts] = useState();
+  const { data } = useGetProductsQuery(`category=${category}`, {
+    refetchOnReconnect: true,
+  });
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const res = await axios.get(`/api/v1/products?category=${category}`);
+  const products =
+    data?.products?.filter((product) => product._id !== id).slice(0, 10) || [];
 
-      setProducts(
-        res.data.products.filter((product) => product._id !== id).slice(0, 10)
-      );
-    };
-    fetchProduct();
-  }, [category, id]);
   return (
     <>
       <Container>
         <Title
           variant="h2"
           text="Related Products"
-          style={{ padding: "2rem 0", color: "#333" }}
+          style={{ padding: "1.5rem", color: "#333" }}
         />
 
         <ProductBox>
           {products &&
-            products.map((product) => {
+            products?.map((product) => {
               return <Product key={product._id} product={product} />;
             })}
         </ProductBox>
-        {products && products.length === 0 && (
+        {products && products?.length === 0 && (
           <div className="no_products">
             <p>No products found.</p>
           </div>
@@ -54,12 +47,8 @@ const Container = styled.div`
   width: 100%;
   /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
 
-  @media screen and (max-width: 768px) {
-    width: 90vw;
-  }
-
   .no_products {
-    margin-left: 1rem;
+    padding-left: 1.5rem;
   }
 `;
 

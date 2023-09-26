@@ -13,7 +13,6 @@ import useWindowSize from "../../utils/customHooks/useWindowSize";
 
 const Header = () => {
   const windowSize = useWindowSize();
-  console.log("Header.js render =>");
 
   return (
     <>

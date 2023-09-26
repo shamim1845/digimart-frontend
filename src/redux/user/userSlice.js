@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Redux Thunk
 export const fetchAsyncLoggedIn = createAsyncThunk(
@@ -18,8 +18,11 @@ export const fetchAsyncUser = createAsyncThunk(
   }
 );
 
+// get local stroge data
 const localCartItem = JSON.parse(localStorage.getItem("cart-item"));
 const localFavouriteItem = JSON.parse(localStorage.getItem("favourite-item"));
+
+// initial state
 const initialState = {
   authenticated: false,
   userInfo: {},
@@ -28,6 +31,7 @@ const initialState = {
   favouriteItems: localFavouriteItem ? localFavouriteItem : [],
 };
 
+// Slice for handling user information
 const userSlice = createSlice({
   name: "user info",
   initialState,

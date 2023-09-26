@@ -2,10 +2,10 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import ChangePassword from "../Auth/ChangePassword";
-import Title from "../utils/reUseableComponents/Title";
+import ChangePassword from "../../Auth/ChangePassword";
+import Title from "../../utils/reUseableComponents/Title";
 import { useSelector } from "react-redux";
-import { selectUserInfo } from "../../redux/user/userSelector";
+import { selectUserInfo } from "../../../redux/user/userSelector";
 const MyProfile = () => {
   const [isChangePassword, setIsChangePassword] = useState(false);
   const user = useSelector(selectUserInfo);
@@ -13,7 +13,7 @@ const MyProfile = () => {
   return (
     <ProfileContainer>
       <Title
-        variant="h2"
+        variant="h1"
         text="My Profile"
         style={{ textAlign: "center", marginTop: "2rem" }}
       />

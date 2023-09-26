@@ -7,11 +7,12 @@ import TextInput from "../../../utils/formik/TextInput";
 import CategorySelector from "../../../utils/reUseableComponents/CategorySelector";
 import Title from "../../../utils/reUseableComponents/Title";
 import { useUpdateCategoryMutation } from "../../../../redux/api/category/categoryAPI";
+import Button from "../../../utils/reUseableComponents/Buttons";
 
 const EditCategory = ({ onClose, categoryForEdit }) => {
   console.log(categoryForEdit);
   // => state
-  const [parentCategory, setParentCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   // check categories change or not
   const [isChangeCategory, setIsChangeCategory] = useState(false);
@@ -31,7 +32,7 @@ const EditCategory = ({ onClose, categoryForEdit }) => {
 
   return (
     <Container>
-      <Title variant="h1" text="Edit Category" />
+      <Title variant="h2" text="Edit Category" />
 
       <Content>
         <Formik
@@ -47,12 +48,11 @@ const EditCategory = ({ onClose, categoryForEdit }) => {
           onSubmit={(values, { setSubmitting }) => {
             const new_category = {
               name: values.name,
-              parent: parentCategory
-                ? parentCategory?._id
-                : categoryForEdit?.parent,
+              parent: categories?.length
+                ? categories[categories?.length - 1]?.category_id
+                : null,
             };
 
-            console.log(new_category);
             updateCategory({
               id: categoryForEdit?._id,
               category: new_category,
@@ -71,8 +71,8 @@ const EditCategory = ({ onClose, categoryForEdit }) => {
               {isChangeCategory ? (
                 <CategorySelector
                   label="Parent Category (optional)"
-                  category={parentCategory}
-                  setCategory={setParentCategory}
+                  categories={categories}
+                  setCategories={setCategories}
                 />
               ) : (
                 <DefaultCategory>
@@ -93,9 +93,7 @@ const EditCategory = ({ onClose, categoryForEdit }) => {
             </CategoriesContainer>
 
             <br />
-            <Button type="submit" disabled={isLoading}>
-              Update
-            </Button>
+            <Button type="submit" disabled={isLoading} text="Update" />
           </Form>
         </Formik>
       </Content>
@@ -113,29 +111,16 @@ const Container = styled.div`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  padding: 2rem;
   background-color: #f2f2f2;
 `;
 
 const Content = styled.div`
-  padding: 2rem 2rem;
+  padding: 2rem 0rem;
   width: 100%;
 `;
 
 const CategoriesContainer = styled.div``;
-
-const Button = styled.button`
-  font-size: 1.3rem;
-  border: none;
-  background-color: var(--bg-primary);
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  &:hover {
-    color: #fff;
-    background-color: #ff6347f6;
-  }
-`;
 
 const DefaultCategory = styled.div`
   .content {

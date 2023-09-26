@@ -8,6 +8,9 @@ import {
 } from "../../../redux/order/orderSlice";
 import Loading from "../../utils/fetchUtils/Loading";
 import Order from "./Order";
+import Title from "../../utils/reUseableComponents/Title";
+import Button from "../../utils/reUseableComponents/Buttons";
+import NotFound from "../../utils/fetchUtils/NotFound";
 
 const MyOrder = () => {
   const dispatch = useDispatch();
@@ -20,9 +23,11 @@ const MyOrder = () => {
 
   return (
     <MyOrdersContainer>
-      <Title>
-        <h2>My Orders</h2>
-      </Title>
+      <Title
+        variant="h1"
+        text="My Orders"
+        style={{ textAlign: "center", marginTop: "2rem" }}
+      />
       <>
         {loading && <Loading />}
 
@@ -37,8 +42,11 @@ const MyOrder = () => {
           })}
         {allOrders?.orders?.length < 1 && (
           <NoOrders>
-            <p>No orders Found.</p>
-            <Link to={"/products"}>Buy products</Link>
+            <NotFound text="No order Found." style={{ height: "auto" }} />
+            <br />
+            <Link to={"/products"}>
+              <Button text="Buy products" />
+            </Link>
           </NoOrders>
         )}
       </>
@@ -76,39 +84,13 @@ const Content = styled.div`
   }
 `;
 
-const Title = styled.div`
-  margin-top: 2rem;
-  width: 90%;
-
-  h2 {
-    text-align: left;
-  }
-  @media screen and (max-width: 768px) {
-    h2 {
-      text-align: center;
-    }
-  }
-`;
-
 const NoOrders = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 40vh;
   p {
     font-size: 1.6rem;
-  }
-  a {
-    font-size: 1.4rem;
-    background-color: #fff;
-    color: tomato;
-    border: 1px solid tomato;
-    border-radius: 2rem;
-    padding: 0.5rem 1rem;
-    transition: all 0.5s;
-
-    &:hover {
-      color: #000;
-    }
   }
 `;

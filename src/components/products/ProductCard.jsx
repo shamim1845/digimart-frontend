@@ -1,44 +1,12 @@
+import React from "react";
 import { Rating } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import styled from "styled-components";
-import { addCartItem, deleteCartItem } from "../../redux/user/userSlice";
-import { selectMemoCartItemQuantity } from "../../redux/user/userSelector";
-import React, { useMemo } from "react";
+import useCartHandler from "../utils/customHooks/useCartHandler";
 
 const ProductCard = ({ product }) => {
-  const dispatch = useDispatch();
-
-  const memoCartItem = useMemo(selectMemoCartItemQuantity, []);
-
-  const quantity = useSelector((state) => memoCartItem(state, product?._id));
-
-  console.log("Product card render =>", quantity);
-
-  const addToCartHandler = () => {
-    const currQty = quantity + 1;
-
-    dispatch(addCartItem({ product, quantity: currQty }));
-
-    if (currQty === 1) {
-      toast.success(`New item added in your cart.`);
-    } else {
-      toast.info(`Quantity increase in your existing cart item.`);
-    }
-  };
-
-  const removeFromCartHandler = () => {
-    const currQty = quantity > 1 ? quantity - 1 : 0;
-
-    if (currQty === 0) {
-      dispatch(deleteCartItem({ product }));
-      toast.warn(`Item removed from your cart.`);
-    } else {
-      dispatch(addCartItem({ product, quantity: currQty }));
-      toast.info(`Quantity decrease in your existing cart item.`);
-    }
-  };
+  const { quantity, addToCartHandler, removeFromCartHandler } =
+    useCartHandler(product);
 
   return (
     <CardContainer>

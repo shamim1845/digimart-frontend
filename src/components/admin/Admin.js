@@ -1,27 +1,17 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../utils/logo/Logo";
 import AdminSidebar from "./sidebar/AdminSidebar";
 import UserInformation from "../utils/reUseableComponents/card/UserInformation";
+import useSidebarHandler from "../utils/customHooks/useSidebarHandler";
 
 const Account = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const sidebarRef = useRef(null);
 
-  // => Effect for sidebar handling
-  useEffect(() => {
-    function sidebarHandler(e) {
-      if (!sidebarRef.current.contains(e.target)) {
-        setShowSidebar(false);
-      }
-    }
-    window.addEventListener("mousedown", sidebarHandler);
-
-    return () => {
-      window.removeEventListener("mousedown", sidebarHandler);
-    };
-  }, []);
+  // =>  sidebar handling with custom hooks
+  useSidebarHandler(sidebarRef, setShowSidebar);
 
   return (
     <AdminContainer>

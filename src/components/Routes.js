@@ -22,8 +22,10 @@ const LazyResetPassword = React.lazy(() => import("./Auth/ResetPassword"));
 
 // For User Account Routes
 const LazyAccount = React.lazy(() => import("./account/Account"));
-const LazyMyProfile = React.lazy(() => import("./account/MyProfile"));
-const LazyUpdateProfile = React.lazy(() => import("./account/UpdateProfile"));
+const LazyMyProfile = React.lazy(() => import("./account/profile/MyProfile"));
+const LazyUpdateProfile = React.lazy(() =>
+  import("./account/profile/UpdateProfile")
+);
 const LazyMyOrder = React.lazy(() => import("./account/order/MyOrder"));
 const LazyOrderDetails = React.lazy(() =>
   import("./account/order/OrderDetails")
@@ -142,7 +144,7 @@ const index = () => {
           {/* Categories */}
           <Route path="categories" element={<LazyAdminCategories />} />
           {/* Brand */}
-          <Route path="brand" element={<LazyAdminBrand />} />
+          <Route path="brands" element={<LazyAdminBrand />} />
 
           {/* Orders */}
           <Route path="orders" element={<LazyAdminOrders />} />

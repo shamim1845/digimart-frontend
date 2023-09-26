@@ -16,6 +16,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 
 // =>
 import { useSelector } from "react-redux";
+import Title from "../../utils/reUseableComponents/Title";
 
 const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
   const sidebarMenu = [
@@ -31,7 +32,6 @@ const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
       id: 2,
       parent: {
         name: "Products",
-        // link: "/admin/products/all",
         icon: <ProductionQuantityLimitsIcon />,
       },
       child: [
@@ -58,8 +58,8 @@ const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
     {
       id: 4,
       parent: {
-        name: "Brand",
-        link: "/admin/brand",
+        name: "Brands",
+        link: "/admin/brands",
         icon: <BrandingWatermarkIcon />,
       },
     },
@@ -71,13 +71,13 @@ const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
       ref={sidebarRef}
       style={{ left: showSidebar ? "0rem" : "-105%" }}
     >
-      <AccUserName>
+      <SidebarTop>
         <p>Hello, {userInfo?.name}</p>
         <i onClick={() => setShowSidebar(false)} className="bi bi-x"></i>
-      </AccUserName>
+      </SidebarTop>
 
       <AccSidebaContent>
-        <h4>Manage My Inventory</h4>
+        <Title variant="h3" text="Manage Inventory" />
         <div className="admin_menus">
           {sidebarMenu.map((menu) => (
             <Menu key={menu.id} menu={menu} />
@@ -92,7 +92,7 @@ export default AdminSidebar;
 
 const AdminSidebarContainer = styled.div`
   min-width: 25rem;
-  max-height: calc(100vh - 5rem);
+  height: calc(100vh - 5rem);
   position: sticky;
   top: 5rem;
   background-color: #fff;
@@ -100,38 +100,36 @@ const AdminSidebarContainer = styled.div`
   z-index: 100;
   overflow-y: auto;
 
-  h4 {
-    font-size: 1.6rem;
-  }
-
   @media screen and (max-width: 768px) {
     position: fixed;
-    height: 100%;
-    top: 5rem;
+    height: 100vh !important;
+    top: 0rem;
     transition: all 0.5s ease-in-out;
-    background: #fff;
     padding: 0 2rem;
   }
 `;
 
-const AccUserName = styled.div`
-  margin: 2rem 0;
-  font-size: 1.2rem;
+const SidebarTop = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
-  @media screen and (max-width: 450px) {
-    p {
-      margin-top: 1rem;
-    }
+
+  p {
+    margin: 4rem 0 2rem;
   }
+
   i {
-    font-size: 2.5rem;
+    font-size: 3rem;
     position: absolute;
     right: -1rem;
-    top: -2rem;
+    top: 0.5rem;
     cursor: pointer;
     display: none;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: tomato !important;
+    }
     @media screen and (max-width: 768px) {
       display: block;
     }
@@ -140,6 +138,9 @@ const AccUserName = styled.div`
 
 const AccSidebaContent = styled.div`
   .admin_menus {
-    margin-top: 1rem;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 `;

@@ -8,15 +8,17 @@ const ProductDescription = ({ product }) => {
       <Title
         variant="h2"
         text={`Product Details of  ${product.name}`}
-        style={{ padding: "1.3rem", color: "#333", background: "#fafafa" }}
+        style={{
+          padding: "1.5rem",
+          color: "var(--text-primary)",
+          background: "#fafafa",
+        }}
       />
 
-      <article>
-        <div
-          className="description"
-          dangerouslySetInnerHTML={{ __html: product.description }}
-        ></div>
-      </article>
+      <article
+        className="description"
+        dangerouslySetInnerHTML={{ __html: product.description }}
+      ></article>
     </Container>
   );
 };
@@ -29,16 +31,14 @@ const Container = styled.div`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   width: 100%;
 
-  @media screen and (max-width: 768px) {
-    width: 90vw;
-  }
-
   .description {
-    padding: 1rem;
-    font-size: 1.3rem;
-    line-height: 1.4;
+    line-height: 1.5;
+    color: var(--text-primary) !important;
+    word-break: break-word;
+    padding: 1.5rem;
 
     ul {
+      columns: 2;
       -webkit-columns: 2;
       -moz-columns: 2;
       column-count: 2;
@@ -47,34 +47,19 @@ const Container = styled.div`
       column-gap: 32px;
 
       @media screen and (max-width: 576px) {
+        columns: 1;
         -webkit-columns: 1;
         -moz-columns: 1;
         column-count: 1;
-        -webkit-column-gap: 32px;
-        -moz-column-gap: 32px;
-        column-gap: 32px;
       }
 
       li {
         list-style: disc;
         list-style-position: inside;
-        font-size: 1.3rem;
       }
+    }
+    p {
+      /* color: var(--text-primary) !important; */
     }
   }
 `;
-
-// const Title = styled.div`
-//   background: #fafafa;
-//   color: #212121;
-//   min-height: 5rem;
-//   display: grid;
-//   align-items: center;
-//   padding: 0 1rem;
-
-//   h2 {
-//     font-weight: 500;
-//     font-size: 1.5rem;
-//     text-transform: capitalize;
-//   }
-// `;

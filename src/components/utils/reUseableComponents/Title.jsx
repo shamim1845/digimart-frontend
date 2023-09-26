@@ -7,6 +7,7 @@ const Title = ({ variant = "h1", text, style }) => {
       {variant === ("h1" || "H1") && <h1>{text}</h1>}
       {variant === ("h2" || "H2") && <h2>{text}</h2>}
       {variant === ("h3" || "H3") && <h3>{text}</h3>}
+      {variant === ("h4" || "H4") && <h4>{text}</h4>}
     </Container>
   );
 };
@@ -24,6 +25,16 @@ const Container = styled.div`
 
   h2 {
     font-size: 2rem;
+    font-weight: 500;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+
+  h4 {
+    font-size: 1.4rem;
     font-weight: 500;
   }
 `;

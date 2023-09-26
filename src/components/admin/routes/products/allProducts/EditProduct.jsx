@@ -11,15 +11,21 @@ import TextInput from "../../../../utils/formik/TextInput";
 import CategorySelector from "../../../../utils/reUseableComponents/CategorySelector";
 import RichTextEditor from "../../../../utils/reUseableComponents/RichTextEditor";
 import ImageUploader from "../../../../utils/reUseableComponents/ImageUploader";
+import SelectBox from "../../../../utils/formik/SelectBox";
+import { useGetAllBrandQuery } from "../../../../../redux/api/brand/brandAPI";
+import Button from "../../../../utils/reUseableComponents/Buttons";
+import DeleteMedia from "../../../../utils/helperFunction/DeleteMedia";
 
 const EditProduct = ({ product, onClose, refetch }) => {
   // => state
-  const [category, setCategory] = useState(product?.category);
+  const [categories, setCategories] = useState(product?.categories);
   const [description, setDescription] = useState(product?.description);
-  const [images, setImages] = useState([]);
   const [prevImages, setPrevImages] = useState(product?.images);
+  const [images, setImages] = useState([]);
+  const [public_ids, setPublic_ids] = useState([]);
+
   // Error state
-  const [categoryError, setCategoryError] = useState(null);
+  const [categoriesError, setCategoriesError] = useState(null);
   const [descError, setDescError] = useState(null);
   const [imagesError, setImagesError] = useState(null);
   // check categories change or not
@@ -49,20 +55,23 @@ const EditProduct = ({ product, onClose, refetch }) => {
 
   // => Effect for handle Category, Description, and Images error
   useEffect(() => {
-    if (category) {
-      setCategoryError(null);
+    if (categories?.length > 0) {
+      setCategoriesError(null);
     }
 
     if (images?.length > 0) {
       setImagesError(null);
     }
 
-    if (description && description.split(" ").length < 50) {
-      setDescError("Description must have at least 50 word.");
+    if (description && description.split(" ").length < 10) {
+      setDescError("Description must have at least 10 word.");
     } else {
       setDescError(null);
     }
-  }, [category, images, description]);
+  }, [categories?.length, images, description]);
+
+  // Fetch brands for brand selection
+  const { data: brandsdata } = useGetAllBrandQuery();
 
   return (
     <Container>
@@ -92,36 +101,36 @@ const EditProduct = ({ product, onClose, refetch }) => {
           })}
           onSubmit={(values, { setSubmitting }) => {
             // => validation
-
             if (
+              !categories?.length ||
               !description ||
-              !category ||
-              (images?.length === 0 && prevImages.length === 0)
+              (!prevImages?.length && !images?.length)
             ) {
+              if (!categories?.length)
+                setCategoriesError("Category is required.");
               if (!description) setDescError("Description is required.");
-              if (!category) setCategoryError("Category is required.");
-              if (images?.length === 0 && prevImages.length === 0)
+              if (!prevImages?.length && !images?.length)
                 setImagesError("Product image is required.");
               return;
             }
 
-            if (description && description.split(" ").length < 50) {
-              return setDescError("Description must have at least 50 word.");
+            if (description && description.split(" ").length < 10) {
+              return setDescError("Description must have at least 10 word.");
             }
 
             if (images?.length > 0) {
-              // => Upload images
-              MediaUpload(images)
+              // => Upload images to Cloudinary
+              MediaUpload(images, "products")
                 .then((uploadedImages) => {
                   // => Images array modification for send in DB
                   const modiFiedImages = uploadedImages.map((img) => {
                     return { public_id: img.public_id, url: img.secure_url };
                   });
 
-                  // => Prepare product
+                  // => Prepare product based on Schema
                   const new_product = {
                     ...values,
-                    category,
+                    categories,
                     description,
                     images: [...prevImages, ...modiFiedImages],
                   };
@@ -129,17 +138,28 @@ const EditProduct = ({ product, onClose, refetch }) => {
                   updateProduct({ id: product?._id, product: new_product });
                 })
                 .catch((err) => {
-                  setImagesError("There was an error while uploadin images.");
+                  setImagesError("There was an error while uploading images.");
                 });
             } else {
               // => Prepare product
               const new_product = {
                 ...values,
-                category,
+                categories,
                 description,
                 images: prevImages,
               };
               updateProduct({ id: product?._id, product: new_product });
+            }
+
+            if (public_ids?.length) {
+              DeleteMedia(public_ids)
+                .then((res) => {
+                  toast.success("Media deleted successfully.");
+                })
+                .catch((err) => {
+                  console.log(err);
+                  toast.success("Media not deleted.");
+                });
             }
           }}
         >
@@ -156,12 +176,16 @@ const EditProduct = ({ product, onClose, refetch }) => {
               type="number"
               placeholder="Enter your product price"
             />
-            <TextInput
-              label="Brand"
-              name="brand"
-              type="text"
-              placeholder="Product brand"
-            />
+
+            <SelectBox label="Brand" name="brand">
+              <option value="">Choose a brand</option>
+              {brandsdata?.brands.map((brand) => (
+                <option key={brand?._id} value={brand?.name}>
+                  {brand?.name}
+                </option>
+              ))}
+            </SelectBox>
+
             <TextInput
               label="Stock"
               name="stock"
@@ -172,21 +196,27 @@ const EditProduct = ({ product, onClose, refetch }) => {
               {isChangeCategory ? (
                 <CategorySelector
                   label="Category"
-                  category={category}
-                  setCategory={setCategory}
-                  categoryError={categoryError}
-                  setCategoryError={setCategoryError}
+                  categories={categories}
+                  setCategories={setCategories}
+                  categoriesError={categoriesError}
+                  setCategoriesError={setCategoriesError}
                 />
               ) : (
                 <DefaultCategory>
                   <label>Category</label>
                   <div className="content">
-                    <span className="category">{product?.category}</span>
+                    <div className="prev_category">
+                      {product?.categories.map((category) => (
+                        <span key={category?._id} className="category">
+                          {category?.category_slug}
+                        </span>
+                      ))}
+                    </div>
                     <span
                       onClick={() => setIsChangeCategory(true)}
                       className="change_category"
                     >
-                      change
+                      Change category
                     </span>
                   </div>
                 </DefaultCategory>
@@ -213,12 +243,11 @@ const EditProduct = ({ product, onClose, refetch }) => {
                       <img src={img.url} alt="product" />
                       <svg
                         onClick={() => {
-                          setPrevImages((prev) => {
-                            console.log(prev);
-                            return prev.filter(
-                              (prev_img) => img._id !== prev_img._id
-                            );
-                          });
+                          setPrevImages((prev) =>
+                            prev.filter((prev_img) => img._id !== prev_img._id)
+                          );
+
+                          setPublic_ids((prev) => [...prev, img?.public_id]);
                         }}
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
@@ -244,9 +273,7 @@ const EditProduct = ({ product, onClose, refetch }) => {
             </ProductImage>
 
             <br />
-            <Button type="submit" disabled={isLoading}>
-              Submit
-            </Button>
+            <Button type="submit" disabled={isLoading} text="Submit" />
           </Form>
         </Formik>
       </Content>
@@ -281,16 +308,24 @@ const DefaultCategory = styled.div`
     background: #fff;
     min-height: 3.5rem;
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     flex-direction: column;
     align-items: flex-start;
     padding: 0.8rem 1rem;
     margin-top: 0.5rem;
     margin-bottom: 1.5rem;
 
-    .category {
-      text-transform: capitalize;
-      font-size: 1.3rem;
+    .prev_category {
+      display: flex;
+      gap: 1rem;
+
+      .category {
+        text-transform: capitalize;
+        font-size: 1.3rem;
+        border: 1px solid #e4e9eb;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+      }
     }
     .change_category {
       font-size: 1rem;
@@ -340,19 +375,5 @@ const PreviousImages = styled.div`
         fill: red;
       }
     }
-  }
-`;
-
-const Button = styled.button`
-  font-size: 1.3rem;
-  border: none;
-  background-color: var(--bg-primary);
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  &:hover {
-    color: #fff;
-    background-color: #ff6347f6;
   }
 `;

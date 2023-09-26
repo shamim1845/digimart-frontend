@@ -291,7 +291,7 @@ const Content = styled.div`
           overflow: hidden;
 
           span {
-            background-image: url("images/social.jpg");
+            background-image: url("https://res.cloudinary.com/dewq5eyuf/image/upload/f_auto,q_auto/v1/digimart/utils/vk2h4qfgaeicfjjiitxo");
             display: inline-block;
             width: 100%;
             height: 100%;

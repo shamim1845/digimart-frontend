@@ -92,7 +92,7 @@ const FilterButton = styled.div`
 const Container = styled.div`
   width: 100%;
   max-width: 1440px;
-  min-height: 80vh;
+  min-height: 50vh;
   display: flex;
   gap: 2rem;
   justify-content: space-between;

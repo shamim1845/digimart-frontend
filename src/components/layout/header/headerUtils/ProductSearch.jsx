@@ -13,8 +13,6 @@ const ProductSearch = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log("ProductSearch.js render => =>>>>");
-
   // Custom Material UI Button
   const AddToCart = btn(Button)({
     minWidth: "100%",

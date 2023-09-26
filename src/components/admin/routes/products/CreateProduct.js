@@ -13,14 +13,16 @@ import Title from "../../../utils/reUseableComponents/Title";
 import MediaUpload from "../../../utils/helperFunction/MediaUpload";
 import SelectBox from "../../../utils/formik/SelectBox";
 import { useGetAllBrandQuery } from "../../../../redux/api/brand/brandAPI";
+import Button from "../../../utils/reUseableComponents/Buttons";
 
 const CreateProduct = () => {
   // => state
-  const [category, setCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
+
   // Error state
-  const [categoryError, setCategoryError] = useState(null);
+  const [categoriesError, setCategoriesError] = useState(null);
   const [descError, setDescError] = useState(null);
   const [imagesError, setImagesError] = useState(null);
 
@@ -41,8 +43,8 @@ const CreateProduct = () => {
 
   // => Effect for handle Category, Description, and Images error
   useEffect(() => {
-    if (category) {
-      setCategoryError(null);
+    if (categories?.length > 0) {
+      setCategoriesError(null);
     }
 
     if (images?.length > 0) {
@@ -54,7 +56,7 @@ const CreateProduct = () => {
     } else {
       setDescError(null);
     }
-  }, [category, images, description]);
+  }, [categories?.length, images, description]);
 
   // Fetch brands for brand selection
   const { data: brandsdata } = useGetAllBrandQuery();
@@ -87,34 +89,36 @@ const CreateProduct = () => {
           })}
           onSubmit={(values, { setSubmitting }) => {
             // => validation
-            if (!description || !category || images?.length === 0) {
-              if (!category) setCategoryError("Category is required.");
+            if (!categories?.length || !description || !images?.length) {
+              if (!categories?.length)
+                setCategoriesError("Category is required.");
               if (!description) setDescError("Description is required.");
-              if (images?.length === 0)
-                setImagesError("Product image is required.");
+              if (!images?.length) setImagesError("Product image is required.");
               return;
             }
 
-            // => Upload images
-            MediaUpload(images)
+            if (description && description.split(" ").length < 10) {
+              return setDescError("Description must have at least 10 word.");
+            }
+
+            // => Upload images to Cloudinary
+            MediaUpload(images, "products")
               .then((uploadedImages) => {
                 // => Images array modification for send in DB
                 const modiFiedImages = uploadedImages.map((img) => {
                   return { public_id: img.public_id, url: img.secure_url };
                 });
-
-                // => Prepare product
+                // => Prepare product based on Schema
                 const product = {
                   ...values,
-                  category: category?.slug,
+                  categories,
                   description,
                   images: modiFiedImages,
                 };
-
                 createProduct(product);
               })
               .catch((err) => {
-                setImagesError("There was an error while uploadin images.");
+                setImagesError("There was an error while uploading images.");
               });
           }}
         >
@@ -134,7 +138,7 @@ const CreateProduct = () => {
             <SelectBox label="Brand" name="brand">
               <option value="">Choose a brand</option>
               {brandsdata?.brands.map((brand) => (
-                <option key={brand?._id} value={brand?.slug}>
+                <option key={brand?._id} value={brand?.name}>
                   {brand?.name}
                 </option>
               ))}
@@ -148,10 +152,10 @@ const CreateProduct = () => {
             <CategoriesContainer>
               <CategorySelector
                 label="Category"
-                category={category}
-                setCategory={setCategory}
-                categoryError={categoryError}
-                setCategoryError={setCategoryError}
+                categories={categories}
+                setCategories={setCategories}
+                categoriesError={categoriesError}
+                setCategoriesError={setCategoriesError}
               />
             </CategoriesContainer>
 
@@ -176,9 +180,7 @@ const CreateProduct = () => {
             </ProductImage>
 
             <br />
-            <Button type="submit" disabled={isLoading}>
-              Submit
-            </Button>
+            <Button type="submit" disabled={isLoading} text="Submit" />
           </Form>
         </Formik>
       </Content>
@@ -224,18 +226,4 @@ const ProductImage = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-`;
-
-const Button = styled.button`
-  font-size: 1.3rem;
-  border: none;
-  background-color: var(--bg-primary);
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  &:hover {
-    color: #fff;
-    background-color: #ff6347f6;
-  }
 `;

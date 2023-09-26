@@ -6,16 +6,19 @@ import ValidationError from "../validationUtils/ValidationError";
 
 const CategorySelector = ({
   label,
-  category,
-  setCategory,
-  categoryError,
-  setCategoryError,
+  categories,
+  setCategories,
+  categoriesError,
+  setCategoriesError,
 }) => {
   const [parentCatValue, setParentCatValue] = useState("");
   const [subCategory, setSubCategory] = useState([]);
+
+  // fetch categories
   const { data, isLoading, isError, error, isSuccess } =
     useGetAllCategoryQuery();
 
+  // handle category change
   const handleChange = (e, depthLevel) => {
     if (depthLevel === 0) {
       setParentCatValue(e.target.value);
@@ -24,13 +27,16 @@ const CategorySelector = ({
     const { _id, slug, children } = JSON.parse(e.target.value);
 
     if (!slug) {
-      setCategory(null);
+      setCategories([]);
       setSubCategory([]);
-      setParentCatValue(JSON.stringify({}));
+      setParentCatValue(e.target.value);
       return;
     }
 
-    setCategory({ _id, slug });
+    setCategories((prev) => {
+      const prevCopy = prev.slice(0, depthLevel);
+      return [...prevCopy, { category_id: _id, category_slug: slug }];
+    });
     setSubCategory((prev) => {
       const prevCopy = prev.slice(0, depthLevel);
       if (!children) return prevCopy;
@@ -43,7 +49,21 @@ const CategorySelector = ({
       <label>{label}</label>
 
       {isLoading && <div>Loading...</div>}
-      {isError && <Error text={error.message} />}
+
+      {isError && (
+        <>
+          {error.status === 404 ? (
+            <div style={{ fontSize: "1.2rem", padding: "0.5rem 0" }}>
+              {error?.data?.message}
+            </div>
+          ) : (
+            <Error
+              text={error?.message}
+              style={{ fontSize: "1.3rem", padding: "2rem" }}
+            />
+          )}
+        </>
+      )}
 
       {isSuccess && (
         <>
@@ -51,9 +71,9 @@ const CategorySelector = ({
             value={parentCatValue}
             onChange={(e) => handleChange(e, 0)}
             onBlur={() => {
-              !category &&
-                setCategoryError &&
-                setCategoryError("Category is required.");
+              !categories?.length &&
+                setCategoriesError &&
+                setCategoriesError("Category is required.");
             }}
           >
             <option value={JSON.stringify({})}>Select a category</option>
@@ -63,6 +83,8 @@ const CategorySelector = ({
               </option>
             ))}
           </select>
+
+          {/* Sub category */}
           {subCategory?.map((category, index) => (
             <select key={index} onChange={(e) => handleChange(e, index + 1)}>
               <option value={JSON.stringify({})}>Select a sub-category</option>
@@ -75,7 +97,7 @@ const CategorySelector = ({
           ))}
         </>
       )}
-      {categoryError && <ValidationError message={categoryError} />}
+      {categoriesError && <ValidationError message={categoriesError} />}
     </Container>
   );
 };

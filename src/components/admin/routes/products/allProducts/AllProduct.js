@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import EditProduct from "./EditProduct";
 import Modal from "../../../../utils/modal/Modal";
 import NotFound from "../../../../utils/fetchUtils/NotFound";
+import DeleteMedia from "../../../../utils/helperFunction/DeleteMedia";
 
 const columns = [
   { id: 1, label: "Image", minWidth: 120 },
@@ -52,30 +53,31 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [limit, setLimit] = React.useState(20);
   const [keyword, setKeyWord] = React.useState("");
-  const [category, setCategory] = React.useState("");
-
   const [edit, setEdit] = React.useState(false);
   const [ProductForEdit, setProductForEdit] = React.useState(null);
 
+  // If searching set page to 0
   React.useEffect(() => {
     if (keyword) {
       setPage(0);
     }
   }, [keyword]);
 
+  // Generate queryString for searching and filtering
   const queryString = generateQuery({
     keyword: keyword,
-    category: category,
     page: page + 1,
     limit: limit,
   });
 
+  // fetch products
   const { data, isSuccess, isLoading, isError, error, refetch } =
     useGetProductsQuery(queryString, {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
     });
 
+  // Delete product mutation
   const [
     deleteProduct,
     {
@@ -85,7 +87,7 @@ export default function StickyHeadTable() {
     },
   ] = useDeleteProductMutation();
 
-  // => handle product delete state
+  // => Effect for product delete mutation
   React.useEffect(() => {
     if (isDeleteSuccess) {
       toast.success("Product successfully deleted.");
@@ -97,22 +99,34 @@ export default function StickyHeadTable() {
   }, [isDeleteSuccess, isDeleteError, refetch]);
 
   // => Handle delete function
-  const handleDelete = (id) => {
+  const handleDelete = (product) => {
     if (isDeleteLoading) return;
-    deleteProduct(id);
+    deleteProduct(product?._id);
+
+    // delete media
+    let public_ids = product?.images.map((img) => img?.public_id);
+    if (public_ids?.length) {
+      DeleteMedia(public_ids)
+        .then((res) => {
+          toast.success("Media deleted successfully.");
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.success("Media not deleted.");
+        });
+    }
   };
 
+  // handle page change
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  // handle rows per page
   const handleChangeRowsPerPage = (event) => {
     setLimit(+event.target.value);
     setPage(0);
   };
-
-  // if (isLoading) return <Loading />;
-  // if (isError) return <Error text={error?.message} />;
 
   return (
     <Container>
@@ -124,12 +138,12 @@ export default function StickyHeadTable() {
         <>
           {error.status === 404 ? (
             <NotFound
-              style={{ justifyContent: "center", marginTop: "3rem" }}
+              style={{ justifyContent: "center", marginTop: "10rem" }}
               text={error.data?.message}
             />
           ) : (
             <Error
-              style={{ justifyContent: "center", marginTop: "3rem" }}
+              style={{ justifyContent: "center", marginTop: "10rem" }}
               text={error?.message}
             />
           )}
@@ -181,8 +195,19 @@ export default function StickyHeadTable() {
                       <TableCell style={{ fontSize: "1.3rem" }}>
                         {product?.name}
                       </TableCell>
-                      <TableCell style={{ fontSize: "1.3rem" }}>
-                        {product?.category}
+                      <TableCell
+                        style={{
+                          fontSize: "1.3rem",
+                        }}
+                      >
+                        {product?.categories.map((category) => (
+                          <span
+                            key={category?._id}
+                            style={{ marginRight: "1rem" }}
+                          >
+                            {category?.category_slug}
+                          </span>
+                        ))}
                       </TableCell>
                       <TableCell style={{ fontSize: "1.3rem" }}>
                         {product?.price}
@@ -192,7 +217,7 @@ export default function StickyHeadTable() {
                       </TableCell>
                       <TableCell style={{ textAlign: "right" }}>
                         <svg
-                          onClick={() => handleDelete(product?._id)}
+                          onClick={() => handleDelete(product)}
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
                           height="16"

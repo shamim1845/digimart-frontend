@@ -33,7 +33,7 @@ const ProductImageSlider = ({ productImages, sliderRef }) => {
         {productImages.map((img, index) => {
           return (
             <img
-              onClick={() => sliderRef.current.slickGoTo(index)}
+              onMouseOver={() => sliderRef.current.slickGoTo(index)}
               key={img._id}
               src={img.url}
               alt="product"
@@ -48,6 +48,7 @@ const ProductImageSlider = ({ productImages, sliderRef }) => {
 export default ProductImageSlider;
 
 const ProductImageSliderContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -60,11 +61,18 @@ const ProductImageSliderContainer = styled.div`
 `;
 
 const SliderContainer = styled.div`
-  width: 100vw;
-  max-width: 40rem;
+  width: 100%;
+  max-width: 45rem;
   background-color: transparent;
   position: relative;
+  padding: 0 4rem 5rem;
 
+  @media screen and (max-width: 768px) {
+    padding: 0;
+  }
+  .slick-slider {
+    /* tap-highlight-color: none; */
+  }
   .slick-next::before,
   .slick-prev::before {
     color: #5a5858;
@@ -85,19 +93,15 @@ const ThumbnailContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-right: 4rem;
+  padding-bottom: 5rem;
   overflow-y: auto;
   white-space: nowrap;
 
-  @media screen and (max-width: 1024px) {
-    position: absolute;
-    left: 10vw;
-  }
-
   @media screen and (max-width: 768px) {
     position: relative;
-    left: 0;
     flex-direction: row;
-    margin-top: 3rem;
+    padding-top: 3rem;
+    padding-bottom: 0;
   }
 
   img {
@@ -105,8 +109,7 @@ const ThumbnailContainer = styled.div`
     margin: 0.5rem;
     padding: 0.5rem;
     border: 1px solid transparent;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 
     &:hover {
       border-color: tomato;

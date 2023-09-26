@@ -12,44 +12,48 @@ import ProductImageSlider from "./ProductImageSlider";
 import ProductHandler from "./ProductHandler";
 import { useGetProductQuery } from "../../../redux/api/products/productsAPI";
 import Error from "../../utils/fetchUtils/Error";
+import NotFound from "../../utils/fetchUtils/NotFound";
 
 const ProductDetails = () => {
-  const [favourite, setFavourite] = useState(false);
-
   const sliderRef = useRef();
-  const dispatch = useDispatch();
 
   const { productId } = useParams();
-  const { data, isLoading, isError } = useGetProductQuery(productId);
-  console.log(data);
-
-  useEffect(() => {
-    setFavourite(false);
-
-    function localFavouriteItem() {
-      const favItems = JSON.parse(localStorage.getItem("favourite-item"));
-      favItems &&
-        favItems.find((item) => {
-          if (item.product._id === productId) {
-            setFavourite(true);
-          }
-          return null;
-        });
-    }
-    localFavouriteItem();
-  }, [dispatch, productId]);
+  const { data, isLoading, isError, error } = useGetProductQuery(productId);
 
   if (isLoading) {
     return <Loading />;
   }
 
   if (isError) {
-    return Error;
+    if (error.status === 404) {
+      return (
+        <NotFound
+          text={error?.data?.message}
+          style={{
+            height: "20rem",
+            padding: "5rem 0",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        />
+      );
+    }
+    return (
+      <Error
+        text={error?.data?.message}
+        style={{
+          height: "20rem",
+          padding: "5rem 0",
+          textAlign: "center",
+          justifyContent: "center",
+        }}
+      />
+    );
   }
 
   return (
     <PageContainer>
-      <ProductDetailsContainer>
+      <Container>
         <ContainerTop>
           <SliderContainer>
             <ProductImageSlider
@@ -57,43 +61,53 @@ const ProductDetails = () => {
               sliderRef={sliderRef}
             />
           </SliderContainer>
-          <DetailsContainer>
-            <ProductHandler
-              product={data?.product}
-              favourite={favourite}
-              setFavourite={setFavourite}
-            />
-          </DetailsContainer>
+          <HandlerContainer>
+            <ProductHandler product={data?.product} />
+          </HandlerContainer>
         </ContainerTop>
 
         <ProductDescription product={data.product} />
         <RatingReviews product={data.product} />
-        <RelatedProducts category={data.product.category} id={productId} />
-      </ProductDetailsContainer>
+        <RelatedProducts
+          category={
+            data?.product?.categories[data?.product?.categories?.length - 1]
+              .category_slug
+          }
+          id={productId}
+        />
+      </Container>
     </PageContainer>
   );
 };
 
 export default ProductDetails;
 
-const ProductDetailsContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   max-width: 1440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 const ContainerTop = styled.div`
   width: 100%;
+  max-width: 1200px;
   display: flex;
   justify-content: center;
-  gap: 7rem;
-  padding: 2rem 0 3rem;
-  margin-bottom: 3rem;
+  gap: 3rem;
+  padding: 2rem 0;
+  margin-bottom: 5rem;
 
   @media screen and (max-width: 1024px) {
     flex-direction: column;
-    gap: 3rem;
+  }
+  @media screen and (max-width: 576px) {
+    padding: 0;
   }
 `;
 const SliderContainer = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row-reverse;
   justify-content: center;
@@ -104,7 +118,10 @@ const SliderContainer = styled.div`
   }
 `;
 
-const DetailsContainer = styled.div`
+const HandlerContainer = styled.div`
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

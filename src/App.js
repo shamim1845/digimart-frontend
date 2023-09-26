@@ -18,8 +18,6 @@ const App = () => {
   dispatch(fetchAsyncLoggedIn());
   dispatch(fetchAsyncUser());
 
-  console.log("App.js render =>");
-
   return (
     <>
       <ToastContainer />

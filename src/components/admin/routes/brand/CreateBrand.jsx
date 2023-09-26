@@ -6,6 +6,7 @@ import * as yup from "yup";
 import TextInput from "../../../utils/formik/TextInput";
 import Title from "../../../utils/reUseableComponents/Title";
 import { useCreateBrandMutation } from "../../../../redux/api/brand/brandAPI";
+import Button from "../../../utils/reUseableComponents/Buttons";
 
 const CreateBrand = ({ onClose }) => {
   //   =>Create category mutation
@@ -23,7 +24,7 @@ const CreateBrand = ({ onClose }) => {
 
   return (
     <Container>
-      <Title variant="h1" text="Create Brand" />
+      <Title variant="h2" text="Create Brand" />
 
       <Content>
         <Formik
@@ -37,7 +38,6 @@ const CreateBrand = ({ onClose }) => {
               .min(2, "Brand name must have at least 2 characters."),
           })}
           onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
             createBrand(values);
           }}
         >
@@ -50,9 +50,7 @@ const CreateBrand = ({ onClose }) => {
             />
 
             <br />
-            <Button type="submit" disabled={isLoading}>
-              Submit
-            </Button>
+            <Button type="submit" disabled={isLoading} text="Create" />
           </Form>
         </Formik>
       </Content>
@@ -70,24 +68,11 @@ const Container = styled.div`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  padding: 2rem 2rem;
   background-color: #f2f2f2;
 `;
 
 const Content = styled.div`
-  padding: 2rem 2rem;
+  padding: 2rem 0;
   width: 100%;
-`;
-
-const Button = styled.button`
-  font-size: 1.3rem;
-  border: none;
-  background-color: var(--bg-primary);
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  &:hover {
-    color: #fff;
-    background-color: #ff6347f6;
-  }
 `;

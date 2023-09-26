@@ -1,63 +1,24 @@
-import React, { useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import Rating from "@mui/material/Rating";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 import { addOrderItem } from "../../../redux/order/orderSlice";
-import {
-  addCartItem,
-  addFavouriteItem,
-  deleteCartItem,
-  deleteFavouriteItem,
-} from "../../../redux/user/userSlice";
-import { styled as btn } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import { toast } from "react-toastify";
-
-import Rating from "@mui/material/Rating";
 import Title from "../../utils/reUseableComponents/Title";
-import { selectMemoCartItemQuantity } from "../../../redux/user/userSelector";
+import MUIButton from "../../utils/reUseableComponents/MUIButton";
+import useCartHandler from "../../utils/customHooks/useCartHandler";
+import useFavouriteHandler from "../../utils/customHooks/useFavouriteHandler";
 
-// MUI customize button
-const BuyNow = btn(Button)({
-  backgroundColor: "#585555",
-  color: "#fff",
-  marginRight: "2rem",
-  fontSize: "1.4rem",
-  fontWeight: "600",
-  padding: "1rem 3rem",
-  "&:hover": {
-    backgroundColor: "tomato",
-    color: "#000",
-  },
-});
-
-const AddToCart = btn(Button)({
-  backgroundColor: "tomato",
-  color: "#000",
-  fontSize: "1.4rem",
-  fontWeight: "600",
-  padding: "1rem 3rem",
-  "&:hover": {
-    backgroundColor: "#585555",
-    color: "#fff",
-  },
-});
-
-const ProductHandler = ({ product, favourite, setFavourite }) => {
+const ProductHandler = ({ product }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Add item to favourite list
-  const addfavouriteItemHandler = () => {
-    setFavourite(true);
-    dispatch(addFavouriteItem({ product }));
-  };
+  // Custom hook for cart handling
+  const { quantity, addToCartHandler, removeFromCartHandler } =
+    useCartHandler(product);
 
-  // Remove item from favourite lis
-  const removefavouriteHandler = () => {
-    setFavourite(false);
-    dispatch(deleteFavouriteItem({ product }));
-  };
+  // Custom hook for wish list handling
+  const { favourite, addfavouriteItemHandler, removefavouriteHandler } =
+    useFavouriteHandler(product);
 
   // Buy product directly
   const directBuyHandler = () => {
@@ -67,42 +28,9 @@ const ProductHandler = ({ product, favourite, setFavourite }) => {
     navigate("/order");
   };
 
-  const memoCartItem = useMemo(selectMemoCartItemQuantity, []);
-
-  const quantity = useSelector((state) => memoCartItem(state, product?._id));
-
-  console.log("Product card render =>", quantity);
-
-  const addToCartHandler = () => {
-    if (quantity === product?.stock) return;
-
-    const currQty = quantity + 1;
-
-    dispatch(addCartItem({ product, quantity: currQty }));
-
-    if (currQty === 1) {
-      toast.success(`New item added in your cart.`);
-    } else {
-      toast.info(`Quantity increase in your existing cart item.`);
-    }
-  };
-
-  const removeFromCartHandler = () => {
-    if (quantity === 0) return;
-    const currQty = quantity > 1 ? quantity - 1 : 0;
-
-    if (currQty === 0) {
-      dispatch(deleteCartItem({ product }));
-      toast.warn(`Item removed from your cart.`);
-    } else {
-      dispatch(addCartItem({ product, quantity: currQty }));
-      toast.info(`Quantity decrease in your existing cart item.`);
-    }
-  };
-
   return (
     <Container>
-      <Title text={product?.name} style={{ paddingBottom: "1rem" }} />
+      <Title text={product?.name} style={{}} />
       <RatingAndFavourite>
         <div>
           <Rating
@@ -121,14 +49,16 @@ const ProductHandler = ({ product, favourite, setFavourite }) => {
           onDoubleClick={removefavouriteHandler}
         >
           {favourite ? (
-            <i className="bi bi-heart-fill"></i>
+            <i className="bi bi-heart-fill" title="Remove from favourite"></i>
           ) : (
-            <i className="bi bi-heart"></i>
+            <i className="bi bi-heart" title="Add to favourite"></i>
           )}
         </div>
       </RatingAndFavourite>
 
-      <p className="brand_name">Brand: {product?.brand}</p>
+      <Brand>
+        <p className="">Brand: {product?.brand}</p>
+      </Brand>
 
       <PriceBox>
         <div className="price_box">
@@ -136,15 +66,22 @@ const ProductHandler = ({ product, favourite, setFavourite }) => {
           <span className="price">{`${product?.price}`}</span>
         </div>
       </PriceBox>
+      <Stock>
+        <span>Stock: </span>
+        <span>{product?.stock}</span>
+      </Stock>
       <Quantity>
         <p>Quantity</p>
         <div className="set_quantity">
-          <button>
-            <i className="bi bi-dash" onClick={removeFromCartHandler}></i>
+          <button title="Decrease Quantity">
+            <i
+              className="bi bi-dash"
+              onClick={() => removeFromCartHandler()}
+            ></i>
           </button>
           <p>{quantity}</p>
-          <button>
-            <i className="bi bi-plus" onClick={addToCartHandler}></i>
+          <button title="Increase Quantity">
+            <i className="bi bi-plus" onClick={() => addToCartHandler()}></i>
           </button>
         </div>
         {quantity >= product?.stock && (
@@ -153,21 +90,21 @@ const ProductHandler = ({ product, favourite, setFavourite }) => {
       </Quantity>
 
       <ButtonGroup>
-        <BuyNow
+        <MUIButton
           variant="contained"
           onClick={directBuyHandler}
           disabled={quantity === 0}
         >
           Buy Now
-        </BuyNow>
+        </MUIButton>
 
-        <AddToCart
+        <MUIButton
           variant="contained"
           onClick={addToCartHandler}
           disabled={quantity > 0}
         >
           Add to Cart
-        </AddToCart>
+        </MUIButton>
       </ButtonGroup>
     </Container>
   );
@@ -176,6 +113,7 @@ const ProductHandler = ({ product, favourite, setFavourite }) => {
 export default ProductHandler;
 
 const Container = styled.div`
+  width: 100%;
   height: 100%;
 `;
 
@@ -196,7 +134,8 @@ const RatingAndFavourite = styled.div`
   }
 
   .favourite {
-    justify-content: center;
+    justify-content: flex-end;
+
     i {
       font-size: 2.2rem;
       cursor: pointer;
@@ -206,30 +145,40 @@ const RatingAndFavourite = styled.div`
     }
   }
 `;
+
+const Brand = styled.div`
+  color: var(--text-primary);
+`;
 const PriceBox = styled.div`
-  margin-top: 2rem;
+  padding: 2rem 0;
+  margin: 3rem 0;
+  border-top: 2px solid #e4e9eb;
+  border-bottom: 2px solid #e4e9eb;
   .price_box {
     display: flex;
     color: var(--text-primary);
 
     .price_symbol {
-      font-size: 1.3rem;
+      font-size: 1.6rem;
+      font-weight: 500;
     }
     .price {
       font-size: 2.8rem;
+      font-weight: 500;
     }
   }
+`;
+
+const Stock = styled.div`
+  color: var(--text-primary);
 `;
 
 const Quantity = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 1rem 0;
-  p {
-    color: var(--text-primary);
-    font-weight: 400;
-  }
+  color: var(--text-primary);
+
   .set_quantity {
     display: flex;
     justify-content: center;
@@ -263,9 +212,12 @@ const Quantity = styled.div`
 `;
 
 const ButtonGroup = styled.div`
-  margin-top: 2rem;
+  margin-top: 3rem;
+  display: flex;
+  gap: 2rem;
 
   @media screen and (max-width: 576px) {
+    margin-top: 5rem;
     button {
       margin-top: 1rem;
       width: 100%;

@@ -8,8 +8,8 @@ export const Button = ({ text, ...rest }) => {
 export default Button;
 
 const ButtonDefault = styled.button`
-  margin-top: 1rem;
   border: none;
+  color: var(--text-primary);
   background-color: tomato;
   padding: 1rem 2rem;
   font-size: 1.4rem;

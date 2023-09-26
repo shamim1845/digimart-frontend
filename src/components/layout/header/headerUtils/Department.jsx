@@ -9,7 +9,6 @@ import Error from "../../../utils/fetchUtils/Error";
 const Department = ({ setActiveDept, categoryBtnRef }) => {
   const [childCategories, setChildCategories] = useState([]);
 
-  console.log("Department.js render =>");
   let categoryRef = useRef();
 
   // => Get categories
@@ -35,10 +34,18 @@ const Department = ({ setActiveDept, categoryBtnRef }) => {
   return (
     <DepartmentContainer ref={categoryRef}>
       {isError && (
-        <Error
-          text={error?.message}
-          style={{ fontSize: "1.3rem", padding: "2rem" }}
-        />
+        <>
+          {error.status === 404 ? (
+            <div style={{ fontSize: "1.3rem", padding: "2rem" }}>
+              {error?.data?.message}
+            </div>
+          ) : (
+            <Error
+              text={error?.message}
+              style={{ fontSize: "1.3rem", padding: "2rem" }}
+            />
+          )}
+        </>
       )}
 
       {isSuccess && data?.category?.length > 0 && (

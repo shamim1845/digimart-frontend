@@ -40,17 +40,18 @@ const MenuContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
 
   .parent_links {
     display: flex;
-    justify-content: start;
     align-items: center;
     gap: 1rem;
   }
   .sub_menu {
     padding-left: 4rem;
     li {
+      display: flex;
+      align-items: center;
       cursor: pointer;
       span {
         font-size: 1.3rem;
@@ -62,7 +63,7 @@ const MenuContainer = styled.div`
   }
   a {
     font-size: 1.4rem;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.3s ease-in-out;
     &:hover {
       color: tomato;
     }

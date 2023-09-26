@@ -105,7 +105,7 @@ const CategoriesContainer = ({ keyword }) => {
     if (isDeleteLoading) return;
     deleteCategory(id);
   };
-  console.log({ data, error });
+
   return (
     <div>
       {isLoading && <Loading />}
@@ -114,12 +114,12 @@ const CategoriesContainer = ({ keyword }) => {
         <>
           {error.status === 404 ? (
             <NotFound
-              style={{ justifyContent: "center", marginTop: "3rem" }}
+              style={{ justifyContent: "center", marginTop: "10rem" }}
               text={error.data?.message}
             />
           ) : (
             <Error
-              style={{ justifyContent: "center", marginTop: "3rem" }}
+              style={{ justifyContent: "center", marginTop: "10rem" }}
               text={error?.message}
             />
           )}

@@ -6,7 +6,7 @@ import { useState } from "react";
 import BrandContainer from "./BrandContainer";
 import CreateBrand from "./CreateBrand";
 
-const Categories = () => {
+const Brand = () => {
   const [keyword, setKeyWord] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -16,7 +16,11 @@ const Categories = () => {
 
   return (
     <Container>
-      <AdminSearch setKeyWord={setKeyWord} modalController={modalController} />
+      <AdminSearch
+        setKeyWord={setKeyWord}
+        modalController={modalController}
+        label="Brands"
+      />
 
       <BrandContainer keyword={keyword} />
 
@@ -27,7 +31,7 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default Brand;
 const Container = styled.div`
   width: 100%;
 

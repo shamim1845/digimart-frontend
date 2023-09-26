@@ -16,7 +16,11 @@ const Categories = () => {
 
   return (
     <Container>
-      <AdminSearch setKeyWord={setKeyWord} modalController={modalController} />
+      <AdminSearch
+        setKeyWord={setKeyWord}
+        modalController={modalController}
+        label="Categories"
+      />
 
       <CategoriesContainer keyword={keyword} />
 

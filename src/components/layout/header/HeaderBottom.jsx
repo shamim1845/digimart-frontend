@@ -17,8 +17,6 @@ import {
 const HeaderBottom = () => {
   const [activeDept, setActiveDept] = useState(false);
 
-  console.log("HeaderBottom.js render =>");
-
   const categoryBtnRef = useRef(null);
 
   // select data from redux store

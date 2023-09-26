@@ -106,12 +106,12 @@ const BrandContainer = ({ keyword }) => {
         <>
           {error.status === 404 ? (
             <NotFound
-              style={{ justifyContent: "center", marginTop: "3rem" }}
+              style={{ justifyContent: "center", marginTop: "10rem" }}
               text={error.data?.message}
             />
           ) : (
             <Error
-              style={{ justifyContent: "center", marginTop: "3rem" }}
+              style={{ justifyContent: "center", marginTop: "10rem" }}
               text={error?.message}
             />
           )}

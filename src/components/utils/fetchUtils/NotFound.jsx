@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import Title from "../reUseableComponents/Title";
 
 const NotFound = ({ style, text }) => {
   return (
     <Container style={style}>
-      <h3>Oops!</h3>
+      <Title variant="h1" text="Oops!" />
       <p>{text}</p>
     </Container>
   );
@@ -21,8 +22,4 @@ const Container = styled.div`
   gap: 1rem;
   align-items: center;
   justify-content: center;
-
-  h3 {
-    font-size: 2rem;
-  }
 `;

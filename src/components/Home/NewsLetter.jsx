@@ -60,7 +60,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  background-image: url(https://res.cloudinary.com/dewq5eyuf/image/upload/f_auto,q_auto/v1/digimart/home_slider/pqa93l3uwvn0gp8s6yuk);
+  background-image: url(https://res.cloudinary.com/dewq5eyuf/image/upload/v1691832586/digimart/utils/pqa93l3uwvn0gp8s6yuk.jpg);
   background-position: center center !important;
   background-repeat: no-repeat;
   background-size: cover;

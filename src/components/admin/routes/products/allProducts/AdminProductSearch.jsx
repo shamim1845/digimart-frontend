@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
+import Title from "../../../../utils/reUseableComponents/Title";
 
 const AdminProductSearch = ({ setKeyWord }) => {
   const [value, setValue] = useState("");
@@ -40,7 +41,7 @@ const AdminProductSearch = ({ setKeyWord }) => {
 
   return (
     <ProductSearchContainer>
-      <h1>Products</h1>
+      <Title variant="h4" text="Products" style={{ width: "auto" }} />
       <form onSubmit={(e) => e.preventDefault()}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,10 +95,6 @@ const ProductSearchContainer = styled.div`
   gap: 3rem;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.116) 1px 2px 7px;
-
-  h1 {
-    font-size: 1.3rem;
-  }
 
   form {
     width: 100% !important;

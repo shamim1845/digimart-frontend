@@ -9,8 +9,6 @@ const NewArivals = () => {
   const [category, setCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log("NewArivals.js render =>");
-
   const categoryHandler = (e) => {
     const { value } = e.target;
     setCategory(value);
@@ -39,9 +37,13 @@ const NewArivals = () => {
   }
 
   if (isError) {
-    content = (
-      <Error text={error?.message} style={{ justifyContent: "center" }} />
-    );
+    if (error.status === 404) {
+      content = null;
+    } else {
+      content = (
+        <Error text={error?.message} style={{ justifyContent: "center" }} />
+      );
+    }
   }
 
   if (isSuccess && data?.allCategories?.length > 0) {

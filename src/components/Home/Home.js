@@ -6,8 +6,6 @@ import NewArivals from "./newArivals/NewArivals";
 import NewsLetter from "./NewsLetter";
 
 const Home = () => {
-  console.log("Home.js render =>");
-
   return (
     <>
       <Container>

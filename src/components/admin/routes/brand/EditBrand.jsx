@@ -24,7 +24,7 @@ const EditBrand = ({ onClose, brandForEdit }) => {
 
   return (
     <Container>
-      <Title variant="h1" text="Edit Brand" />
+      <Title variant="h2" text="Edit Brand" />
 
       <Content>
         <Formik
@@ -70,11 +70,12 @@ const Container = styled.div`
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  padding: 2rem 2rem;
   background-color: #f2f2f2;
 `;
 
 const Content = styled.div`
-  padding: 2rem 2rem;
+  padding: 2rem 0;
   width: 100%;
 `;
 

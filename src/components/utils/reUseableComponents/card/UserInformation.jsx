@@ -1,28 +1,22 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
+import useSidebarHandler from "../../customHooks/useSidebarHandler";
+import { selectUserInfo } from "../../../../redux/user/userSelector";
+import Title from "../Title";
 
 const UserInformation = () => {
   const [active, setActive] = useState(false);
   const avatarRef = useRef(null);
   const navigate = useNavigate();
 
-  const { avatar, name, email } = useSelector((state) => state.user.userInfo);
+  const { avatar, name, email } = useSelector(selectUserInfo);
 
   // handle setActive when clicked outside of Card component
-  useEffect(() => {
-    function handleActive(e) {
-      if (!avatarRef.current.contains(e.target)) {
-        setActive(false);
-      }
-    }
-    window.addEventListener("mousedown", handleActive);
-
-    return () => window.removeEventListener("mousedown", handleActive);
-  }, []);
+  useSidebarHandler(avatarRef, setActive);
 
   // Log Out Handler
   const LogOutHandler = async () => {
@@ -64,15 +58,18 @@ const UserInformation = () => {
       </div>
 
       <Card active={active} ref={avatarRef}>
+        <div className="card_top">
+          <Title variant="h3" text={name} style={{ marginBottom: "0.2rem" }} />
+          <span>{email}</span>
+        </div>
+
         <ul>
           <li>
-            <h3 style={{}}>{name}</h3>
-            <span>{email}</span>
+            <Link to={"/account/myprofile"}>My Profile</Link>
           </li>
           <li>
-            <Link to={"/account/myprofile"}>Profile</Link>
+            <Link to={"/account/updateprofile"}>Update Profile</Link>
           </li>
-          <li></li>
         </ul>
 
         <br />
@@ -103,8 +100,9 @@ const Card = styled.div`
   right: 2rem;
   min-width: 10rem;
   margin-top: 0.5rem;
-  background-color: #fff;
   padding: 2rem;
+  background-color: #fff;
+  border-radius: 0 0 0.5rem 0.5rem;
   transition: all 0.3s ease-in-out;
   opacity: ${(props) => (props.active ? 1 : 0)};
   visibility: ${(props) => (props.active ? "vissible" : "hidden")};
@@ -112,9 +110,18 @@ const Card = styled.div`
   box-shadow: rgba(0, 0, 0, 0.116) 1px 2px 7px;
 
   ul {
+    margin: 2rem 0 0;
+    display: flex;
+    gap: 0.3rem;
+    flex-direction: column;
+
     li {
-      display: flex;
-      flex-direction: column;
+      transition: all 0.3s ease-in-out;
+      a {
+        &:hover {
+          color: tomato;
+        }
+      }
     }
   }
 
@@ -123,6 +130,8 @@ const Card = styled.div`
     border: none;
     cursor: pointer;
     font-size: 1.3rem;
+    transition: all 0.3s ease-in-out;
+
     &:hover {
       color: tomato;
     }

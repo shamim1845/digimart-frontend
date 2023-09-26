@@ -3,8 +3,6 @@ import AuthMenu from "./headerUtils/AuthMenu";
 import Currency from "./headerUtils/Currency.jsx";
 
 const HeaderTop = () => {
-  console.log("HeaderTop.js render =>");
-
   return (
     <HeaderTopContainer>
       <HeaderTopBar>
@@ -68,7 +66,6 @@ const HeaderTopBar = styled.div`
 
       img {
         margin-right: 0.5rem;
-        width: 1.3rem;
       }
       span {
         margin-bottom: 0;

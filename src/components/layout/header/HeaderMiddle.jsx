@@ -14,8 +14,6 @@ const navLinks = [
 ];
 
 const HeaderMiddle = () => {
-  console.log("HeaderMiddle.js render =>");
-
   return (
     <HeaderMidContainer>
       <HeaderMidd>

@@ -10,17 +10,27 @@ import {
 } from "../../../../redux/productFilter/productFilterSlice";
 import { useNavigate } from "react-router-dom";
 
-const Categories = ({ setSidebar }) => {
+const Categories = () => {
   // Fetch categories
   const { data, isSuccess, isError, error } = useGetAllCategoryQuery();
 
   return (
     <CategoriesContainer>
-      {isError && <Error text={error?.message} style={{ marginTop: "1rem" }} />}
+      {isError && (
+        <>
+          {error.status === 404 ? (
+            <div style={{ fontSize: "1.3rem", padding: "1rem 0" }}>
+              {error?.data?.message}
+            </div>
+          ) : (
+            <Error text={error?.message} style={{ marginTop: "1rem" }} />
+          )}
+        </>
+      )}
 
       {isSuccess && data?.category && (
         <ul>
-          <SubCategory category={data?.category} setSidebar={setSidebar} />
+          <SubCategory category={data?.category} />
         </ul>
       )}
     </CategoriesContainer>
@@ -59,9 +69,8 @@ const CategoriesContainer = styled.div`
   }
 `;
 
-const SubCategory = ({ category, setSidebar }) => {
+const SubCategory = ({ category }) => {
   const [activeCategory, setActiveCategory] = useState(null);
-  console.log("FilterBox SubCategory render. =>");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,7 +82,6 @@ const SubCategory = ({ category, setSidebar }) => {
   const checkBoxHandler = (cat) => {
     dispatch(addPage(1));
     dispatch(addCategory(cat?.slug === checkedCategory ? "" : cat?.slug));
-    setSidebar(false);
     navigate("/products");
   };
 
@@ -96,10 +104,7 @@ const SubCategory = ({ category, setSidebar }) => {
             </div>
 
             {cat?._id === activeCategory?._id && (
-              <SubCategory
-                category={activeCategory?.children}
-                setSidebar={setSidebar}
-              />
+              <SubCategory category={activeCategory?.children} />
             )}
           </li>
         );

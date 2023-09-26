@@ -4,12 +4,12 @@ import { toast } from "react-toastify";
 import styled from "styled-components";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import MediaUpload from "../utils/helperFunction/MediaUpload";
+import MediaUpload from "../../utils/helperFunction/MediaUpload";
 import { useNavigate } from "react-router-dom";
-import Title from "../utils/reUseableComponents/Title";
+import Title from "../../utils/reUseableComponents/Title";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUserInfo } from "../../redux/user/userSelector";
-import { fetchAsyncUser } from "../../redux/user/userSlice";
+import { selectUserInfo } from "../../../redux/user/userSelector";
+import { fetchAsyncUser } from "../../../redux/user/userSlice";
 
 const MyProfile = () => {
   const [isProfile, setIsProfile] = useState(false);
@@ -84,7 +84,7 @@ const MyProfile = () => {
       }
 
       if (profilePic) {
-        MediaUpload(profilePic).then((res) => {
+        MediaUpload(profilePic, "user").then((res) => {
           updateProfile(res);
         });
       } else {
@@ -96,7 +96,7 @@ const MyProfile = () => {
   return (
     <UpdateProfileContainer>
       <Title
-        variant="h2"
+        variant="h1"
         text="Update Profile"
         style={{ textAlign: "center", marginTop: "2rem" }}
       />

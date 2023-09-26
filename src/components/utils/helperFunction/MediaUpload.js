@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const MediaUpload = async (files) => {
+const MediaUpload = async (files, folder) => {
   // Convert files Object to Array
   const filesArr = [];
   for (let key = 0; key < files.length; key++) {
@@ -10,29 +10,35 @@ const MediaUpload = async (files) => {
   // Convert all files in base 64
   const reader_files = filesArr.map((file) => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (res) => {
-        const public_id = file.name.split(".")[0];
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (res) => {
+          const public_id = file.name.split(".")[0];
 
-        resolve({
-          base64: res.target.result,
-          options: {
-            public_id: public_id,
-            tags: [public_id],
-          },
-        });
-      };
+          resolve({
+            base64: res.target.result,
+            options: {
+              public_id: public_id,
+              tags: [public_id],
+            },
+          });
+        };
+      } catch (error) {
+        console.error(error);
+        reject(error?.message);
+      }
     });
   });
 
   const images = await Promise.all(reader_files);
 
-  // Upload image on Cloudinary
+  // Upload images on Cloudinary
   return new Promise((resolve, reject) => {
     axios
-      .post("/api/v1/media/uploadImage", {
+      .post("/api/v1/media/uploadImages", {
         images,
+        folder,
       })
       .then((res) => {
         resolve(res.data.urls);

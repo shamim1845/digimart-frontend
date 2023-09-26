@@ -57,7 +57,7 @@ const ProductBox = () => {
       {isError && (
         <>
           {error.status === 404 ? (
-            <NotFound text="No products found." />
+            <NotFound text="No product found." style={{ maxHeight: "15rem" }} />
           ) : (
             <Error text={error?.message} style={{ justifyContent: "center" }} />
           )}
@@ -91,6 +91,7 @@ export default ProductBox;
 
 const Container = styled.div`
   flex: 1;
+  height: auto;
 `;
 
 const Content = styled.div`

@@ -17,8 +17,6 @@ const FilterBox = ({ activeFilter, setActiveFilter }) => {
   const dispatch = useDispatch();
   const filterBoxRef = useRef(null);
 
-  console.log("FilterBox Render. =>");
-
   // Custom hooks for handling sidebar when mousedown inside of sidebar
   useSidebarHandler(filterBoxRef, setActiveFilter);
 
@@ -53,7 +51,7 @@ const FilterBox = ({ activeFilter, setActiveFilter }) => {
       <PriceSlider />
       <Content>
         <p className="title">Categories</p>
-        <Categories setSidebar={setActiveFilter} />
+        <Categories />
 
         <br />
         <ClearFilter>
@@ -86,10 +84,10 @@ const FilterBoxContainer = styled.div`
   @media screen and (max-width: 768px) {
     box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
     width: 100%;
-    max-width: 35rem;
+    max-width: 30rem;
     height: 100vh;
     z-index: 10000 !important;
-    background-color: #f2f2f2;
+    background-color: aliceblue;
     padding: 2rem;
     transition: all 0.5s ease-in-out;
     position: fixed;
@@ -151,7 +149,6 @@ const ClearFilter = styled.div`
 
 const SubCategory = ({ category, setActiveFilter }) => {
   const [activeCategory, setActiveCategory] = useState(null);
-  console.log("FilterBox SubCategory render. =>");
 
   const dispatch = useDispatch();
 
