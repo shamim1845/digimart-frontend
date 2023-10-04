@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import { styled as btn } from "@mui/material/styles";
@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addKeyword } from "../../../../redux/productFilter/productFilterSlice";
 import { useNavigate } from "react-router-dom";
 import { selectproductFilterKeyword } from "../../../../redux/productFilter/productFilterSelector";
+import useDebounceHandler from "../../../utils/customHooks/useDebounceHandler";
 
 const ProductSearch = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -18,7 +19,7 @@ const ProductSearch = () => {
     minWidth: "100%",
     backgroundColor: "tomato",
     padding: "1rem",
-    transition: "all 0.5s",
+    transition: "all 0.5s ease-in-out",
     "&:hover": {
       backgroundColor: "#ff6347c1",
       transform: "scale(1.2)",
@@ -39,23 +40,8 @@ const ProductSearch = () => {
     navigate("/products");
   };
 
-  // => Awesome Debounce technique
-  const debounce = (fn, delay) => {
-    let timerID;
-    return (...val) => {
-      if (timerID) {
-        clearTimeout(timerID);
-      }
-
-      timerID = setTimeout(() => {
-        fn.apply(this, val);
-      }, delay);
-    };
-  };
-
-  const request = debounce(handleSubmit, 500);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debounceRequest = useCallback((val) => request(val), []);
+  // custom hooks for debounce handling
+  const debounceRequest = useDebounceHandler(handleSubmit);
 
   // Handle Input Change
   const handleChange = (e) => {
@@ -66,6 +52,8 @@ const ProductSearch = () => {
   // SearchBar Handler
   const searchHandler = (e) => {
     e.preventDefault();
+
+    if (!searchKeyword) return;
     handleSubmit(searchKeyword);
   };
 
@@ -82,7 +70,6 @@ const ProductSearch = () => {
           value={searchKeyword}
           type="text"
           placeholder="What are you looking for?"
-          required
         />
         {searchKeyword && (
           <div className="search_clear" onClick={clearSearchHandler}>
@@ -158,7 +145,7 @@ const ProductSearchContainer = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0 0.5rem;
+      margin: 0 0.2rem;
     }
   }
 `;

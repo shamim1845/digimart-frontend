@@ -14,7 +14,6 @@ import {
 import Loading from "../../../../utils/fetchUtils/Loading";
 import Error from "../../../../utils/fetchUtils/Error";
 import styled from "styled-components";
-import AdminProductSearch from "./AdminProductSearch";
 import generateQuery from "../../../../utils/helperFunction/generateQuery";
 import { toast } from "react-toastify";
 
@@ -22,6 +21,7 @@ import EditProduct from "./EditProduct";
 import Modal from "../../../../utils/modal/Modal";
 import NotFound from "../../../../utils/fetchUtils/NotFound";
 import DeleteMedia from "../../../../utils/helperFunction/DeleteMedia";
+import AdminProductSearch from "../../../admin-utils/AdminProductSearch";
 
 const columns = [
   { id: 1, label: "Image", minWidth: 120 },

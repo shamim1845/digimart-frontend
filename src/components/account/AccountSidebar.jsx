@@ -68,6 +68,7 @@ export default AccountSidebar;
 
 const AccountSidebarContainer = styled.div`
   min-width: 20rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 
   @media screen and (max-width: 768px) {
     position: absolute;

@@ -213,8 +213,7 @@ const FooterContainer = styled.div`
   padding: 5rem 3rem;
 
   @media screen and (max-width: 768px) {
-    margin-bottom: 5rem;
-    padding: 5rem 2rem;
+    padding: 5rem 2rem 10rem;
   }
 `;
 const Content = styled.div`

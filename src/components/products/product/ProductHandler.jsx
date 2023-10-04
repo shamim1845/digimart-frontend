@@ -7,18 +7,35 @@ import Title from "../../utils/reUseableComponents/Title";
 import MUIButton from "../../utils/reUseableComponents/MUIButton";
 import useCartHandler from "../../utils/customHooks/useCartHandler";
 import useFavouriteHandler from "../../utils/customHooks/useFavouriteHandler";
+import { useEffect, useState } from "react";
 
 const ProductHandler = ({ product }) => {
+  const [showInput, setShowInput] = useState(false);
+  const [value, setValue] = useState(0);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // Custom hook for cart handling
-  const { quantity, addToCartHandler, removeFromCartHandler } =
-    useCartHandler(product);
+  const { quantity, addToCartHandler } = useCartHandler(product?._id);
+
+  // set quantity from cart
+  useEffect(() => {
+    if (quantity) {
+      setValue(quantity);
+    }
+  }, [quantity]);
+
+  // form submit handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addToCartHandler(value);
+    setShowInput(false);
+  };
 
   // Custom hook for wish list handling
   const { favourite, addfavouriteItemHandler, removefavouriteHandler } =
-    useFavouriteHandler(product);
+    useFavouriteHandler(product?._id);
 
   // Buy product directly
   const directBuyHandler = () => {
@@ -43,17 +60,15 @@ const ProductHandler = ({ product }) => {
           <p className="total_ratings">{`${product?.totalReviews} Ratings`}</p>
         </div>
 
-        <div
-          className="favourite"
-          onClick={addfavouriteItemHandler}
-          onDoubleClick={removefavouriteHandler}
-        >
-          {favourite ? (
+        {favourite ? (
+          <div className="favourite" onClick={removefavouriteHandler}>
             <i className="bi bi-heart-fill" title="Remove from favourite"></i>
-          ) : (
+          </div>
+        ) : (
+          <div className="favourite" onClick={addfavouriteItemHandler}>
             <i className="bi bi-heart" title="Add to favourite"></i>
-          )}
-        </div>
+          </div>
+        )}
       </RatingAndFavourite>
 
       <Brand>
@@ -73,15 +88,40 @@ const ProductHandler = ({ product }) => {
       <Quantity>
         <p>Quantity</p>
         <div className="set_quantity">
-          <button title="Decrease Quantity">
-            <i
-              className="bi bi-dash"
-              onClick={() => removeFromCartHandler()}
-            ></i>
+          <button
+            title="Decrease Quantity"
+            onClick={() => addToCartHandler(quantity - 1)}
+            disabled={quantity === 0}
+          >
+            <i className="bi bi-dash"></i>
           </button>
-          <p>{quantity}</p>
-          <button title="Increase Quantity">
-            <i className="bi bi-plus" onClick={() => addToCartHandler()}></i>
+          <div className="textElement">
+            {showInput ? (
+              <form onSubmit={handleSubmit}>
+                <input
+                  name="quantity"
+                  type="number"
+                  max={product?.stock}
+                  min={1}
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+              </form>
+            ) : (
+              <span
+                title="Double-click to set the quantity"
+                onDoubleClick={() => setShowInput(true)}
+              >
+                {quantity}
+              </span>
+            )}
+          </div>
+          <button
+            disabled={quantity >= product?.stock}
+            title="Increase Quantity"
+            onClick={() => addToCartHandler(quantity + 1)}
+          >
+            <i className="bi bi-plus"></i>
           </button>
         </div>
         {quantity >= product?.stock && (
@@ -100,7 +140,7 @@ const ProductHandler = ({ product }) => {
 
         <MUIButton
           variant="contained"
-          onClick={addToCartHandler}
+          onClick={() => addToCartHandler(quantity + 1)}
           disabled={quantity > 0}
         >
           Add to Cart
@@ -183,6 +223,7 @@ const Quantity = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
     margin-left: 5rem;
 
     button {
@@ -203,10 +244,35 @@ const Quantity = styled.div`
         }
       }
     }
-    p {
-      padding: 0 1rem;
-      margin-bottom: 0;
-      color: var(--text-primary);
+
+    .textElement {
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      form {
+        box-shadow: var(--shadow-3);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+
+        input {
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          max-width: 8rem;
+          border: none;
+          outline: none;
+        }
+      }
+
+      span {
+        padding: 0 1rem;
+      }
     }
   }
 `;

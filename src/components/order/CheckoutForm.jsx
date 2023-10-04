@@ -130,10 +130,14 @@ export default function CheckoutForm({ clientSecret }) {
     }
   };
 
+  const paymentElementOptions = {
+    layout: "tabs",
+  };
+
   return (
     <CheckoutFormContainer>
       <form id="payment-form" onSubmit={handleSubmit}>
-        <PaymentElement id="payment-element" />
+        <PaymentElement id="payment-element" options={paymentElementOptions} />
         <button disabled={isLoading || !stripe || !elements} id="submit">
           <span id="button-text">
             {isLoading ? (

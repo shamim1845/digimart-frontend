@@ -21,7 +21,7 @@ const LoadingContainer = styled.div`
   height: 100vh;
   width: 100vw;
   position: fixed;
-  z-index: 1000;
+  z-index: 10000;
   background: rgba(0, 0, 0, 0.281);
   cursor: not-allowed;
   overflow: hidden;

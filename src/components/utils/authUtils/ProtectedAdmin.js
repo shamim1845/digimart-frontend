@@ -8,9 +8,9 @@ export const ProtectedAdmin = ({ children }) => {
   } = useSelector((state) => state.user);
 
   const location = useLocation();
-  if (!authenticated || role !== "admin") {
-    return <Navigate to="/login" state={{ path: location.pathname }} />;
+  if (authenticated && role === "admin") {
+    return children;
   }
 
-  return children;
+  return <Navigate to="/login" state={{ path: location.pathname }} />;
 };

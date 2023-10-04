@@ -147,48 +147,49 @@ const ClearFilter = styled.div`
   }
 `;
 
-const SubCategory = ({ category, setActiveFilter }) => {
-  const [activeCategory, setActiveCategory] = useState(null);
+//
+// const SubCategory = ({ category, setActiveFilter }) => {
+//   const [activeCategory, setActiveCategory] = useState(null);
 
-  const dispatch = useDispatch();
+//   const dispatch = useDispatch();
 
-  // redux state
-  const checkedCategory = useSelector(selectproductFilterCategory);
+//   // redux state
+//   const checkedCategory = useSelector(selectproductFilterCategory);
 
-  // Check Box Handler
-  const checkBoxHandler = (cat) => {
-    dispatch(addPage(1));
-    dispatch(addCategory(cat?.slug === checkedCategory ? "" : cat?.slug));
-    setActiveFilter(false);
-  };
+//   // Check Box Handler
+//   const checkBoxHandler = (cat) => {
+//     dispatch(addPage(1));
+//     dispatch(addCategory(cat?.slug === checkedCategory ? "" : cat?.slug));
+//     setActiveFilter(false);
+//   };
 
-  return (
-    <ul>
-      {category?.map((cat, index) => {
-        return (
-          <li key={index}>
-            <div
-              className="category"
-              onClick={() => checkBoxHandler(cat)}
-              onMouseEnter={() => setActiveCategory(cat)}
-            >
-              <input
-                type="checkbox"
-                checked={cat.slug === checkedCategory}
-                onChange={() => checkBoxHandler(cat)}
-              />
-              <span>{cat.name}</span>
-            </div>
+//   return (
+//     <ul>
+//       {category?.map((cat, index) => {
+//         return (
+//           <li key={index}>
+//             <div
+//               className="category"
+//               onClick={() => checkBoxHandler(cat)}
+//               onMouseEnter={() => setActiveCategory(cat)}
+//             >
+//               <input
+//                 type="checkbox"
+//                 checked={cat.slug === checkedCategory}
+//                 onChange={() => checkBoxHandler(cat)}
+//               />
+//               <span>{cat.name}</span>
+//             </div>
 
-            {cat?._id === activeCategory?._id && (
-              <SubCategory
-                category={activeCategory?.children}
-                setActiveFilter={setActiveFilter}
-              />
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
+//             {cat?._id === activeCategory?._id && (
+//               <SubCategory
+//                 category={activeCategory?.children}
+//                 setActiveFilter={setActiveFilter}
+//               />
+//             )}
+//           </li>
+//         );
+//       })}
+//     </ul>
+//   );
+// };

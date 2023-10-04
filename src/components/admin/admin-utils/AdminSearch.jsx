@@ -97,9 +97,10 @@ const ProductSearchContainer = styled.div`
   display: flex;
   gap: 3rem;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.116) 1px 2px 7px;
+  box-shadow: var(--shadow-2);
 
   form {
+    flex: 1;
     width: 100% !important;
     height: 100%;
     display: flex;
@@ -107,10 +108,12 @@ const ProductSearchContainer = styled.div`
     align-items: center;
     gap: 0.5rem;
     padding: 1rem;
-    box-shadow: rgba(0, 0, 0, 0.178) 0px 0px 3px;
+    box-shadow: var(--shadow-3);
+    border-radius: 0.5rem;
 
     input {
       flex: 1;
+      width: 100%;
       height: 100%;
       width: 6rem;
       border: none;

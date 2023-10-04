@@ -41,7 +41,7 @@ const AuthMenu = () => {
           >
             Register
           </NavLink>
-          or
+          /
           <NavLink
             className={({ isActive }) =>
               isActive ? "activeNavLink" : undefined
@@ -60,10 +60,8 @@ export default AuthMenu;
 const AuthMenuContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 1rem;
-  font-size: 1.2rem;
   font-weight: 500;
-  transition: all 0.5s;
+  padding: 1rem 0;
   img {
     margin-right: 0.5rem;
   }
@@ -79,6 +77,7 @@ const AuthMenuContainer = styled.div`
   }
   .register_login {
     margin-bottom: 0;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;

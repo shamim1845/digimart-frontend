@@ -107,7 +107,7 @@ export default CategorySelector;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   label {
     font-size: 1.3rem;
     color: var(--text-secondary);
@@ -122,13 +122,12 @@ const Container = styled.div`
     border: none;
     outline: none;
     font-size: 1.3rem;
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
     &:focus {
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-        rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-      color: #000;
-    }
-    &::placeholder {
-      font-size: 1.2rem;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     }
   }
 `;

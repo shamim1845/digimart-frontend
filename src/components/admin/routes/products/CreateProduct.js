@@ -203,7 +203,7 @@ const CreateProductContainer = styled.div`
 
 const Content = styled.div`
   border-radius: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: var(--shadow-1);
   padding: 5rem;
   width: 100%;
   @media screen and (max-width: 768px) {

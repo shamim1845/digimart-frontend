@@ -14,8 +14,8 @@ const Currency = () => {
   return (
     <CurrencyContainer>
       <select onChange={handleCurrency}>
-        <option value="usd">USD</option>
-        <option value="bdt">BDT</option>
+        <option value="USD">USD</option>
+        <option value="BDT">BDT</option>
       </select>
     </CurrencyContainer>
   );

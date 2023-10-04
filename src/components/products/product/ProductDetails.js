@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import PageContainer from "../../utils/PageContainer";

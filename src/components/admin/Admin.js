@@ -5,6 +5,7 @@ import Logo from "../utils/logo/Logo";
 import AdminSidebar from "./sidebar/AdminSidebar";
 import UserInformation from "../utils/reUseableComponents/card/UserInformation";
 import useSidebarHandler from "../utils/customHooks/useSidebarHandler";
+import Loading from "../utils/fetchUtils/Loading";
 
 const Account = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -40,7 +41,9 @@ const Account = () => {
           sidebarRef={sidebarRef}
         />
         <Content>
-          <Outlet />
+          <React.Suspense fallback={<Loading />}>
+            <Outlet />
+          </React.Suspense>
         </Content>
       </ContentContainer>
     </AdminContainer>
@@ -52,7 +55,6 @@ export default Account;
 const AdminContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #f2f2f2;
 `;
 
 const AdminHeader = styled.div`

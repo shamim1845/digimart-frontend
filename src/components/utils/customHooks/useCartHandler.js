@@ -1,45 +1,101 @@
-import { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectMemoCartItemQuantity } from "../../../redux/user/userSelector";
-import { addCartItem, deleteCartItem } from "../../../redux/user/userSlice";
+import { useEffect, useState } from "react";
+import {
+  useAddToCartMutation,
+  useGetMyCartListQuery,
+  useRemoveFromCartMutation,
+} from "../../../redux/api/cart/cartAPI";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useRemoveToFavouriteListMutation } from "../../../redux/api/favourite/favouriteAPI";
 
-const useCartHandler = (product) => {
-  const dispatch = useDispatch();
+const useCartHandler = (productId) => {
+  const [quantity, setQuantity] = useState(0);
 
-  // Memoized version of cart Quantity
-  const memoCartItem = useMemo(selectMemoCartItemQuantity, []);
-  const quantity = useSelector((state) => memoCartItem(state, product?._id));
+  const navigate = useNavigate();
+
+  // get my cart list
+  const { isSuccess, data } = useGetMyCartListQuery();
+  // find item already exist or not in cart list, if exist set cart quantity
+  useEffect(() => {
+    if (isSuccess) {
+      const item = data?.carts?.find(
+        (item) => item?.product?._id === productId
+      );
+      if (item) {
+        setQuantity(item?.quantity);
+      } else {
+        setQuantity(0);
+      }
+    }
+  }, [isSuccess, data?.carts, productId]);
+
+  // Mutation for add to cart
+  const [addToCart] = useAddToCartMutation();
+  // Mutation for remove to cart
+  const [removeFromCart] = useRemoveFromCartMutation();
+  // Remove  from favourite mutation
+  const [removeFromFavouriteList] = useRemoveToFavouriteListMutation();
 
   // Add to cart handler
-  const addToCartHandler = () => {
-    if (quantity === product?.stock) return;
-    const currQty = quantity + 1;
-
-    dispatch(addCartItem({ product, quantity: currQty }));
-
-    if (currQty === 1) {
-      toast.success(`New item added in your cart.`);
+  const addToCartHandler = (qty) => {
+    if (qty === 0) {
+      removeFromCart({ productId })
+        .unwrap()
+        .then((res) => {
+          toast.info(res?.message);
+        })
+        .catch((err) => {
+          toast.error(err?.data?.message);
+        });
     } else {
-      toast.info(`Quantity increase in your existing cart item.`);
+      addToCart({ productId, quantity: qty })
+        .unwrap()
+        .then((res) => {
+          toast.success(res?.message);
+        })
+        .catch((err) => {
+          toast.error(err?.data?.message);
+          if (err?.status === 401) {
+            setTimeout(() => {
+              navigate("/login");
+              window.scrollTo(0, 0);
+            }, 2000);
+          }
+        });
     }
+  };
+
+  // Add to cart handler
+  const addToCartFromFavouriteHandler = () => {
+    addToCart({ productId, quantity: 1 })
+      .unwrap()
+      .then((res) => {
+        toast.success(res?.message);
+        removeFromFavouriteList({ productId });
+      })
+      .catch((err) => {
+        toast.error(err.data?.message);
+      });
   };
 
   // Remove from cart handler
   const removeFromCartHandler = () => {
-    if (quantity === 0) return;
-    const currQty = quantity > 1 ? quantity - 1 : 0;
-
-    if (currQty === 0) {
-      dispatch(deleteCartItem({ product }));
-      toast.warn(`Item removed from your cart.`);
-    } else {
-      dispatch(addCartItem({ product, quantity: currQty }));
-      toast.info(`Quantity decrease in your existing cart item.`);
-    }
+    removeFromCart({ productId })
+      .unwrap()
+      .then((res) => {
+        toast.info(res?.message);
+      })
+      .catch((err) => {
+        toast.error(err?.data?.message);
+      });
   };
 
-  return { quantity, addToCartHandler, removeFromCartHandler };
+  return {
+    quantity,
+    addToCartHandler,
+    addToCartFromFavouriteHandler,
+    removeFromCartHandler,
+  };
 };
 
 export default useCartHandler;

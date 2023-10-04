@@ -54,18 +54,26 @@ export default RichTextEditor;
 const RichTextEditorContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+
   label {
     font-size: 1.3rem;
     color: var(--text-secondary);
   }
 
   .quill_container {
-    margin-top: 0.5rem;
-    .ql-toolbar.ql-snow {
-      @media screen and (max-width: 576px) {
-        padding: 0;
-      }
+    border-radius: 2px;
+    font-size: 1.3rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+    .ql-snow {
+      border: none;
+    }
+
+    .ql-toolbar {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
     }
 
     .error {

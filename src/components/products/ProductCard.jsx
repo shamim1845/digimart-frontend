@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Rating } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useCartHandler from "../utils/customHooks/useCartHandler";
+import Currency from "../utils/reUseableComponents/Currency";
 
 const ProductCard = ({ product }) => {
-  const { quantity, addToCartHandler, removeFromCartHandler } =
-    useCartHandler(product);
+  const [showInput, setShowInput] = useState(false);
+  const [value, setValue] = useState(0);
+
+  // Custom hook for cart handling
+  const { quantity, addToCartHandler } = useCartHandler(product?._id);
+
+  // Effect for set quantity from cart
+  useEffect(() => {
+    if (quantity) {
+      setValue(quantity);
+    }
+  }, [quantity]);
+
+  // form submit handler
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addToCartHandler(value);
+    setShowInput(false);
+  };
 
   return (
     <CardContainer>
@@ -16,7 +34,9 @@ const ProductCard = ({ product }) => {
         </CardHead>
         <CardBody>
           <div className="price_rating">
-            <span className="price">{`$ ${product?.price}`}</span>
+            <div className="price">
+              <Currency price={product?.price} />
+            </div>
             <Rating
               name="half-rating-read"
               value={product.avgRatings}
@@ -41,7 +61,7 @@ const ProductCard = ({ product }) => {
             <div className="btnContainer">
               <button
                 className="removeBtn"
-                onClick={removeFromCartHandler}
+                onClick={() => addToCartHandler(quantity - 1)}
                 disabled={quantity === 0}
               >
                 <svg
@@ -56,9 +76,31 @@ const ProductCard = ({ product }) => {
                 </svg>
               </button>
               <div className="textElement">
-                <span>{quantity > 0 ? quantity : "Add"}</span>
+                {showInput ? (
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      name="quantity"
+                      type="number"
+                      max={product?.stock}
+                      min={1}
+                      value={value}
+                      onChange={(e) => setValue(e.target.value)}
+                    />
+                  </form>
+                ) : (
+                  <span
+                    title="Double-click to set the quantity"
+                    onDoubleClick={() => setShowInput(true)}
+                  >
+                    {quantity}
+                  </span>
+                )}
               </div>
-              <button className="addBtn" onClick={addToCartHandler}>
+              <button
+                className="addBtn"
+                disabled={quantity >= product?.stock}
+                onClick={() => addToCartHandler(quantity + 1)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -74,7 +116,7 @@ const ProductCard = ({ product }) => {
           ) : (
             <div
               className="btnContainer emptyBtnContainer"
-              onClick={addToCartHandler}
+              onClick={() => addToCartHandler(quantity + 1)}
             >
               <div className="textElement">
                 <span>{quantity > 0 ? quantity : "Add"}</span>
@@ -111,13 +153,11 @@ const CardContainer = styled.div`
   transition: all 0.3s ease-in-out;
   border-radius: 5px;
   overflow: hidden;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  box-shadow: var(--shadow-1);
 
   &:hover {
     transform: translateY(-0.6rem);
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
-      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    box-shadow: var(--shadow);
   }
 `;
 
@@ -196,6 +236,22 @@ const AddToCartBtn = styled.div`
 
     .textElement {
       color: ${({ quantity }) => (quantity > 0 ? "#fff" : "")};
+
+      form {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        user-select: none;
+
+        input {
+          width: 100%;
+          max-width: 8rem;
+          border: none;
+          outline: none;
+          padding-left: 1rem;
+        }
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAllOrders } from "../../redux/order/orderSlice";
+import Title from "../utils/reUseableComponents/Title";
 
 const CartOrderSummary = () => {
   const [subtotal, setSubTotal] = useState(0);
@@ -41,9 +42,12 @@ const CartOrderSummary = () => {
 
   return (
     <Container>
+      <Title
+        variant="h2"
+        text={"Cart Summary"}
+        style={{ marginBottom: "1.5rem" }}
+      />
       <div className="content">
-        <h2>Cart Summary</h2>
-
         <dl className="sub_total">
           <dt>Product price</dt>
           <dd> ${subtotal}</dd>
@@ -63,15 +67,10 @@ const CartOrderSummary = () => {
 export default CartOrderSummary;
 
 const Container = styled.div`
-  width: 25%;
-  max-width: 35rem;
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
+  min-width: 20rem;
+
   .content {
     background: #fff;
-    padding: 1rem 2rem;
-    margin: 1rem 0 1rem 1rem;
     border-radius: 0.5rem;
 
     h2 {

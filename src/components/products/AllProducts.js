@@ -6,17 +6,17 @@ import MetaData from "../utils/Metadata";
 import TuneIcon from "@mui/icons-material/Tune";
 import FilterBox from "./FilterBox";
 import ProductBox from "./ProductBox";
+import useScrollHandler from "../utils/customHooks/useScrollHandler";
 
 const AllProducts = () => {
   const [activeFilter, setActiveFilter] = useState(false);
-
-  console.log("AllProducts page render. =>");
+  const { scrolling, lastScrollY } = useScrollHandler();
 
   return (
     <>
       <MetaData title="Products" />
       <PageContainer>
-        <Header>
+        <Header show={scrolling === "down" && lastScrollY > 300}>
           <FilterButton onClick={() => setActiveFilter(true)}>
             <TuneIcon />
             <span>Filter</span>
@@ -45,13 +45,13 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 1rem 0;
-
   z-index: 10;
-  background-color: #f2f2f2;
+
   @media screen and (max-width: 768px) {
     padding: 1rem 2rem;
-    position: sticky;
+    position: ${({ show }) => (show ? "sticky" : "relative")};
     top: 0;
+    background-color: ${({ show }) => (show ? "#f2f2f2" : "transparent")};
   }
 `;
 
@@ -59,34 +59,32 @@ const FilterButton = styled.div`
   display: none;
 
   @media screen and (max-width: 768px) {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-      rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+    box-shadow: var(--shadow-3);
     display: flex;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
     cursor: pointer;
     border-radius: 5px;
-    transition: all 0.5s ease-in-out;
-  }
 
-  &:hover {
-    background-color: tomato;
+    &:hover {
+      background-color: tomato;
+      svg {
+        fill: #fff;
+      }
+      span {
+        color: #fff;
+      }
+    }
+
     svg {
-      fill: #fff;
+      font-size: 2rem;
     }
     span {
-      color: #fff;
+      font-size: 1.3rem;
+      color: var(--text-primary);
+      font-weight: 600;
     }
-  }
-
-  svg {
-    font-size: 2rem;
-  }
-  span {
-    font-size: 1.3rem;
-    color: var(--text-primary);
-    font-weight: 600;
   }
 `;
 const Container = styled.div`

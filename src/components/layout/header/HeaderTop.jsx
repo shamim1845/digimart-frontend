@@ -17,15 +17,8 @@ const HeaderTop = () => {
           </div>
         </div>
         <div className="right">
-          <div className="authmenu_container">
-            <AuthMenu />
-          </div>
-          {/* <div className="currency_container">
-            <Currency />
-          </div> */}
-          {/* <div className="site_language">
-            <img src="/images/icons/bd-flag.svg" alt="Country flag" />
-          </div> */}
+          <AuthMenu />
+          <Currency />
         </div>
       </HeaderTopBar>
     </HeaderTopContainer>
@@ -41,6 +34,7 @@ const HeaderTopContainer = styled.div`
   padding: 0 3rem;
   border-top: 5px solid tomato;
   border-bottom: 1px solid #e4e9eb;
+  background-color: #fff;
 `;
 const HeaderTopBar = styled.div`
   width: 100%;
@@ -57,7 +51,6 @@ const HeaderTopBar = styled.div`
     align-items: center;
     gap: 2rem;
     flex: 2;
-    border-right: 1px solid #e4e9eb;
 
     div {
       display: flex;
@@ -77,28 +70,6 @@ const HeaderTopBar = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .authmenu_container {
-      border-right: 1px solid #e4e9eb;
-    }
-    .currency_container {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-right: 1px solid #e4e9eb;
-      padding: 0 1rem;
-    }
-
-    .site_language {
-      display: flex;
-      align-items: center;
-      padding: 1rem;
-      border-right: 1px solid #e4e9eb;
-
-      img {
-        width: 25px;
-      }
-    }
+    gap: 5rem;
   }
 `;

@@ -9,7 +9,7 @@ import { ProtectedRoutes } from "./utils/authUtils/ProtectedRoutes";
 import Loading from "./utils/fetchUtils/Loading";
 
 // For Layout
-const LazyLayout = React.lazy(() => import("./layout/Layout"));
+import Layout from "./layout/Layout";
 
 // For Home Routes
 const LazyHome = React.lazy(() => import("./Home/Home"));
@@ -44,15 +44,16 @@ const LazyAdminCreateProduct = React.lazy(() =>
 const LazyAdminCategories = React.lazy(() =>
   import("./admin/routes/categories/Categories")
 );
-const LazyAdminBrand = React.lazy(() => import("./admin/routes/brand/Brand"));
+const LazyAdminBrands = React.lazy(() => import("./admin/routes/brand/Brand"));
 
 const LazyAdminOrders = React.lazy(() =>
   import("./admin/routes/orders/Orders")
 );
-const LazyAdminUsers = React.lazy(() => import("./admin/routes/users/Users"));
-const LazyAdminReviews = React.lazy(() =>
-  import("./admin/routes/reviews/Reviews")
+const LazyAdminOrderStatus = React.lazy(() =>
+  import("./admin/routes/orderStatus/OrderStatus")
 );
+
+const LazyAdminUsers = React.lazy(() => import("./admin/routes/users/Users"));
 
 // For Products Routes
 const LazyAllProducts = React.lazy(() => import("./products/AllProducts"));
@@ -71,90 +72,99 @@ const LazyError = React.lazy(() => import("./error/ErrorPage"));
 
 const index = () => {
   return (
-    <React.Suspense fallback={<Loading />}>
-      <Routes>
-        {/* User Routes */}
-        <Route
-          path="/"
-          element={
-            <LazyLayout>
+    <Routes>
+      {/* User Routes */}
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <React.Suspense fallback={<Loading />}>
               <Outlet />
-            </LazyLayout>
-          }
-        >
-          {/* Home Routes */}
-          <Route index element={<LazyHome />} />
+            </React.Suspense>
+          </Layout>
+        }
+      >
+        {/* Home Routes */}
+        <Route index element={<LazyHome />} />
 
-          {/* Auth Routes */}
-          <Route path="register" element={<LazyRegister />} />
-          <Route path="/login" element={<LazyLogin />} />
-          <Route path="/password/forgot" element={<LazyForgotPassword />} />
-          <Route
-            path="/password/reset/:token"
-            element={<LazyResetPassword />}
-          />
+        {/* Auth Routes */}
+        <Route path="register" element={<LazyRegister />} />
+        <Route path="/login" element={<LazyLogin />} />
+        <Route path="/password/forgot" element={<LazyForgotPassword />} />
+        <Route path="/password/reset/:token" element={<LazyResetPassword />} />
 
-          {/* Account Routes  */}
-          <Route
-            path="/account"
-            element={
-              <ProtectedRoutes>
-                <LazyAccount />
-              </ProtectedRoutes>
-            }
-          >
-            <Route path="myprofile" element={<LazyMyProfile />} />
-            <Route path="updateprofile" element={<LazyUpdateProfile />} />
-            <Route path="myorder" element={<LazyMyOrder />} />
-            <Route
-              path="orderDetails/:orderid"
-              element={<LazyOrderDetails />}
-            />
-          </Route>
-
-          {/* Product Routes */}
-          <Route path="/products" element={<LazyAllProducts />} />
-          <Route path="/products/:productId" element={<LazyProductDetails />} />
-
-          {/* Product Order Routes */}
-          <Route path="/favourite" element={<LazyFavourite />} />
-          <Route path="/cart" element={<LazyCart />} />
-          <Route path="/order" element={<LazyOrder />} />
-          <Route path="/order/sucess" element={<LazyOrderSucess />} />
-
-          {/* Error Routes  */}
-          <Route path="*" element={<LazyError />} />
-        </Route>
-
-        {/* Admin Routes */}
+        {/* Account Routes  */}
         <Route
-          path="/admin"
+          path="/account"
           element={
-            <ProtectedAdmin>
-              <Admin />
-            </ProtectedAdmin>
+            <ProtectedRoutes>
+              <LazyAccount />
+            </ProtectedRoutes>
           }
         >
-          <Route index element={<Navigate to={"/admin/dashboard"} />} />
-          {/* Dashboard */}
-          <Route path="dashboard" element={<LazyAdminDashboard />} />
-          {/* Product */}
-          <Route path="products" element={<LazyAdminAllProducts />} />
-          <Route path="products/create" element={<LazyAdminCreateProduct />} />
-          {/* Categories */}
-          <Route path="categories" element={<LazyAdminCategories />} />
-          {/* Brand */}
-          <Route path="brands" element={<LazyAdminBrand />} />
-
-          {/* Orders */}
-          <Route path="orders" element={<LazyAdminOrders />} />
-          {/* Users */}
-          <Route path="users" element={<LazyAdminUsers />} />
-          {/* Reviews */}
-          <Route path="reviews" element={<LazyAdminReviews />} />
+          <Route path="myprofile" element={<LazyMyProfile />} />
+          <Route path="updateprofile" element={<LazyUpdateProfile />} />
+          <Route path="myorder" element={<LazyMyOrder />} />
+          <Route path="orderDetails/:orderid" element={<LazyOrderDetails />} />
         </Route>
-      </Routes>
-    </React.Suspense>
+
+        {/* Product Routes */}
+        <Route path="/products" element={<LazyAllProducts />} />
+        <Route path="/products/:productId" element={<LazyProductDetails />} />
+
+        {/* Product Order Routes */}
+        <Route
+          path="/favourite"
+          element={
+            <ProtectedRoutes>
+              <LazyFavourite />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoutes>
+              <LazyCart />
+            </ProtectedRoutes>
+          }
+        />
+        <Route path="/order" element={<LazyOrder />} />
+        <Route path="/order/sucess" element={<LazyOrderSucess />} />
+
+        {/* Error Routes  */}
+        <Route path="*" element={<LazyError />} />
+      </Route>
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedAdmin>
+            <Admin />
+          </ProtectedAdmin>
+        }
+      >
+        <Route index element={<Navigate to={"/admin/dashboard"} />} />
+        {/* Dashboard */}
+        <Route path="dashboard" element={<LazyAdminDashboard />} />
+        {/* Products */}
+        <Route path="products" element={<LazyAdminAllProducts />} />
+        <Route path="products/create" element={<LazyAdminCreateProduct />} />
+        {/* Categories */}
+        <Route path="categories" element={<LazyAdminCategories />} />
+        {/* Brands */}
+        <Route path="brands" element={<LazyAdminBrands />} />
+
+        {/* Orders */}
+        <Route path="orders" element={<LazyAdminOrders />} />
+        {/* Order Status */}
+        <Route path="order-status" element={<LazyAdminOrderStatus />} />
+
+        {/* Users */}
+        <Route path="users" element={<LazyAdminUsers />} />
+      </Route>
+    </Routes>
   );
 };
 

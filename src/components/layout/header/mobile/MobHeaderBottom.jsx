@@ -3,76 +3,80 @@ import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useSelector } from "react-redux";
+import { useGetMyFavouriteListQuery } from "../../../../redux/api/favourite/favouriteAPI";
+import { useGetMyCartListQuery } from "../../../../redux/api/cart/cartAPI";
 
 const MobHeaderBottom = () => {
   // select data from redux store
   const { role } = useSelector((state) => state.user.userInfo);
   const { authenticated } = useSelector((state) => state.user);
-  const { cartItems } = useSelector((state) => state.user);
-  const { favouriteItems } = useSelector((state) => state.user);
+
+  // get my favourite list
+  const { data: favData } = useGetMyFavouriteListQuery();
+  // get my cart list
+  const { data: cartData } = useGetMyCartListQuery();
+
   return (
-    <>
-      <BottomHeaderContainer>
-        <BottomLeft>
-          <div className="button">
-            <NavLink to={"/"}>
-              <button>
-                <img src="/images/icons/home.svg" alt="home icon" />
-                <p>Home</p>
-              </button>
-            </NavLink>
-          </div>
-        </BottomLeft>
-        <BottomRight>
-          <div className="button">
-            <NavLink to={"/products"}>
-              <button>
-                <img src="/images/icons/product.svg" alt="product icon" />
-                <p>Products</p>
-              </button>
-            </NavLink>
-          </div>
+    <BottomHeaderContainer>
+      <BottomLeft>
+        <div className="button">
+          <NavLink to={"/"}>
+            <button>
+              <img src="/images/icons/home.svg" alt="home icon" />
+              <p>Home</p>
+            </button>
+          </NavLink>
+        </div>
+      </BottomLeft>
+      <BottomRight>
+        <div className="button">
+          <NavLink to={"/products"}>
+            <button>
+              <img src="/images/icons/product.svg" alt="product icon" />
+              <p>Products</p>
+            </button>
+          </NavLink>
+        </div>
 
-          <div className="button">
-            <NavLink to={"/favourite"}>
-              <button>
-                <img src="/images/icons/favourite.svg" alt="favourite icon" />
-                <p>Favourite</p>
-                <span>{favouriteItems?.length}</span>
-              </button>
-            </NavLink>
-          </div>
-          <div className="button">
-            <NavLink to={"/cart"}>
-              <button>
-                <img src="/images/icons/cart.svg" alt="cart icon" />
-                <p>Cart</p>
-                <span>{cartItems?.length}</span>
-              </button>
-            </NavLink>
-          </div>
+        <div className="button">
+          <NavLink to={"/favourite"}>
+            <button>
+              <img src="/images/icons/favourite.svg" alt="favourite icon" />
+              <p>Favourite</p>
+              <span>{favData?.favourites?.length}</span>
+            </button>
+          </NavLink>
+        </div>
+        <div className="button">
+          <NavLink to={"/cart"}>
+            <button>
+              <img src="/images/icons/cart.svg" alt="cart icon" />
+              <p>Cart</p>
+              <span>{cartData?.carts?.length}</span>
+            </button>
+          </NavLink>
+        </div>
 
+        <div className="button">
+          <NavLink to={"/account/myprofile"}>
+            <button>
+              <img src="/images/icons/person.svg" alt="account icon" />
+              <p>Account</p>
+            </button>
+          </NavLink>
+        </div>
+        {authenticated && role === "admin" && (
           <div className="button">
-            <NavLink to={"/account/myprofile"}>
+            <NavLink to={"/admin/dashboard"}>
               <button>
-                <img src="/images/icons/person.svg" alt="account icon" />
-                <p>Account</p>
+                <DashboardIcon color="info" fontSize="large" />
+                <p>Dashboard</p>
               </button>
             </NavLink>
           </div>
-          {authenticated && role === "admin" && (
-            <div className="button">
-              <NavLink to={"/admin/dashboard"}>
-                <button>
-                  <DashboardIcon color="info" fontSize="large" />
-                  <p>Dashboard</p>
-                </button>
-              </NavLink>
-            </div>
-          )}
-        </BottomRight>
-      </BottomHeaderContainer>
-    </>
+        )}
+      </BottomRight>
+    </BottomHeaderContainer>
   );
 };
 
@@ -87,8 +91,8 @@ const BottomHeaderContainer = styled.div`
   width: 100%;
   position: fixed;
   background-color: #fff;
-  z-index: 1000;
   padding: 0 2rem;
+  z-index: 1000;
 
   @media screen and (min-width: 769px) {
     display: none;

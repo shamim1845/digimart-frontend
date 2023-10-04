@@ -1,15 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import Title from "../../utils/reUseableComponents/Title";
 
 const OrderedShippingInfo = ({ shippingInfo }) => {
   // console.log(shippingInfo);
 
   return (
-    <OrderedShippingInfoContainer>
-      <Title>
-        <h2>Shipping Information</h2>
-      </Title>
-      <PaymentDetails>
+    <Container>
+      <Title
+        variant="h3"
+        text={"Shipping Information"}
+        style={{
+          background: "#fafafa",
+          padding: "1.5rem",
+          fontWeight: "500",
+        }}
+      />
+
+      <Content>
         <div className="infoGroup">
           <p>
             Country : <span>${shippingInfo?.country}</span>
@@ -42,56 +50,34 @@ const OrderedShippingInfo = ({ shippingInfo }) => {
             Phone No : <span>${shippingInfo?.phoneNo}</span>
           </p>
         </div>
-      </PaymentDetails>
-    </OrderedShippingInfoContainer>
+      </Content>
+    </Container>
   );
 };
 
 export default OrderedShippingInfo;
 
-const OrderedShippingInfoContainer = styled.div`
+const Container = styled.div`
   border-radius: 0.5rem;
   margin-bottom: 2rem;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   width: 100%;
   margin-top: 1rem;
-
-  @media screen and (max-width: 768px) {
-    /* width: 90vw; */
-  }
+  box-shadow: var(--shadow-1);
 `;
-const Title = styled.div`
-  background: #fafafa;
-  color: #212121;
-  min-height: 5rem;
-  display: grid;
-  align-items: center;
-  padding: 0 1rem;
 
-  h2 {
-    font-weight: 500;
-    font-family: roboto;
-    font-size: 1.6rem;
+const Content = styled.div`
+  padding: 1.5rem;
 
-    span {
-      font-weight: 500;
-      font-family: roboto;
-      font-size: 1.6rem;
-      text-transform: capitalize;
-    }
-  }
-`;
-const PaymentDetails = styled.div`
-  padding: 1rem 0;
   .infoGroup {
-    padding: 0rem 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
     p {
       font-size: 1.3rem;
       display: flex;
 
       span {
-        color: teal;
         margin: 0 1rem;
+        color: tomato;
       }
     }
   }

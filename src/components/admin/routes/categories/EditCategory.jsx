@@ -109,15 +109,20 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #f2f2f2;
 `;
 
 const Content = styled.div`
-  padding: 2rem 0rem;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  form {
+    width: 100%;
+    min-width: 30rem;
+  }
 `;
 
 const CategoriesContainer = styled.div``;

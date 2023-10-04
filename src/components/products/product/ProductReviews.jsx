@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Rating from "@mui/material/Rating";
-import TimeAgo from "timeago-react";
+import TimeAgo from "react-timeago";
 import Title from "../../utils/reUseableComponents/Title";
 
 const ProductReviews = ({ product }) => {
@@ -46,7 +46,7 @@ const Review = ({ review }) => {
       <div className="review_rating">
         <Rating name="read-only" value={review.rating} readOnly size="large" />
 
-        <TimeAgo datetime={review.reviewedAt} />
+        <TimeAgo date={review.reviewedAt} />
       </div>
 
       <div className="review_author">

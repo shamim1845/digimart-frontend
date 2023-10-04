@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import TimeAgo from "timeago-react";
+import TimeAgo from "react-timeago";
+
 const Order = ({ order }) => {
-  // console.log(order);
   const orderStatusStyle = () => {
     let style = {
       color: "#fff",
@@ -36,7 +36,7 @@ const Order = ({ order }) => {
     <OrderContainer>
       <OrderHead>
         <div style={orderStatusStyle()}>{order.orderStatus}</div>
-        <TimeAgo className="timeago" datetime={order.createdAt} />
+        <TimeAgo className="timeago" date={order.createdAt} />
       </OrderHead>
       {order?.orderItems?.map((product) => {
         // console.log(product);

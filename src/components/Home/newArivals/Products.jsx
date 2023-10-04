@@ -77,8 +77,6 @@ const ProductContainer = styled.div`
 const ProductBox = styled.div`
   width: 100%;
   display: grid;
-  gap: 1rem;
-  margin: 0;
-  padding: 0;
+  gap: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 `;

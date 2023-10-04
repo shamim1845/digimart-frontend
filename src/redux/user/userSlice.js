@@ -26,14 +26,14 @@ const localFavouriteItem = JSON.parse(localStorage.getItem("favourite-item"));
 const initialState = {
   authenticated: false,
   userInfo: {},
-  currency: "usd",
+  currency: "USD",
   cartItems: localCartItem ? localCartItem : [],
   favouriteItems: localFavouriteItem ? localFavouriteItem : [],
 };
 
 // Slice for handling user information
 const userSlice = createSlice({
-  name: "user info",
+  name: "user-info",
   initialState,
   reducers: {
     addCurrency: (state, { payload }) => {

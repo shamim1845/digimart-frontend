@@ -1,15 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import Title from "../../utils/reUseableComponents/Title";
 
 const OrderedPaymentInfo = ({ paymentInfo }) => {
   // console.log(paymentInfo);
 
   return (
-    <OrderedPaymentInfoContainer>
-      <Title>
-        <h2>Payment Information</h2>
-      </Title>
-      <PaymentDetails>
+    <Container>
+      <Title
+        variant="h3"
+        text={"Payment Information"}
+        style={{
+          background: "#fafafa",
+          padding: "1.5rem",
+          fontWeight: "500",
+        }}
+      />
+
+      <Content>
         <div className="infoGroup">
           <p>
             Payment Status : <span>{paymentInfo?.status}</span>
@@ -47,56 +55,52 @@ const OrderedPaymentInfo = ({ paymentInfo }) => {
             Total payment : <span>${paymentInfo?.totalPrice}</span>
           </p>
         </div>
-      </PaymentDetails>
-    </OrderedPaymentInfoContainer>
+      </Content>
+    </Container>
   );
 };
 
 export default OrderedPaymentInfo;
 
-const OrderedPaymentInfoContainer = styled.div`
+const Container = styled.div`
   border-radius: 0.5rem;
   margin-bottom: 2rem;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   width: 100%;
   margin-top: 1rem;
-
-  @media screen and (max-width: 768px) {
-    /* width: 90vw; */
-  }
+  box-shadow: var(--shadow-1);
 `;
-const Title = styled.div`
-  background: #fafafa;
-  color: #212121;
-  min-height: 5rem;
-  display: grid;
-  align-items: center;
-  padding: 0 1rem;
 
-  h2 {
-    font-weight: 500;
-    font-family: roboto;
-    font-size: 1.6rem;
+//   background: #fafafa;
+//   color: #212121;
+//   min-height: 5rem;
+//   display: grid;
+//   align-items: center;
+//   padding: 0 1rem;
 
-    span {
-      font-weight: 500;
-      font-family: roboto;
-      font-size: 1.6rem;
-      text-transform: capitalize;
-    }
-  }
-`;
-const PaymentDetails = styled.div`
-  padding: 1rem 0;
+//   h2 {
+//     font-weight: 500;
+//     font-size: 1.6rem;
+
+//     span {
+//       font-weight: 500;
+//       font-size: 1.6rem;
+//       text-transform: capitalize;
+//     }
+//   }
+// `;
+const Content = styled.div`
+  padding: 1.5rem;
+
   .infoGroup {
-    padding: 0rem 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
     p {
       font-size: 1.3rem;
       display: flex;
 
       span {
-        color: teal;
         margin: 0 1rem;
+        color: tomato;
       }
     }
   }

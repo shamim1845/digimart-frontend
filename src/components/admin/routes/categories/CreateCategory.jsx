@@ -59,13 +59,11 @@ const CreateCategory = ({ onClose }) => {
               placeholder="Enter your category name"
             />
 
-            <CategoriesContainer>
-              <CategorySelector
-                label="Parent Category (optional)"
-                categories={categories}
-                setCategories={setCategories}
-              />
-            </CategoriesContainer>
+            <CategorySelector
+              label="Parent Category (optional)"
+              categories={categories}
+              setCategories={setCategories}
+            />
 
             <br />
             <Button type="submit" text={"Create"} disabled={isLoading} />
@@ -84,15 +82,18 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 2rem;
-  background-color: #f2f2f2;
 `;
 
 const Content = styled.div`
-  padding: 2rem 0;
   width: 100%;
-`;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 
-const CategoriesContainer = styled.div``;
+  form {
+    width: 100%;
+    min-width: 30rem;
+  }
+`;

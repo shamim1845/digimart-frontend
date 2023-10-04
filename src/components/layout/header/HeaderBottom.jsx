@@ -9,21 +9,27 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   selectAuthenticated,
-  selectCartItems,
-  selectFavouriteItems,
   selectUserInfo,
 } from "../../../redux/user/userSelector";
+import useScrollHandler from "../../utils/customHooks/useScrollHandler";
+import { useGetMyFavouriteListQuery } from "../../../redux/api/favourite/favouriteAPI";
+import { useGetMyCartListQuery } from "../../../redux/api/cart/cartAPI";
 
 const HeaderBottom = () => {
   const [activeDept, setActiveDept] = useState(false);
 
   const categoryBtnRef = useRef(null);
 
+  const { scrolling, lastScrollY } = useScrollHandler();
+
   // select data from redux store
   const userInfo = useSelector(selectUserInfo);
   const authenticated = useSelector(selectAuthenticated);
-  const cartItems = useSelector(selectCartItems);
-  const favouriteItems = useSelector(selectFavouriteItems);
+
+  // get my favourite list
+  const { data: favData } = useGetMyFavouriteListQuery();
+  // get my cart list
+  const { data: cartData } = useGetMyCartListQuery();
 
   //  toogle category
   const categorytHandler = () => {
@@ -31,7 +37,7 @@ const HeaderBottom = () => {
   };
 
   return (
-    <HeaderBottomContainer>
+    <HeaderBottomContainer show={scrolling === "top" && lastScrollY > 700}>
       <HeaderBottoms>
         <BottomLeftContainer>
           <BottomLeft
@@ -58,7 +64,7 @@ const HeaderBottom = () => {
             <div className="button">
               <button title="Favourite">
                 <img src="/images/icons/favourite.svg" alt="" />
-                <span>{favouriteItems?.length}</span>
+                <span>{favData?.favourites?.length}</span>
               </button>
             </div>
           </Link>
@@ -66,7 +72,7 @@ const HeaderBottom = () => {
             <div className="button">
               <button title="Cart">
                 <img src="/images/icons/cart.svg" alt="" />
-                <span>{cartItems?.length}</span>
+                <span>{cartData?.carts?.length}</span>
               </button>
             </div>
           </Link>
@@ -100,9 +106,10 @@ const HeaderBottomContainer = styled.div`
   background-color: tomato;
   width: 100%;
   padding: 0 3rem;
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
+  z-index: 100;
+  transition: position 0.5s ease-in-out;
+  position: ${({ show }) => (show ? "sticky" : "")};
+  top: 0;
 `;
 
 const HeaderBottoms = styled.div`
@@ -134,7 +141,6 @@ const BottomLeft = styled.div`
   h4 {
     color: tomato;
     margin-bottom: 0px;
-    /* font-size: 1.2rem; */
     font-weight: 600;
   }
 `;

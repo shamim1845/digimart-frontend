@@ -1,20 +1,5 @@
 import styled from "styled-components";
 import Menu from "./Menu";
-
-// Parent icon
-import Dashboard from "@mui/icons-material/Dashboard";
-import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
-import Category from "@mui/icons-material/Category";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
-
-// Child icon
-import AddIcon from "@mui/icons-material/Add";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-
-// =>
 import { useSelector } from "react-redux";
 import Title from "../../utils/reUseableComponents/Title";
 
@@ -25,25 +10,25 @@ const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
       parent: {
         name: "Dashboard",
         link: "/admin/dashboard",
-        icon: <Dashboard />,
+        icon: <i className="bi bi-columns-gap"></i>,
       },
     },
     {
       id: 2,
       parent: {
         name: "Products",
-        icon: <ProductionQuantityLimitsIcon />,
+        icon: <i className="bi bi-cart4"></i>,
       },
       child: [
         {
           name: "All",
           link: "/admin/products",
-          icon: <PostAddIcon />,
+          icon: <i className="bi bi-box"></i>,
         },
         {
           name: "Create",
           link: "/admin/products/create",
-          icon: <AddIcon />,
+          icon: <i className="bi bi-plus-lg"></i>,
         },
       ],
     },
@@ -52,7 +37,7 @@ const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
       parent: {
         name: "Categories",
         link: "/admin/categories",
-        icon: <Category />,
+        icon: <i className="bi bi-collection"></i>,
       },
     },
     {
@@ -60,7 +45,31 @@ const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
       parent: {
         name: "Brands",
         link: "/admin/brands",
-        icon: <BrandingWatermarkIcon />,
+        icon: <i className="bi bi-shop-window"></i>,
+      },
+    },
+    {
+      id: 5,
+      parent: {
+        name: "Orders",
+        link: "/admin/orders",
+        icon: <i className="bi bi-bag-check"></i>,
+      },
+    },
+    {
+      id: 6,
+      parent: {
+        name: "Order Status",
+        link: "/admin/order-status",
+        icon: <i className="bi bi-diagram-3"></i>,
+      },
+    },
+    {
+      id: 7,
+      parent: {
+        name: "Users",
+        link: "/admin/users",
+        icon: <i className="bi bi-people"></i>,
       },
     },
   ];
@@ -69,7 +78,7 @@ const AdminSidebar = ({ setShowSidebar, showSidebar, sidebarRef }) => {
   return (
     <AdminSidebarContainer
       ref={sidebarRef}
-      style={{ left: showSidebar ? "0rem" : "-105%" }}
+      style={{ left: showSidebar ? "0rem" : "-100%" }}
     >
       <SidebarTop>
         <p>Hello, {userInfo?.name}</p>
@@ -95,7 +104,8 @@ const AdminSidebarContainer = styled.div`
   height: calc(100vh - 5rem);
   position: sticky;
   top: 5rem;
-  background-color: #fff;
+  border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
+
   padding: 0 2rem;
   z-index: 100;
   overflow-y: auto;
@@ -104,7 +114,7 @@ const AdminSidebarContainer = styled.div`
     position: fixed;
     height: 100vh !important;
     top: 0rem;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.3s ease-in-out;
     padding: 0 2rem;
   }
 `;

@@ -32,6 +32,8 @@ const EditProduct = ({ product, onClose, refetch }) => {
   const [isChangeCategory, setIsChangeCategory] = useState(false);
 
   const navigate = useNavigate();
+
+  // Update product mutation
   const [updateProduct, { data, isError, error, isLoading, isSuccess }] =
     useUpdateProductMutation();
 
@@ -135,6 +137,7 @@ const EditProduct = ({ product, onClose, refetch }) => {
                     images: [...prevImages, ...modiFiedImages],
                   };
 
+                  // update product
                   updateProduct({ id: product?._id, product: new_product });
                 })
                 .catch((err) => {
@@ -293,7 +296,6 @@ const Container = styled.div`
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #f2f2f2;
 `;
 
 const Content = styled.div`
@@ -308,22 +310,26 @@ const DefaultCategory = styled.div`
     background: #fff;
     min-height: 3.5rem;
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0.8rem 1rem;
+    padding: 1rem;
     margin-top: 0.5rem;
     margin-bottom: 1.5rem;
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 
     .prev_category {
       display: flex;
-      gap: 1rem;
+      gap: 2rem;
 
       .category {
         text-transform: capitalize;
         font-size: 1.3rem;
-        border: 1px solid #e4e9eb;
-        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+          rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+        border-radius: 15px;
         padding: 0.5rem 1rem;
       }
     }
@@ -338,11 +344,7 @@ const DefaultCategory = styled.div`
   }
 `;
 
-const DescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
+const DescriptionContainer = styled.div``;
 
 const ProductImage = styled.div`
   display: flex;
@@ -356,8 +358,10 @@ const PreviousImages = styled.div`
   gap: 1rem;
   margin-bottom: 1rem;
   user-select: none;
-  border: 1px solid #ccc;
   padding: 1rem;
+  border-radius: 2px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 
   .img_box {
     width: 100%;

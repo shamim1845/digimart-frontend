@@ -7,6 +7,7 @@ import TextInput from "../../../utils/formik/TextInput";
 
 import Title from "../../../utils/reUseableComponents/Title";
 import { useUpdateBrandMutation } from "../../../../redux/api/brand/brandAPI";
+import Button from "../../../utils/reUseableComponents/Buttons";
 
 const EditBrand = ({ onClose, brandForEdit }) => {
   //   =>Create category mutation
@@ -50,9 +51,7 @@ const EditBrand = ({ onClose, brandForEdit }) => {
             />
 
             <br />
-            <Button type="submit" disabled={isLoading}>
-              Update
-            </Button>
+            <Button type="submit" text={"Update"} disabled={isLoading} />
           </Form>
         </Formik>
       </Content>
@@ -68,27 +67,18 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 2rem;
-  background-color: #f2f2f2;
 `;
 
 const Content = styled.div`
-  padding: 2rem 0;
   width: 100%;
-`;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 
-const Button = styled.button`
-  font-size: 1.3rem;
-  border: none;
-  background-color: var(--bg-primary);
-  padding: 1rem 2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.5s;
-  &:hover {
-    color: #fff;
-    background-color: #ff6347f6;
+  form {
+    width: 100%;
+    min-width: 30rem;
   }
 `;

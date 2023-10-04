@@ -42,8 +42,6 @@ const ProductPerPageContainer = styled.div`
   select {
     border: none;
     outline: none;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-      rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
     padding: 1rem;
     cursor: pointer;
     border-radius: 5px;

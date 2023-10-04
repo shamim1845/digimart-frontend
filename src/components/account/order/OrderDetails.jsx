@@ -4,14 +4,16 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import TimeAgo from "timeago-react";
+import TimeAgo from "react-timeago";
 import axios from "axios";
 import OrderedPaymentInfo from "./OrderedPaymentInfo";
 import OrderedShippingInfo from "./OrderedShippingInfo";
+import Currency from "../../utils/reUseableComponents/Currency";
 
 const OrderDetails = () => {
-  const [order, setOrder] = useState();
+  const [order, setOrder] = useState(null);
   const { orderid } = useParams();
+  console.log(order);
 
   useEffect(() => {
     axios.get(`/api/v1/order/${orderid}`).then((res) => {
@@ -21,11 +23,11 @@ const OrderDetails = () => {
 
   const orderStatusStyle = () => {
     let style = {
-      color: "#fff",
+      color: "var(--text-secondary)",
       padding: "0.5rem 1rem",
-      fontSize: "1.2rem",
       fontWeight: "400",
       backgroundColor: "",
+      textTransform: "Capitalize",
     };
 
     switch (order?.orderStatus) {
@@ -46,116 +48,109 @@ const OrderDetails = () => {
     }
     return style;
   };
-  // console.log(order);
+
+  if (!order) return null;
 
   return (
-    <OrderContainer>
+    <Container>
       <OrderHead>
         <div style={orderStatusStyle()}>{order?.orderStatus}</div>
-        <TimeAgo className="timeago" datetime={order?.createdAt} />
+        <TimeAgo
+          date={order?.createdAt}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "0.5rem 1rem",
+          }}
+        />
       </OrderHead>
       <OrderBody>
         {order?.orderItems?.map((product) => {
-          // console.log(product);
           return (
-            <ProductContainer key={product?._id}>
-              <CartProducts>
-                <div className="fav_details_box">
-                  <div className="img_box">
+            <CartProducts key={product?._id}>
+              <div className="details_box">
+                <div className="img_box">
+                  <Link to={`/products/${product?.productId}`}>
+                    <img src={product?.image} alt={product?.name} />
+                  </Link>
+                </div>
+
+                <div className="dtails_box">
+                  <div className="title">
                     <Link to={`/products/${product?.productId}`}>
-                      <img src={product?.image} alt="" />
+                      {product?.name}
                     </Link>
                   </div>
 
-                  <div className="dtails_box">
-                    <div className="title">
-                      <Link to={`/products/${product?._id}`}>
-                        {product?.name}
-                      </Link>
-                    </div>
-
-                    <div className="price">
-                      <span>BDT ৳{product?.price}</span>
-                    </div>
-                    <div className="shiping">
-                      Quantity :<span> {product?.quantity}</span>
-                    </div>
+                  <div className="price">
+                    {/* <span>BDT ৳{product?.price}</span> */}
+                    <Currency price={product?.price} />
+                  </div>
+                  <div className="shiping">
+                    Quantity :<span> {product?.quantity}</span>
                   </div>
                 </div>
+              </div>
 
-                <div className="fav_controller">
-                  <IconButton
-                    onClick={() => {}}
-                    aria-label="favourite"
-                    size="large"
-                  >
-                    <ShoppingCartIcon fontSize="large" />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {}}
-                    aria-label="delete"
-                    size="large"
-                    color="error"
-                  >
-                    <DeleteForeverIcon fontSize="large" />
-                  </IconButton>
-                </div>
-              </CartProducts>
-            </ProductContainer>
+              <div className="controller">
+                <IconButton
+                  title="Return this product"
+                  onClick={() => {}}
+                  aria-label="delete"
+                  size="large"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    fontSize: "1.3rem",
+                  }}
+                >
+                  <i className="bi bi-arrow-return-right"></i>
+                  <span>Return</span>
+                </IconButton>
+              </div>
+            </CartProducts>
           );
         })}
       </OrderBody>
 
       <OrderedPaymentInfo paymentInfo={order?.paymentInfo} />
       <OrderedShippingInfo shippingInfo={order?.shippingInfo} />
-    </OrderContainer>
+    </Container>
   );
 };
 
 export default OrderDetails;
 
-const OrderContainer = styled.div`
-  border-radius: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  padding: 3rem;
-  margin: 1rem;
-  width: 95%;
+const Container = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
+  padding: 0 2rem;
+  margin: 2rem 0;
+  border-radius: 0.5rem;
 
   @media screen and (max-width: 768px) {
-    /* margin: 0 5rem; */
-  }
-  @media screen and (max-width: 450px) {
-    /* padding: 2rem; */
+    padding: 1rem;
   }
 `;
 const OrderHead = styled.div`
   display: flex;
   justify-content: space-between;
-  .timeago {
-    color: tomato;
-    font-size: 1.2rem;
-  }
 `;
 const OrderBody = styled.div`
   margin: 1rem 0;
-`;
-const ProductContainer = styled.div`
-  background: #fff;
-  padding: 1rem 2rem;
-  margin: 1rem 0;
+  padding: 2rem 1rem;
   border-radius: 0.5rem;
-  @media screen and (max-width: 450px) {
-    padding: 1rem;
-  }
+  box-shadow: var(--shadow-1);
 `;
 
 const CartProducts = styled.div`
   display: flex;
   justify-content: space-between;
 
-  .fav_details_box {
+  .details_box {
     display: flex;
     gap: 1rem;
     .img_box {
@@ -196,8 +191,7 @@ const CartProducts = styled.div`
     }
   }
 
-  .fav_controller {
+  .controller {
     width: min-content;
-    background: #d3c2c2;
   }
 `;

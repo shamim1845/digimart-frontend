@@ -6,7 +6,16 @@ const apiCreator = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "/api/v1",
   }),
-  tagTypes: ["Categories", "AdminCategories", "Brands"],
+  tagTypes: [
+    "Categories",
+    "AdminCategories",
+    "Brands",
+    "getAllUsers",
+    "getAllOrders",
+    "getAllOrderStatus",
+    "getMyFavouriteList",
+    "getMyCartList",
+  ],
   endpoints: () => ({}),
 });
 

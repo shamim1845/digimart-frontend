@@ -107,7 +107,7 @@ export default ImageUploader;
 const ImageUploaderContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 
   label {
     font-size: 1.3rem;
@@ -120,8 +120,10 @@ const ImageUploaderContainer = styled.div`
     gap: 1rem;
     margin-bottom: 1rem;
     user-select: none;
-    border: 1px solid #ccc;
     padding: 1rem;
+    border-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 
     .img_box {
       width: 100%;

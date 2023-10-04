@@ -23,6 +23,7 @@ const OrderDetails = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   useEffect(() => {
     const shippingInf = JSON.parse(localStorage.getItem("shippingInfo"));
     dispatch(shippingInformation({ shippingInfo: shippingInf }));
