@@ -93,6 +93,7 @@ const ImageUploader = ({
         onChange={handleImageChange}
         onBlur={() => {
           (!images || images.length === 0) &&
+            setImagesError &&
             setImagesError("Product image is required.");
         }}
         accept="image/*"

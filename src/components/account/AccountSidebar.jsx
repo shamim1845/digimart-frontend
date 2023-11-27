@@ -1,65 +1,49 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import Sidebar from "../utils/reUseableComponents/sideBar/account/Sidebar";
 
-const accountNavlinksConstant = [
+const sidebarMenu = [
   {
-    id: 1,
-    title: "Manage My Account",
+    id: 100,
+    title: "Manage Account",
     links: [
       {
         id: 1,
-        name: "My Profile",
-        link: "/account/myprofile",
+        parent: {
+          name: "My Profile",
+          link: "/account/myprofile",
+          icon: <i className="bi bi-person-circle"></i>,
+        },
       },
       {
         id: 2,
-        name: "Update Profile",
-        link: "/account/updateprofile",
+        parent: {
+          name: "Update Profile",
+          link: "/account/updateprofile",
+          icon: <i className="bi bi-pencil-square"></i>,
+        },
       },
     ],
   },
   {
-    id: 2,
+    id: 101,
     title: "My Orders",
     links: [
       {
         id: 1,
-        name: "Orders",
-        link: "/account/myorder",
+        parent: {
+          name: "Orders",
+          link: "/account/myorder",
+          icon: <i className="bi bi-bag-check"></i>,
+        },
       },
     ],
   },
 ];
 const AccountSidebar = ({ setSidebar, sidebar, sidebarRef }) => {
   return (
-    <AccountSidebarContainer
-      ref={sidebarRef}
-      style={{ left: sidebar ? "0rem" : "-105%" }}
-    >
-      <AccUserName>
-        <p>Hello, Md Shamim Hossain</p>
-        <i onClick={() => setSidebar(false)} className="bi bi-x"></i>
-      </AccUserName>
-
-      <AccSidebaContent>
-        {accountNavlinksConstant.map((navlink) => {
-          return (
-            <div key={navlink?.id} className="navlink_group">
-              <h4>{navlink?.title}</h4>
-              <div className="links_box">
-                {navlink.links.map((child) => {
-                  return (
-                    <NavLink key={child?.id} to={child?.link}>
-                      {child?.name}
-                    </NavLink>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </AccSidebaContent>
+    <AccountSidebarContainer sideBar={sidebar} ref={sidebarRef}>
+      <Sidebar sidebarMenu={sidebarMenu} setShowSidebar={setSidebar} />
     </AccountSidebarContainer>
   );
 };
@@ -69,61 +53,20 @@ export default AccountSidebar;
 const AccountSidebarContainer = styled.div`
   min-width: 20rem;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
+  max-height: 100vh;
+  position: sticky;
+  top: 0;
 
   @media screen and (max-width: 768px) {
-    position: absolute;
-    width: 50%;
-    height: 100%;
-    transition: all 0.5s ease-in-out;
-    background: #fff;
+    min-width: 30rem;
+    position: fixed;
+    left: ${({ sideBar }) => (sideBar ? "0" : "-30rem")};
+    top: 0;
+    height: 100vh;
+    transition: all 0.3s ease-in-out;
+    background: aliceblue;
+    border: none;
     padding: 0 2rem;
-  }
-`;
-
-const AccUserName = styled.div`
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  font-size: 1.2rem;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  @media screen and (max-width: 450px) {
-    p {
-      margin-top: 1rem;
-    }
-  }
-  i {
-    font-size: 2.5rem;
-    position: absolute;
-    right: -1rem;
-    top: -2rem;
-    cursor: pointer;
-    display: none;
-    @media screen and (max-width: 768px) {
-      display: block;
-    }
-  }
-`;
-
-const AccSidebaContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-
-  .navlink_group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    h4 {
-      font-size: 1.6rem;
-    }
-    .links_box {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      a {
-        font-size: 1.4rem;
-      }
-    }
+    z-index: 10000;
   }
 `;

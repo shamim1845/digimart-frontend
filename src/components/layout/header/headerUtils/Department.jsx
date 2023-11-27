@@ -12,7 +12,8 @@ const Department = ({ setActiveDept, categoryBtnRef }) => {
   let categoryRef = useRef();
 
   // => Get categories
-  const { data, isSuccess, isError, error } = useGetAllCategoryQuery();
+  const { isFetching, data, isSuccess, isError, error } =
+    useGetAllCategoryQuery();
 
   //  hide category container when mouseDown outside of category Container
   useEffect(() => {
@@ -33,6 +34,9 @@ const Department = ({ setActiveDept, categoryBtnRef }) => {
 
   return (
     <DepartmentContainer ref={categoryRef}>
+      {isFetching && (
+        <div style={{ fontSize: "1.3rem", padding: "2rem" }}>Fetching...</div>
+      )}
       {isError && (
         <>
           {error.status === 404 ? (
@@ -144,7 +148,6 @@ const DepartmentContainer = styled.div`
   display: flex;
   border-radius: 0.5rem;
   width: 100%;
-  min-height: 10rem;
   overflow-x: auto;
 `;
 

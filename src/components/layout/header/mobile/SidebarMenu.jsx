@@ -38,9 +38,8 @@ const Container = styled.div`
   width: 100%;
   max-width: 30rem;
   transition: all 0.3s ease-in-out;
-  background: #fff;
-  left: ${({ sideBar }) => (sideBar ? "0" : "-30rem")};
   position: fixed;
+  left: ${({ sideBar }) => (sideBar ? "0" : "-30rem")};
   z-index: 10000;
 `;
 

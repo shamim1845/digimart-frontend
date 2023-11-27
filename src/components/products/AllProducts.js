@@ -2,7 +2,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import PageContainer from "../utils/PageContainer";
 import ProductPerPage from "./ProductPerPage";
-import MetaData from "../utils/Metadata";
 import TuneIcon from "@mui/icons-material/Tune";
 import FilterBox from "./FilterBox";
 import ProductBox from "./ProductBox";
@@ -14,23 +13,24 @@ const AllProducts = () => {
 
   return (
     <>
-      <MetaData title="Products" />
       <PageContainer>
-        <Header show={scrolling === "down" && lastScrollY > 300}>
-          <FilterButton onClick={() => setActiveFilter(true)}>
-            <TuneIcon />
-            <span>Filter</span>
-          </FilterButton>
-          <ProductPerPage />
-        </Header>
-
         <Container>
-          <FilterBox
-            activeFilter={activeFilter}
-            setActiveFilter={setActiveFilter}
-          />
+          <Header show={scrolling === "down" && lastScrollY > 300}>
+            <FilterButton onClick={() => setActiveFilter(true)}>
+              <TuneIcon />
+              <span>Filter</span>
+            </FilterButton>
+            <ProductPerPage />
+          </Header>
 
-          <ProductBox />
+          <Content>
+            <FilterBox
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+            />
+
+            <ProductBox />
+          </Content>
         </Container>
       </PageContainer>
     </>
@@ -38,17 +38,21 @@ const AllProducts = () => {
 };
 
 export default AllProducts;
+const Container = styled.div`
+  width: 100%;
+  max-width: 1440px;
+  min-height: 50vh;
+  position: relative;
+`;
 
 const Header = styled.div`
   width: 100%;
-  max-width: 1440px;
   display: flex;
   justify-content: space-between;
-  padding: 1rem 0;
   z-index: 10;
+  padding: 1rem 2rem;
 
   @media screen and (max-width: 768px) {
-    padding: 1rem 2rem;
     position: ${({ show }) => (show ? "sticky" : "relative")};
     top: 0;
     background-color: ${({ show }) => (show ? "#f2f2f2" : "transparent")};
@@ -87,13 +91,9 @@ const FilterButton = styled.div`
     }
   }
 `;
-const Container = styled.div`
-  width: 100%;
-  max-width: 1440px;
-  min-height: 50vh;
+
+const Content = styled.div`
   display: flex;
-  gap: 2rem;
   justify-content: space-between;
-  padding: 1rem 0;
-  position: relative;
+  gap: 2rem;
 `;

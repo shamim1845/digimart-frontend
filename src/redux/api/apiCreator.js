@@ -15,6 +15,8 @@ const apiCreator = createApi({
     "getAllOrderStatus",
     "getMyFavouriteList",
     "getMyCartList",
+    "getShippingInfo",
+    "getMyAllOrders",
   ],
   endpoints: () => ({}),
 });

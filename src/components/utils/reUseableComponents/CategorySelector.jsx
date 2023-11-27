@@ -114,10 +114,10 @@ const Container = styled.div`
   }
   select {
     background: #fff;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     margin-top: 0.5rem;
     width: 100%;
-    height: 3.5rem;
+    height: 4rem;
     padding: 0 1rem;
     border: none;
     outline: none;

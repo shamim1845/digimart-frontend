@@ -69,7 +69,7 @@ const HeaderBottom = styled.div`
   display: flex;
   justify-content: center;
   background-color: tomato;
-  height: 6rem;
+  height: 6.2rem;
   z-index: 100;
   position: ${({ show }) => (show ? "sticky" : "relative")};
   top: 0;

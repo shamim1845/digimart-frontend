@@ -3,8 +3,6 @@ import styled from "styled-components";
 import Title from "../../utils/reUseableComponents/Title";
 
 const OrderedShippingInfo = ({ shippingInfo }) => {
-  // console.log(shippingInfo);
-
   return (
     <Container>
       <Title
@@ -19,36 +17,30 @@ const OrderedShippingInfo = ({ shippingInfo }) => {
 
       <Content>
         <div className="infoGroup">
-          <p>
-            Country : <span>${shippingInfo?.country}</span>
-          </p>
+          <span>Country :</span>
+          <span>{shippingInfo?.country}</span>
         </div>
         <div className="infoGroup">
-          <p>
-            State: <span>${shippingInfo?.state}</span>
-          </p>
+          <span>State:</span>
+          <span>{shippingInfo?.state}</span>
         </div>
         <div className="infoGroup">
-          <p>
-            City :<span>{shippingInfo?.city}</span>
-          </p>
+          <span>City :</span>
+          <span>{shippingInfo?.city}</span>
         </div>
         <div className="infoGroup">
-          <p>
-            Address : <span>{shippingInfo?.address}</span>
-          </p>
+          <span>Address :</span>
+          <span>{shippingInfo?.address}</span>
         </div>
 
         <div className="infoGroup">
-          <p>
-            Post Code : <span>${shippingInfo?.postCode}</span>
-          </p>
+          <span>Post Code :</span>
+          <span>{shippingInfo?.postCode}</span>
         </div>
 
         <div className="infoGroup">
-          <p>
-            Phone No : <span>${shippingInfo?.phoneNo}</span>
-          </p>
+          <span>Phone No :</span>
+          <span>{shippingInfo?.phoneNo}</span>
         </div>
       </Content>
     </Container>
@@ -58,27 +50,20 @@ const OrderedShippingInfo = ({ shippingInfo }) => {
 export default OrderedShippingInfo;
 
 const Container = styled.div`
+  box-shadow: var(--shadow-3);
   border-radius: 0.5rem;
-  margin-bottom: 2rem;
-  width: 100%;
-  margin-top: 1rem;
-  box-shadow: var(--shadow-1);
+  padding: 2rem;
 `;
 
 const Content = styled.div`
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
   .infoGroup {
-    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
     color: var(--text-primary);
-    p {
-      font-size: 1.3rem;
-      display: flex;
-
-      span {
-        margin: 0 1rem;
-        color: tomato;
-      }
-    }
   }
 `;

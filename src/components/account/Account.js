@@ -1,41 +1,29 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import PageContainer from "../utils/PageContainer";
-import AccountSidebar from "./AccountSidebar";
+import Sidebar from "./AccountSidebar";
+import useSidebarHandler from "../utils/customHooks/useSidebarHandler";
 
 const Account = () => {
   const [sidebar, setSidebar] = useState(false);
 
   const sidebarRef = useRef(null);
 
-  useEffect(() => {
-    function sidebarHandler(e) {
-      if (!sidebarRef.current.contains(e.target)) {
-        setSidebar(false);
-      }
-    }
-    window.addEventListener("mousedown", sidebarHandler);
-
-    return () => {
-      window.removeEventListener("mousedown", sidebarHandler);
-    };
-  }, [setSidebar]);
+  // cistom hooks for sidebar handling when mouse down beside of sidebar
+  useSidebarHandler(sidebarRef, setSidebar);
 
   const accountSidebarHandler = () => {
     setSidebar(true);
   };
+
   return (
     <PageContainer>
       <AccountContainer>
         <AccountHamberger onClick={accountSidebarHandler}>
-          {sidebar ? (
-            <i className="bi bi-x"></i>
-          ) : (
-            <i className="bi bi-list"></i>
-          )}
+          <i className="bi bi-arrow-right-square"></i>
         </AccountHamberger>
-        <AccountSidebar
+        <Sidebar
           setSidebar={setSidebar}
           sidebar={sidebar}
           sidebarRef={sidebarRef}
@@ -70,13 +58,20 @@ const AccountContent = styled.div`
 `;
 
 const AccountHamberger = styled.div`
-  margin-top: 2rem;
   display: none;
-  cursor: pointer;
+  position: absolute;
+  top: 2rem;
   i {
     font-size: 2.5rem;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: tomato;
+    }
   }
   @media screen and (max-width: 768px) {
     display: block;
+    max-width: max-content;
+    cursor: pointer;
   }
 `;

@@ -26,4 +26,9 @@ const ButtonDefault = styled.button`
     background-color: #dd5a43;
     color: #f1f1f1;
   }
+  &:disabled {
+    background-color: #dd5a43d3;
+    cursor: not-allowed;
+    color: var(--text-primary);
+  }
 `;

@@ -19,61 +19,49 @@ const MobHeaderBottom = () => {
   return (
     <BottomHeaderContainer>
       <BottomLeft>
-        <div className="button">
-          <NavLink to={"/"}>
-            <button>
-              <img src="/images/icons/home.svg" alt="home icon" />
-              <p>Home</p>
-            </button>
-          </NavLink>
-        </div>
+        <NavLink to={"/"}>
+          <MobileMenuBtn>
+            <img src="/images/icons/home.svg" alt="home icon" />
+            <span>Home</span>
+          </MobileMenuBtn>
+        </NavLink>
       </BottomLeft>
       <BottomRight>
-        <div className="button">
-          <NavLink to={"/products"}>
-            <button>
-              <img src="/images/icons/product.svg" alt="product icon" />
-              <p>Products</p>
-            </button>
-          </NavLink>
-        </div>
+        <NavLink to={"/products"}>
+          <MobileMenuBtn>
+            <img src="/images/icons/product.svg" alt="product icon" />
+            <span>Products</span>
+          </MobileMenuBtn>
+        </NavLink>
 
-        <div className="button">
-          <NavLink to={"/favourite"}>
-            <button>
-              <img src="/images/icons/favourite.svg" alt="favourite icon" />
-              <p>Favourite</p>
-              <span>{favData?.favourites?.length}</span>
-            </button>
-          </NavLink>
-        </div>
-        <div className="button">
-          <NavLink to={"/cart"}>
-            <button>
-              <img src="/images/icons/cart.svg" alt="cart icon" />
-              <p>Cart</p>
-              <span>{cartData?.carts?.length}</span>
-            </button>
-          </NavLink>
-        </div>
+        <NavLink to={"/favourite"}>
+          <MobileMenuBtn>
+            <img src="/images/icons/favourite.svg" alt="favourite icon" />
+            <span>Favourite</span>
+            <span className="badge">{favData?.favourites?.length}</span>
+          </MobileMenuBtn>
+        </NavLink>
+        <NavLink to={"/cart"}>
+          <MobileMenuBtn>
+            <img src="/images/icons/cart.svg" alt="cart icon" />
+            <span>Cart</span>
+            <span className="badge">{cartData?.carts?.length}</span>
+          </MobileMenuBtn>
+        </NavLink>
 
-        <div className="button">
-          <NavLink to={"/account/myprofile"}>
-            <button>
-              <img src="/images/icons/person.svg" alt="account icon" />
-              <p>Account</p>
-            </button>
-          </NavLink>
-        </div>
+        <NavLink to={"/account/myprofile"}>
+          <MobileMenuBtn>
+            <img src="/images/icons/person.svg" alt="account icon" />
+            <span>Account</span>
+          </MobileMenuBtn>
+        </NavLink>
         {authenticated && role === "admin" && (
-          <div className="button">
-            <NavLink to={"/admin/dashboard"}>
-              <button>
-                <DashboardIcon color="info" fontSize="large" />
-                <p>Dashboard</p>
-              </button>
-            </NavLink>
-          </div>
+          <NavLink to={"/admin/dashboard"}>
+            <MobileMenuBtn>
+              <DashboardIcon color="info" fontSize="large" />
+              <span>Dashboard</span>
+            </MobileMenuBtn>
+          </NavLink>
         )}
       </BottomRight>
     </BottomHeaderContainer>
@@ -83,92 +71,56 @@ const MobHeaderBottom = () => {
 export default MobHeaderBottom;
 
 const BottomHeaderContainer = styled.div`
-  position: absolute;
-  bottom: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+  background-color: aliceblue;
   position: fixed;
-  background-color: #fff;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 0 2rem;
   z-index: 1000;
 
-  @media screen and (min-width: 769px) {
-    display: none;
-  }
-
-  @media screen and (max-width: 768px) {
-    padding: 1 2rem;
-  }
   @media screen and (max-width: 576px) {
-    /* padding: 1rem 1rem; */
+    padding: 0 1rem;
   }
 `;
-const BottomLeft = styled.div`
-  flex: 1;
-
-  .button {
-    & button {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: #fff;
-      border: none;
-      height: 4.5rem;
-      width: 4.5rem;
-      /* margin: 0 1rem; */
-      padding-top: 1rem;
-      &:hover {
-        box-shadow: rgba(255, 155, 155, 0.3) 0px -50px 36px -28px inset;
-      }
-      & img {
-        width: 2rem;
-      }
-      p {
-        font-size: 1rem;
-      }
-    }
-  }
-`;
+const BottomLeft = styled.div``;
 
 const BottomRight = styled.div`
   display: flex;
   justify-content: space-between;
-  flex: 1;
+  gap: 1rem;
+`;
 
-  .button {
-    & button {
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
-      background-color: #fff;
-      border: none;
-      height: 4.5rem;
-      min-width: 4.5rem;
-      margin-right: 1rem;
-      padding-top: 1rem;
-      position: relative;
-      &:hover {
-        box-shadow: rgba(255, 155, 155, 0.3) 0px -50px 36px -28px inset;
-      }
-      & img {
-        width: 2rem;
-      }
-      p {
-        font-size: 1rem;
-      }
-      span {
-        position: absolute;
-        right: 0;
-        top: 0;
-        font-size: 1.2rem;
-        font-weight: 600;
-      }
-    }
+const MobileMenuBtn = styled.button`
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  height: 4.5rem;
+  min-width: 4.5rem;
+  padding-top: 1rem;
+  position: relative;
+  &:hover {
+    box-shadow: rgba(255, 155, 155, 0.3) 0px -50px 36px -28px inset;
+  }
+  & img {
+    width: 2rem;
+  }
+  span {
+    font-size: 1.1rem;
+  }
+  .badge {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
 `;

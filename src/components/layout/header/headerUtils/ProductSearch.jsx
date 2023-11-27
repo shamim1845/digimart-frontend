@@ -15,7 +15,7 @@ const ProductSearch = () => {
   const navigate = useNavigate();
 
   // Custom Material UI Button
-  const AddToCart = btn(Button)({
+  const SearchBtn = btn(Button)({
     minWidth: "100%",
     backgroundColor: "tomato",
     padding: "1rem",
@@ -86,9 +86,9 @@ const ProductSearch = () => {
           </div>
         )}
         <div className="search_button">
-          <AddToCart type="submit">
+          <SearchBtn type="submit">
             <img src="/images/icons/search.svg" alt="search icon" />
-          </AddToCart>
+          </SearchBtn>
         </div>
       </form>
     </ProductSearchContainer>
@@ -145,7 +145,7 @@ const ProductSearchContainer = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0 0.2rem;
+      margin: 0 0.4rem;
     }
   }
 `;

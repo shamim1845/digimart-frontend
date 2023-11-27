@@ -21,9 +21,9 @@ const CartList = ({ cartItem }) => {
 export default CartList;
 
 const Container = styled.div`
+  flex: 3;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-bottom: 2rem;
 `;

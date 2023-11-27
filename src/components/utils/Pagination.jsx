@@ -48,15 +48,11 @@ const Pagination = ({ pages, currentPage, setCurrentPage }) => {
 export default Pagination;
 
 const PaginationContainer = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  margin: 2rem;
-  padding: 1rem;
-  overflow: hidden;
-  width: 100%;
-  max-width: 1440px;
 `;
 const Prev = styled.div``;
 const Page = styled.ul`

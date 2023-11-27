@@ -2,6 +2,17 @@ import apiCreator from "../apiCreator";
 
 const orderAPI = apiCreator.injectEndpoints({
   endpoints: (builder) => ({
+    getMyAllOrders: builder.query({
+      query: () => ({
+        url: `orders/me`,
+      }),
+      providesTags: ["getMyAllOrders"],
+    }),
+    getMySingleOrder: builder.query({
+      query: (orderid) => ({
+        url: `order/${orderid}`,
+      }),
+    }),
     getAllOrders: builder.query({
       query: () => ({
         url: `admin/orders`,
@@ -29,6 +40,8 @@ const orderAPI = apiCreator.injectEndpoints({
 });
 
 export const {
+  useGetMyAllOrdersQuery,
+  useGetMySingleOrderQuery,
   useGetAllOrdersQuery,
   useUpdateOrderedOrderStatusMutation,
   useDeleteOrderMutation,

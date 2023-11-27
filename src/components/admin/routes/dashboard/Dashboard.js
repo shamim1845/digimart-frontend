@@ -9,28 +9,28 @@ const Dashboard = () => {
         <InfoCard
           titleText={"Total Revenue"}
           subTitleText={"(Last 30 Days)"}
-          icon={<i class="bi bi-shop-window"></i>}
+          icon={<i className="bi bi-shop-window"></i>}
           value={"$0.00"}
           iconBg="#A7F3D0"
         />
         <InfoCard
           titleText={"Total Order"}
           subTitleText={"(Last 30 Days)"}
-          icon={<i class="bi bi-cart3"></i>}
+          icon={<i className="bi bi-cart3"></i>}
           value={"$0.00"}
           iconBg="#FACACA"
         />
 
         <InfoCard
           titleText={"Todays Revenue"}
-          icon={<i class="bi bi-shop-window"></i>}
+          icon={<i className="bi bi-shop-window"></i>}
           value={"$0.00"}
           iconBg="#FFE8B2"
         />
 
         <InfoCard
           titleText={"Total Brands"}
-          icon={<i class="bi bi-shop-window"></i>}
+          icon={<i className="bi bi-shop-window"></i>}
           value={"$0.00"}
           iconBg="#93C5FD"
         />

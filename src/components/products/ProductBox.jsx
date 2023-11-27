@@ -92,7 +92,7 @@ export default ProductBox;
 const Container = styled.div`
   flex: 1;
   height: auto;
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
 `;
 
 const Content = styled.div`
@@ -102,4 +102,7 @@ const Content = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 `;
 
-const PaginationContainer = styled.div``;
+const PaginationContainer = styled.div`
+  width: 100%;
+  margin: 5rem 0;
+`;

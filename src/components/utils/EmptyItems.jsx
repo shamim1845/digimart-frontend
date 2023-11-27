@@ -4,14 +4,14 @@ import styled from "styled-components";
 import Button from "./reUseableComponents/Buttons";
 import Title from "./reUseableComponents/Title";
 
-const EmptyItems = ({ text, link, btnText }) => {
+const EmptyItems = ({ text, link, btnText, style }) => {
   const navigate = useNavigate();
   const goToProduct = () => {
     navigate(link);
   };
 
   return (
-    <EmptyItemContainer>
+    <EmptyItemContainer style={{ ...style }}>
       <Content>
         <Title variant="h1" text={text} />
         <Button text={btnText} onClick={goToProduct} />
@@ -23,9 +23,7 @@ const EmptyItems = ({ text, link, btnText }) => {
 export default EmptyItems;
 
 const EmptyItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
   height: 50vh;
 `;
 const Content = styled.div`
@@ -35,8 +33,4 @@ const Content = styled.div`
   align-items: center;
   gap: 2rem;
   height: 100%;
-
-  h4 {
-    font-size: 2rem;
-  }
 `;

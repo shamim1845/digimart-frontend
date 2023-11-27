@@ -26,6 +26,13 @@ const cartAPI = apiCreator.injectEndpoints({
       }),
       invalidatesTags: ["getMyCartList"],
     }),
+    removeAllFromCart: builder.mutation({
+      query: () => ({
+        url: `cart/remove/all`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["getMyCartList"],
+    }),
   }),
 });
 
@@ -33,4 +40,5 @@ export const {
   useGetMyCartListQuery,
   useAddToCartMutation,
   useRemoveFromCartMutation,
+  useRemoveAllFromCartMutation,
 } = cartAPI;

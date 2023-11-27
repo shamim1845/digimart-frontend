@@ -1,80 +1,22 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-
 import {
   PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { useSelector } from "react-redux";
-import {
-  getAllOrders,
-  getPaymentInfo,
-  getShippingInformation,
-} from "../../redux/order/orderSlice";
-import axios from "axios";
-import { toast } from "react-toastify";
+import useCreateNewOrder from "../utils/customHooks/useCreateNewOrder";
 
-export default function CheckoutForm({ clientSecret }) {
+export default function StripeCheckoutForm({ clientSecret }) {
   const stripe = useStripe();
   const elements = useElements();
-
-  const navigate = useNavigate();
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const shippingInfo = useSelector(getShippingInformation);
-  const orderdItem = useSelector(getAllOrders);
-  const paymentInfo = useSelector(getPaymentInfo);
-  // console.log(paymentInfo);
+  const { createNewOrder } = useCreateNewOrder({ setIsLoading });
 
-  // Create a Order After complete the payment
-  const createNewOrder = (paymentIntent) => {
-    let orderItems = [];
-    orderdItem.map((item) => {
-      orderItems.push({
-        productId: item.product._id,
-        name: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity,
-        image: item.product.images[0].url,
-      });
-
-      return null;
-    });
-
-    const newOrder = {
-      shippingInfo,
-      orderItems,
-      paymentInfo: {
-        id: paymentIntent.id,
-        status: paymentIntent.status,
-        itemsPrice: paymentInfo.products_price,
-        taxPrice: paymentInfo.tax,
-        shippingPrice: paymentInfo.shipping_cost,
-        totalPrice: paymentInfo.totalPayAmount,
-      },
-    };
-
-    axios
-      .post("/api/v1/order/new", newOrder)
-      .then((res) => {
-        if (res.status === 201) {
-          setIsLoading(false);
-          toast("Your order has been Successfully created.");
-          setTimeout(() => {
-            navigate("/order/sucess");
-          }, 3000);
-        }
-      })
-      .catch((err) => {
-        toast("Your order have not created.");
-        console.log(err);
-      });
-  };
-
+  // handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -95,7 +37,17 @@ export default function CheckoutForm({ clientSecret }) {
       redirect: "if_required",
     });
 
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+    // check error
+    if (error) {
+      if (error.type === "card_error" || error.type === "validation_error") {
+        setMessage(error.message);
+      } else {
+        setMessage("An unexpected error occurred.");
+      }
+    }
+
+    // set message
+    if (paymentIntent) {
       switch (paymentIntent.status) {
         case "succeeded":
           setMessage("Payment succeeded!");
@@ -104,32 +56,25 @@ export default function CheckoutForm({ clientSecret }) {
           setMessage("Your payment is processing.");
           break;
         case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
+          setMessage("Your payment was not successfull, please try again.");
           break;
         default:
           setMessage("Something went wrong.");
           break;
       }
-    });
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
-
-    if (error) {
-      if (error.type === "card_error" || error.type === "validation_error") {
-        setMessage(error.message);
-      } else {
-        setMessage(error.message);
-      }
     }
 
+    // Create an order
     if (!error && paymentIntent && paymentIntent.status === "succeeded") {
-      createNewOrder(paymentIntent);
+      createNewOrder({
+        paymentProvider: "stripe",
+        paymentId: paymentIntent.id,
+        paymentStatus: paymentIntent.status,
+      });
     }
   };
 
+  // =>
   const paymentElementOptions = {
     layout: "tabs",
   };
@@ -159,9 +104,7 @@ const CheckoutFormContainer = styled.div`
     width: 30vw;
     min-width: 500px;
     align-self: center;
-    box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
-      0px 2px 5px 0px rgba(50, 50, 93, 0.1),
-      0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
+    box-shadow: var(--shadow-3);
     border-radius: 7px;
     padding: 40px;
 
@@ -169,7 +112,7 @@ const CheckoutFormContainer = styled.div`
       margin-bottom: 24px;
     }
     button {
-      background: #5469d4;
+      background: tomato;
       font-family: Arial, sans-serif;
       color: #ffffff;
       border-radius: 4px;
@@ -221,7 +164,7 @@ const CheckoutFormContainer = styled.div`
       .spinner:before {
         width: 10.4px;
         height: 20.4px;
-        background: #5469d4;
+        background: tomato;
         border-radius: 20.4px 0 0 20.4px;
         top: -0.2px;
         left: -0.2px;
@@ -234,7 +177,7 @@ const CheckoutFormContainer = styled.div`
       .spinner:after {
         width: 10.4px;
         height: 10.2px;
-        background: #5469d4;
+        background: tomato;
         border-radius: 0 10.2px 10.2px 0;
         top: -0.1px;
         left: 10.2px;
@@ -257,17 +200,17 @@ const CheckoutFormContainer = styled.div`
     }
 
     #payment-message {
-      color: rgb(105, 115, 134);
-      font-size: 16px;
+      color: var(--text-secondary);
+      font-size: 14px;
       line-height: 20px;
-      padding-top: 12px;
+      padding-top: 20px;
       text-align: center;
     }
   }
 
   @media only screen and (max-width: 600px) {
     form {
-      width: 80vw;
+      width: 100%;
       min-width: initial;
     }
   }

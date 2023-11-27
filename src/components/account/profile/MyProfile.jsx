@@ -6,17 +6,14 @@ import ChangePassword from "../../Auth/ChangePassword";
 import Title from "../../utils/reUseableComponents/Title";
 import { useSelector } from "react-redux";
 import { selectUserInfo } from "../../../redux/user/userSelector";
+import MUIButton from "../../utils/reUseableComponents/MUIButton";
 const MyProfile = () => {
   const [isChangePassword, setIsChangePassword] = useState(false);
   const user = useSelector(selectUserInfo);
 
   return (
     <ProfileContainer>
-      <Title
-        variant="h1"
-        text="My Profile"
-        style={{ textAlign: "center", marginTop: "2rem" }}
-      />
+      <Title variant="h1" text="My Profile" style={{ textAlign: "center" }} />
 
       <Content>
         <UserImage>
@@ -36,9 +33,7 @@ const MyProfile = () => {
             <span>Mobile</span>
             <span>{user?.mobile}</span>
           </div>
-        </UserDetails>
 
-        <UserDetails>
           <div className="detils_group">
             <span>Birthday</span>
             <span>{user?.birthday}</span>
@@ -50,19 +45,21 @@ const MyProfile = () => {
         </UserDetails>
 
         <ButtonContainer>
-          <Link to={"/account/updateProfile"}>
-            <button className="edit_profile">EDIT PROFILE</button>
+          <Link to={"/account/updateProfile"} style={{ flex: "1" }}>
+            <MUIButton style={{ margin: "0" }}>EDIT PROFILE</MUIButton>
           </Link>
 
-          <button
-            className="change_password"
+          <MUIButton
+            style={{ margin: "0", flex: "1" }}
             onClick={() => setIsChangePassword((prev) => !prev)}
           >
             CHANGE PASSWORD
-          </button>
+          </MUIButton>
         </ButtonContainer>
 
-        {isChangePassword && <ChangePassword />}
+        {isChangePassword && (
+          <ChangePassword setIsChangePassword={setIsChangePassword} />
+        )}
       </Content>
     </ProfileContainer>
   );
@@ -78,17 +75,22 @@ const ProfileContainer = styled.div`
   gap: 2rem;
   width: 100%;
   max-width: 800px;
+  padding: 2rem;
   margin-bottom: 3rem;
+
+  @media screen and (max-width: 576px) {
+    padding: 2rem 1rem;
+  }
 `;
 
 const Content = styled.div`
   border-radius: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: var(--shadow-1);
   padding: 5rem;
-  margin: 2rem;
-  width: 90%;
+  width: 100%;
+
   @media screen and (max-width: 768px) {
-    margin: 0 5rem;
+    box-shadow: var(--shadow-3);
   }
   @media screen and (max-width: 576px) {
     padding: 2rem;
@@ -99,7 +101,7 @@ const UserImage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
   img {
     width: 13rem;
     height: 13rem;
@@ -111,8 +113,8 @@ const UserImage = styled.div`
 const UserDetails = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 3rem;
-  gap: 1rem;
+  gap: 3rem;
+  margin-bottom: 5rem;
 
   .detils_group {
     display: flex;
@@ -126,34 +128,17 @@ const UserDetails = styled.div`
     }
   }
   @media screen and (max-width: 850px) {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 2.5rem;
   }
 `;
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 1rem;
   margin-top: 5rem;
-  .edit_profile,
-  .change_password {
-    width: 25rem;
-    padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: 500;
-    background-color: #1a9cb7;
-    border: 2px solid #1a9cb7;
-    color: #fff;
-    transition: all 0.5s ease-in-out;
-    cursor: pointer;
 
-    &:hover {
-      background-color: #177e92;
-      border: 2px solid #177e92;
-    }
-    @media screen and (max-width: 450px) {
-      width: 18rem;
-    }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
   }
 `;

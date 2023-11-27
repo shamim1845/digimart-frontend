@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { addCurrency } from "../../../../redux/user/userSlice";
+import { currencyConstants } from "../../../utils/constants/currencyConstants";
 
 const Currency = () => {
   const dispatch = useDispatch();
@@ -14,8 +15,11 @@ const Currency = () => {
   return (
     <CurrencyContainer>
       <select onChange={handleCurrency}>
-        <option value="USD">USD</option>
-        <option value="BDT">BDT</option>
+        {currencyConstants.map((currency) => (
+          <option key={currency.name} value={currency.name}>
+            {currency.name}
+          </option>
+        ))}
       </select>
     </CurrencyContainer>
   );

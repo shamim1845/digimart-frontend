@@ -21,7 +21,7 @@ const Carousle = () => {
   };
 
   // MUI custom Btn
-  const AddToCart = btn(Button)({
+  const ShopNowBtn = btn(Button)({
     backgroundColor: "tomato",
     color: "#0f1111",
     fontSize: "1.4rem",
@@ -46,7 +46,7 @@ const Carousle = () => {
                   <h3>{slide.desc}</h3>
                   <br />
                   <Link style={{ marginTop: "2rem" }} to="/products">
-                    <AddToCart variant="contained">Shop Now</AddToCart>
+                    <ShopNowBtn variant="contained">Shop Now</ShopNowBtn>
                   </Link>
                 </div>
                 <div className="slider_image">

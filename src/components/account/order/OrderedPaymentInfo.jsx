@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import Title from "../../utils/reUseableComponents/Title";
+import { currencyConstants } from "../../utils/constants/currencyConstants";
 
 const OrderedPaymentInfo = ({ paymentInfo }) => {
-  // console.log(paymentInfo);
+  // find selected currency
+  const selectedCurrency = currencyConstants.find(
+    (currCurrency) => currCurrency.name === paymentInfo?.currency
+  );
 
   return (
     <Container>
@@ -19,13 +23,23 @@ const OrderedPaymentInfo = ({ paymentInfo }) => {
 
       <Content>
         <div className="infoGroup">
-          <p>
-            Payment Status : <span>{paymentInfo?.status}</span>
-          </p>
+          <div>Payment Id :</div>
+          <div>{paymentInfo?.id}</div>
         </div>
+
         <div className="infoGroup">
-          <p>
-            Paid-At :
+          <div>Payment Status :</div>
+          <div>{paymentInfo?.status}</div>
+        </div>
+
+        <div className="infoGroup">
+          <div>Provider :</div>
+          <div>{paymentInfo?.provider}</div>
+        </div>
+
+        <div className="infoGroup">
+          <div>Paid-At :</div>
+          <div style={{ display: "flex", gap: "5rem" }}>
             <span>
               {paymentInfo && new Date(paymentInfo?.paidAt).toDateString()}
             </span>
@@ -33,27 +47,39 @@ const OrderedPaymentInfo = ({ paymentInfo }) => {
               {paymentInfo &&
                 new Date(paymentInfo?.paidAt).toLocaleTimeString()}
             </span>
-          </p>
+          </div>
         </div>
+
         <div className="infoGroup">
-          <p>
-            Product price : <span>${paymentInfo?.itemsPrice}</span>
-          </p>
+          <div>Product price :</div>
+          <div>
+            <span>{selectedCurrency.icon}</span>
+            <span>{paymentInfo?.itemsPrice}</span>
+          </div>
         </div>
+
         <div className="infoGroup">
-          <p>
-            Shipping Cost : <span>${paymentInfo?.shippingPrice}</span>
-          </p>
+          <div>Shipping Cost :</div>
+          <div>
+            <span>{selectedCurrency.icon}</span>
+            <span>{paymentInfo?.shippingPrice}</span>
+          </div>
         </div>
+
         <div className="infoGroup">
-          <p>
-            Tax : <span>${paymentInfo?.taxPrice}</span>
-          </p>
+          <div>Tax :</div>
+          <div>
+            <span>{selectedCurrency.icon}</span>
+            <span>{paymentInfo?.taxPrice}</span>
+          </div>
         </div>
+
         <div className="infoGroup">
-          <p>
-            Total payment : <span>${paymentInfo?.totalPrice}</span>
-          </p>
+          <div>Total payment :</div>
+          <div>
+            <span>{selectedCurrency.icon}</span>
+            <span>{paymentInfo?.totalPrice}</span>
+          </div>
         </div>
       </Content>
     </Container>
@@ -63,45 +89,20 @@ const OrderedPaymentInfo = ({ paymentInfo }) => {
 export default OrderedPaymentInfo;
 
 const Container = styled.div`
+  box-shadow: var(--shadow-3);
   border-radius: 0.5rem;
-  margin-bottom: 2rem;
-  width: 100%;
-  margin-top: 1rem;
-  box-shadow: var(--shadow-1);
+  padding: 2rem;
 `;
 
-//   background: #fafafa;
-//   color: #212121;
-//   min-height: 5rem;
-//   display: grid;
-//   align-items: center;
-//   padding: 0 1rem;
-
-//   h2 {
-//     font-weight: 500;
-//     font-size: 1.6rem;
-
-//     span {
-//       font-weight: 500;
-//       font-size: 1.6rem;
-//       text-transform: capitalize;
-//     }
-//   }
-// `;
 const Content = styled.div`
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
   .infoGroup {
-    margin-bottom: 1rem;
+    display: flex;
+    gap: 1rem;
     color: var(--text-primary);
-    p {
-      font-size: 1.3rem;
-      display: flex;
-
-      span {
-        margin: 0 1rem;
-        color: tomato;
-      }
-    }
   }
 `;

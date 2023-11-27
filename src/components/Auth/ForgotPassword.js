@@ -1,134 +1,96 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import axiox from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+import Button from "../utils/reUseableComponents/Buttons";
+import TextInput from "../utils/formik/TextInput";
+import { Form, Formik } from "formik";
+import Title from "../utils/reUseableComponents/Title";
 
-const Login = () => {
-  const [data, setData] = useState("");
-
-  const InputHandler = (e) => {
-    let value = e.target.value;
-    setData(value);
-  };
-
-  const SubmitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      if (!data) {
-        return toast("Fields can't be empty.");
-      }
-      const res = await axiox.post(`/api/v1/password/forgot`, {
-        email: data,
-      });
-      // console.log(res);
-      if (res.status === 200) {
-        toast(res.data.message);
-      }
-    } catch (err) {
-      toast.error("Invalid email address.");
-      console.log(err);
-    }
-  };
-
+const ForgotPassword = () => {
   return (
-    <>
-      <ToastContainer />
-      <LoginContainer>
-        <ContainerTop>
-          <FormContainer>
-            <Title>Forgot Password</Title>
-            <Form onSubmit={SubmitHandler}>
-              <InputGroup>
-                <div>
-                  <label htmlFor="email">Enter Your Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    onChange={InputHandler}
-                    value={data}
-                  />
-                </div>
-              </InputGroup>
-              <Button>
-                <input type="submit" value="Submit" />
-              </Button>
-            </Form>
-          </FormContainer>
-        </ContainerTop>
-      </LoginContainer>
-    </>
+    <Container>
+      <FormContainer>
+        <Title text="Forgot Password" />
+
+        <Formik
+          initialValues={{
+            email: "",
+          }}
+          validationSchema={yup.object({
+            email: yup
+              .string()
+              .required("Email is required.")
+              .email("Email must be a valid email."),
+          })}
+          onSubmit={(values, { resetForm }) => {
+            const { email } = values;
+
+            axiox
+              .post(`/api/v1/password/forgot`, {
+                email,
+              })
+              .then((res) => {
+                if (res.status === 200) {
+                  toast.success(res.data.message);
+                }
+              })
+              .catch((err) => {
+                toast.error(
+                  err?.response?.data?.message || "Invalid email address."
+                );
+                console.log(err);
+              })
+              .finally(() => {
+                resetForm();
+              });
+          }}
+        >
+          <Form>
+            <TextInput
+              label="Email"
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+            />
+
+            <Button type="submit" text="Submit" />
+          </Form>
+        </Formik>
+      </FormContainer>
+    </Container>
   );
 };
 
-export default Login;
+export default ForgotPassword;
 
-const LoginContainer = styled.div`
+const Container = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-`;
-const ContainerTop = styled.div`
-  width: 100%;
-  max-width: 35rem;
-  display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  width: 100%;
+  max-width: 50rem;
+  margin: 5rem auto;
+  padding: 1rem;
+
+  @media screen and (max-width: 576px) {
+    margin: 2rem auto;
+  }
 `;
 
 const FormContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  gap: 2rem;
+  padding: 3rem;
+  box-shadow: var(--shadow-1);
   border-radius: 5px;
-`;
-const Title = styled.h2`
-  font-size: 2.5rem;
-  font-weight: 600;
-`;
 
-const Form = styled.form`
-  width: 100%;
-  height: 100%;
-`;
-const InputGroup = styled.div`
-  div {
-    margin: 1rem 0;
-    & label {
-      font-size: 1.3rem;
-      color: var(--text-secondary);
-    }
-    & input {
-      width: 100%;
-      height: 3rem;
-      &:focus {
-        border: none;
-        outline: none;
-        /* outline: 1px solid tomato; */
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
-          rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-      }
-    }
-  }
-`;
-const Button = styled.div`
-  & input {
-    font-size: 1.3rem;
-    border: none;
-    background-color: var(--bg-primary);
-    padding: 1rem 2rem;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition: all 0.5s;
-    &:hover {
-      color: #fff;
-      background-color: #ff6347f6;
-    }
+  form {
+    width: 100%;
   }
 `;

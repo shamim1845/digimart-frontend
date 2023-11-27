@@ -8,10 +8,8 @@ import NotFound from "../../utils/fetchUtils/NotFound";
 import Error from "../../utils/fetchUtils/Error";
 
 const Products = ({ category, currentPage, setCurrentPage }) => {
-  console.log("Products(NewArivals).js render =>");
-
   // Fetch New Arrivals Products
-  const { isLoading, isFetching, isSuccess, data, isError, error } =
+  const { isFetching, isLoading, isSuccess, data, isError, error } =
     useGetNewArivalsQuery(
       { category, currentPage },
       {
@@ -24,46 +22,43 @@ const Products = ({ category, currentPage, setCurrentPage }) => {
       {isError && (
         <>
           {error.status === 404 ? (
-            <NotFound text="No products found." />
+            <NotFound text="No product found." />
           ) : (
-            <Error text={error?.message} style={{ justifyContent: "center" }} />
+            <Error
+              text={error?.data?.message}
+              style={{ justifyContent: "center" }}
+            />
           )}
         </>
       )}
 
-      <ProductBox>
-        {(isLoading || isFetching) && (
-          <>
-            <ProductCardSkeleton />
-            <ProductCardSkeleton />
-            <ProductCardSkeleton />
-            <ProductCardSkeleton />
-            <ProductCardSkeleton />
-            <ProductCardSkeleton />
-            <ProductCardSkeleton />
-          </>
-        )}
+      {(isLoading || isFetching) && (
+        <ProductBox>
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+          <ProductCardSkeleton />
+        </ProductBox>
+      )}
 
-        {!isLoading &&
-          !isFetching &&
-          !isError &&
-          isSuccess &&
-          data?.products.map((product) => {
+      {isSuccess && (
+        <ProductBox>
+          {data?.products.map((product) => {
             return <Product key={product._id} product={product} />;
           })}
-      </ProductBox>
+        </ProductBox>
+      )}
 
-      {!isLoading &&
-        !isFetching &&
-        !isError &&
-        isSuccess &&
-        data?.pagination?.length > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            pages={data.pagination}
-          />
-        )}
+      {isSuccess && data?.pagination?.length > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          pages={data.pagination}
+        />
+      )}
     </ProductContainer>
   );
 };

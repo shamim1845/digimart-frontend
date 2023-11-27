@@ -1,15 +1,12 @@
 import React from "react";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
-import Admin from "./admin/Admin";
-import { ProtectedAdmin } from "./utils/authUtils/ProtectedAdmin";
-// import Hooks from "./hooks/Hooks";
 
 // For Utils
 import { ProtectedRoutes } from "./utils/authUtils/ProtectedRoutes";
-import Loading from "./utils/fetchUtils/Loading";
+import { ProtectedAdmin } from "./utils/authUtils/ProtectedAdmin";
 
 // For Layout
-import Layout from "./layout/Layout";
+const LazyLayout = React.lazy(() => import("./layout/Layout"));
 
 // For Home Routes
 const LazyHome = React.lazy(() => import("./Home/Home"));
@@ -32,6 +29,7 @@ const LazyOrderDetails = React.lazy(() =>
 );
 
 //For Admin Routes
+const LazyAdmin = React.lazy(() => import("./admin/Admin"));
 const LazyAdminDashboard = React.lazy(() =>
   import("./admin/routes/dashboard/Dashboard")
 );
@@ -77,11 +75,9 @@ const index = () => {
       <Route
         path="/"
         element={
-          <Layout>
-            <React.Suspense fallback={<Loading />}>
-              <Outlet />
-            </React.Suspense>
-          </Layout>
+          <LazyLayout>
+            <Outlet />
+          </LazyLayout>
         }
       >
         {/* Home Routes */}
@@ -89,13 +85,13 @@ const index = () => {
 
         {/* Auth Routes */}
         <Route path="register" element={<LazyRegister />} />
-        <Route path="/login" element={<LazyLogin />} />
-        <Route path="/password/forgot" element={<LazyForgotPassword />} />
-        <Route path="/password/reset/:token" element={<LazyResetPassword />} />
+        <Route path="login" element={<LazyLogin />} />
+        <Route path="password/forgot" element={<LazyForgotPassword />} />
+        <Route path="password/reset/:token" element={<LazyResetPassword />} />
 
         {/* Account Routes  */}
         <Route
-          path="/account"
+          path="account"
           element={
             <ProtectedRoutes>
               <LazyAccount />
@@ -109,12 +105,12 @@ const index = () => {
         </Route>
 
         {/* Product Routes */}
-        <Route path="/products" element={<LazyAllProducts />} />
-        <Route path="/products/:productId" element={<LazyProductDetails />} />
+        <Route path="products" element={<LazyAllProducts />} />
+        <Route path="products/:productId" element={<LazyProductDetails />} />
 
         {/* Product Order Routes */}
         <Route
-          path="/favourite"
+          path="favourite"
           element={
             <ProtectedRoutes>
               <LazyFavourite />
@@ -122,15 +118,15 @@ const index = () => {
           }
         />
         <Route
-          path="/cart"
+          path="cart"
           element={
             <ProtectedRoutes>
               <LazyCart />
             </ProtectedRoutes>
           }
         />
-        <Route path="/order" element={<LazyOrder />} />
-        <Route path="/order/sucess" element={<LazyOrderSucess />} />
+        <Route path="order" element={<LazyOrder />} />
+        <Route path="order/sucess" element={<LazyOrderSucess />} />
 
         {/* Error Routes  */}
         <Route path="*" element={<LazyError />} />
@@ -138,14 +134,14 @@ const index = () => {
 
       {/* Admin Routes */}
       <Route
-        path="/admin"
+        path="admin"
         element={
           <ProtectedAdmin>
-            <Admin />
+            <LazyAdmin />
           </ProtectedAdmin>
         }
       >
-        <Route index element={<Navigate to={"/admin/dashboard"} />} />
+        <Route index element={<Navigate to={"admin/dashboard"} />} />
         {/* Dashboard */}
         <Route path="dashboard" element={<LazyAdminDashboard />} />
         {/* Products */}

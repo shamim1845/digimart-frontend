@@ -9,6 +9,7 @@ const NewArivals = () => {
   const [category, setCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  // category handler
   const categoryHandler = (e) => {
     const { value } = e.target;
     setCategory(value);
@@ -19,12 +20,14 @@ const NewArivals = () => {
   const { isLoading, isSuccess, data, isError, error } =
     useGetNewArivalsCategoriesQuery();
 
+  // set default category
   useEffect(() => {
     if (data?.allCategories?.length > 0) {
       setCategory(data?.allCategories[0]);
     }
   }, [data]);
 
+  //
   const cachedCategory = useMemo(
     () => data?.allCategories,
     [data?.allCategories]

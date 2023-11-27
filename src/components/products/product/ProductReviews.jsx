@@ -38,7 +38,6 @@ const AllReviewsContainer = styled.div`
 `;
 
 const Review = ({ review }) => {
-  console.log(review);
   const [imgNo, setImgNo] = useState(null);
 
   return (
@@ -59,10 +58,10 @@ const Review = ({ review }) => {
         <p>{review.comment}</p>
       </div>
 
-      {review?.images?.length && (
+      {review?.images?.length >= 1 && (
         <div className="review_img_box">
           <div className="review_img_thumbnail">
-            {review.images.map((img, index) => {
+            {review.images?.map((img, index) => {
               return (
                 <img
                   key={index}

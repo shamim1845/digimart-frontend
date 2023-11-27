@@ -69,12 +69,7 @@ const OrdersContainer = ({ keyword }) => {
     }
 
     if (data) {
-      const ordersCopy = [...data?.orders];
-      const sorted_orders = ordersCopy.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-
-      setorders(sorted_orders);
+      setorders(data?.orders);
     }
   }, [keyword, data]);
 

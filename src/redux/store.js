@@ -1,6 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import productsReducer from "./products/productSlice";
-import orderReducer from "./order/orderSlice";
 import userReducer from "./user/userSlice";
 import productFilterReducer from "./productFilter/productFilterSlice";
 import apiCreator from "./api/apiCreator";
@@ -9,8 +7,6 @@ import { setupListeners } from "@reduxjs/toolkit/dist/query";
 export const store = configureStore({
   reducer: {
     [apiCreator.reducerPath]: apiCreator.reducer,
-    products: productsReducer,
-    order: orderReducer,
     user: userReducer,
     productFilter: productFilterReducer,
   },

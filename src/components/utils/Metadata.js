@@ -1,13 +1,14 @@
-import React from 'react';
-import {Helmet} from "react-helmet";
+import React from "react";
+import { Helmet } from "react-helmet";
 
-const Metadata = ({title}) => {
-    return (
-        <Helmet>
-            <title>{title}</title>
-            <meta name="description" content="Helmet application" />
-        </Helmet>
-    )
-}
+const Metadata = ({ title, description }) => {
+  return (
+    <Helmet>
+      {/* Standard metadata tags */}
+      <title>{title}</title>
+      {description && <meta name="description" content={description} />}
+    </Helmet>
+  );
+};
 
-export default Metadata
+export default Metadata;

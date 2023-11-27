@@ -1,8 +1,6 @@
 import Rating from "@mui/material/Rating";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { addOrderItem } from "../../../redux/order/orderSlice";
 import Title from "../../utils/reUseableComponents/Title";
 import MUIButton from "../../utils/reUseableComponents/MUIButton";
 import useCartHandler from "../../utils/customHooks/useCartHandler";
@@ -14,7 +12,6 @@ const ProductHandler = ({ product }) => {
   const [value, setValue] = useState(0);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   // Custom hook for cart handling
   const { quantity, addToCartHandler } = useCartHandler(product?._id);
@@ -39,9 +36,6 @@ const ProductHandler = ({ product }) => {
 
   // Buy product directly
   const directBuyHandler = () => {
-    let Item = { product, quantity };
-    dispatch(addOrderItem({ Item }));
-
     navigate("/order");
   };
 

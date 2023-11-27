@@ -6,7 +6,7 @@ const currencyConverter = async ({ amount, from, to }) => {
 
   const value = await converter.convert(amount, from, to);
 
-  return value;
+  return value.toFixed(2);
 };
 
 export default currencyConverter;

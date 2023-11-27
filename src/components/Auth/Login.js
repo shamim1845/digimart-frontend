@@ -44,8 +44,8 @@ const Login = () => {
 
         <Formik
           initialValues={{
-            email: "",
-            password: "",
+            email: "demo@digimart.com",
+            password: "demo12345678",
           }}
           validationSchema={yup.object({
             email: yup
@@ -75,7 +75,9 @@ const Login = () => {
                 }
               })
               .catch((err) => {
-                toast.error("Invalid login credentials.");
+                toast.error(
+                  err?.response?.data?.message || "Invalid login credentials."
+                );
                 console.error(err);
               });
           }}

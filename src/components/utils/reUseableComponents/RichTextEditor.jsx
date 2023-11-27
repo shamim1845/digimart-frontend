@@ -63,6 +63,8 @@ const RichTextEditorContainer = styled.div`
   }
 
   .quill_container {
+    color: var(--text-primary);
+
     border-radius: 2px;
     font-size: 1.3rem;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
@@ -74,18 +76,6 @@ const RichTextEditorContainer = styled.div`
 
     .ql-toolbar {
       border-bottom: 1px solid rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .error {
-      font-size: 1.1rem;
-      padding: 1rem 0;
-      span {
-        font-style: italic;
-        color: tomato;
-        margin-right: 0.3rem;
-        font-weight: 700;
-        font-size: 1.1rem;
-      }
     }
   }
 `;

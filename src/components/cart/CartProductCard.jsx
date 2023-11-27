@@ -17,7 +17,7 @@ const CartProductCard = ({ product, quantity }) => {
   // Custom hook for cart handling
   const { addToCartHandler } = useCartHandler(product?._id);
 
-  // set quantity from cart
+  // set quantity from cart for input box
   useEffect(() => {
     if (quantity) {
       setValue(quantity);
@@ -34,12 +34,6 @@ const CartProductCard = ({ product, quantity }) => {
   return (
     <Container>
       <div className="left_content">
-        <div className="select_product">
-          <input
-            type="checkbox"
-            //   onChange={(e) => addToCheckList(e, Item)}
-          />
-        </div>
         <div className="img_box">
           <img src={product.images[0].url} alt={product?.name} />
         </div>

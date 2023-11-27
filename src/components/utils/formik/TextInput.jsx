@@ -19,16 +19,18 @@ const TextInput = ({ label, ...props }) => {
 export default TextInput;
 
 const InputGroup = styled.div`
+  width: 100%;
   margin-bottom: 2rem;
+
   label {
     color: var(--text-secondary);
     font-size: 1.3rem;
   }
   input {
     background: #fff;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     width: 100%;
-    height: 3.5rem;
+    height: 4rem;
     padding: 0 1rem;
     margin-top: 0.5rem;
     border: none;

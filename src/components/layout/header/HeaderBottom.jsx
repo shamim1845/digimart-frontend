@@ -153,26 +153,6 @@ const BottomCenter = styled.div`
   height: 4.5rem;
   margin: 0 2rem;
   border-radius: 0.5rem;
-
-  form {
-    width: 100%;
-
-    &:input {
-      width: 100%;
-      border: none;
-      padding-left: 1rem;
-      border-radius: 0.5rem;
-      font-size: 1.4rem;
-
-      &::placeholder {
-        font-size: 1.4rem;
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
 `;
 
 const BottomRight = styled.div`
