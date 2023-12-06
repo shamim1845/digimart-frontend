@@ -35,7 +35,7 @@ const OrderCard = ({ order, showDetailsButton = true, style }) => {
 
               <div className="dtails_box">
                 <div className="title">
-                  <Link to={`/products/${product?._id}`}>
+                  <Link to={`/products/${product?.productId}`}>
                     <Title
                       variant="h3"
                       text={product?.name}

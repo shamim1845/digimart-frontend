@@ -157,7 +157,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href={`https://shamim-me.netlify.app/`}
+                    href={`https://developershamim.me`}
                     target="_blank"
                     rel="noreferrer"
                   >
