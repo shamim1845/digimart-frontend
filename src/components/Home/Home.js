@@ -18,9 +18,9 @@ const Home = () => {
       />
 
       <Container>
-        <CaruusleContainer>
+        <CarousleContainer>
           <LazyCarousle />
-        </CaruusleContainer>
+        </CarousleContainer>
         <PageContainer>
           <NewArivals />
         </PageContainer>
@@ -39,7 +39,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const CaruusleContainer = styled.div`
+const CarousleContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
