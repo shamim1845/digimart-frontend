@@ -1,11 +1,13 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { addCurrency } from "../../../../redux/user/userSlice";
 import { currencyConstants } from "../../../utils/constants/currencyConstants";
+import { selectCurrency } from "../../../../redux/user/userSelector";
 
 const Currency = () => {
   const dispatch = useDispatch();
+  const currency = useSelector(selectCurrency);
 
   // Currency Handler
   const handleCurrency = (e) => {
@@ -14,7 +16,7 @@ const Currency = () => {
 
   return (
     <CurrencyContainer>
-      <select onChange={handleCurrency}>
+      <select onChange={handleCurrency} value={currency}>
         {currencyConstants.map((currency) => (
           <option key={currency.name} value={currency.name}>
             {currency.name}

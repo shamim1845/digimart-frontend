@@ -1,40 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import InfoCard from "./InfoCard";
+import { useGetAnalyticsQuery } from "../../../../redux/api/analytics/analyticsAPI";
+import Loading from "../../../utils/fetchUtils/Loading";
+import NotFound from "../../../utils/fetchUtils/NotFound";
+import Error from "../../../utils/fetchUtils/Error";
+import TimePeriodSelector from "./TimePeriodSelector";
 
 const Dashboard = () => {
+  const [period, setPeriod] = useState(0);
+
+
+  const { isFetching, isError, error, isLoading, isSuccess, data } = useGetAnalyticsQuery(`period=${period}`, {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+    skip: period === 0
+  })
+
   return (
     <DashboardContainer>
-      <QuickInfo>
-        <InfoCard
-          titleText={"Total Revenue"}
-          subTitleText={"(Last 30 Days)"}
-          icon={<i className="bi bi-shop-window"></i>}
-          value={"$0.00"}
-          iconBg="#A7F3D0"
-        />
-        <InfoCard
-          titleText={"Total Order"}
-          subTitleText={"(Last 30 Days)"}
-          icon={<i className="bi bi-cart3"></i>}
-          value={"$0.00"}
-          iconBg="#FACACA"
-        />
+      {(isFetching || isLoading) && <Loading />}
 
-        <InfoCard
-          titleText={"Todays Revenue"}
-          icon={<i className="bi bi-shop-window"></i>}
-          value={"$0.00"}
-          iconBg="#FFE8B2"
-        />
+      {isError && (
+        <>
+          {error.status === 404 ? (
+            <NotFound
+              style={{ justifyContent: "center", marginTop: "10rem" }}
+              text={error.data?.message}
+            />
+          ) : (
+            <Error
+              style={{ justifyContent: "center", marginTop: "10rem" }}
+              text={error?.message}
+            />
+          )}
+        </>
+      )}
 
-        <InfoCard
-          titleText={"Total Brands"}
-          icon={<i className="bi bi-shop-window"></i>}
-          value={"$0.00"}
-          iconBg="#93C5FD"
-        />
-      </QuickInfo>
+      <div style={{
+        display: "flex",
+        justifyContent: "flex-end",
+        marginBottom: "1rem"
+      }}>
+        <TimePeriodSelector period={period} setPeriod={setPeriod} />
+      </div>
+
+      {isSuccess && data && (
+        <QuickInfo>
+          <InfoCard
+            titleText={"Total Revenue"}
+            subTitleText={`(Last ${period} Days)`}
+            icon={<i className="bi bi-shop-window"></i>}
+            value={`$${data?.data?.totalRevenueInPeriod}`}
+            iconBg="#A7F3D0"
+          />
+          <InfoCard
+            titleText={"Total Order"}
+            subTitleText={`(Last ${period} Days)`}
+            icon={<i className="bi bi-cart3"></i>}
+            value={`$${data?.data?.totalOrdersInPeriod}`}
+            iconBg="#FACACA"
+          />
+
+          <InfoCard
+            titleText={"Todays Revenue"}
+            icon={<i className="bi bi-shop-window"></i>}
+            value={`$${data?.data?.todaysRevenue}`}
+            iconBg="#FFE8B2"
+          />
+
+          <InfoCard
+            titleText={"Total Brands"}
+            icon={<i className="bi bi-shop-window"></i>}
+            value={`$${data?.data?.totalBrands}`}
+            iconBg="#93C5FD"
+          />
+        </QuickInfo>
+      )}
+
     </DashboardContainer>
   );
 };

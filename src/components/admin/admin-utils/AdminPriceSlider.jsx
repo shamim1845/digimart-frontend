@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Slider from "@mui/material/Slider";
 import useDebounceHandler from "../../utils/customHooks/useDebounceHandler";
 
-const AdminPriceSlider = () => {
-  const initialPrice = [0, 200000];
-  const [price, setPrice] = useState([initialPrice[0], initialPrice[1]]);
+const initialValue = [0, 100000];
+const AdminPriceSlider = ({ currentPrice, setCurrentPrice }) => {
+  const [price, setPrice] = useState([initialValue[0], initialValue[1]]);
+
+  useEffect(() => {
+    setCurrentPrice({
+      gte: initialValue[0],
+      lte: initialValue[1],
+    });
+  }, [setCurrentPrice]);
 
   // => handle price slider
   const handleAddPrice = (val) => {
-    console.log(val);
+    setCurrentPrice({
+      gte: val[0],
+      lte: val[1],
+    });
   };
 
   const debounceRequest = useDebounceHandler(handleAddPrice);
@@ -29,8 +39,8 @@ const AdminPriceSlider = () => {
           onChange={handleChange}
           valueLabelDisplay="auto"
           aria-labelledby="range-slider"
-          min={initialPrice[0]}
-          max={initialPrice[1]}
+          min={initialValue[0]}
+          max={initialValue[1]}
         />
       </div>
     </Container>

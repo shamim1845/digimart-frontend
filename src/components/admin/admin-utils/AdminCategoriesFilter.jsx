@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useGetAllCategoryQuery } from "../../../redux/api/category/categoryAPI";
 import Error from "../../utils/fetchUtils/Error";
 
-const AdminCategoriesFilter = () => {
+const AdminCategoriesFilter = ({ currentCategory, setCurrentCategory }) => {
   // Fetch categories
   const { data, isSuccess, isError, error } = useGetAllCategoryQuery();
 
@@ -23,7 +23,11 @@ const AdminCategoriesFilter = () => {
 
       {isSuccess && data?.category && (
         <ul>
-          <SubCategory category={data?.category} />
+          <SubCategory
+            category={data?.category}
+            currentCategory={currentCategory}
+            setCurrentCategory={setCurrentCategory}
+          />
         </ul>
       )}
     </CategoriesContainer>
@@ -62,12 +66,13 @@ const CategoriesContainer = styled.div`
   }
 `;
 
-const SubCategory = ({ category }) => {
-  const [activeCategory, setActiveCategory] = useState(null);
+const SubCategory = ({ category, currentCategory, setCurrentCategory }) => {
+  const [activeCategory, setActiveCategory] = useState(currentCategory);
 
   // Check Box Handler
   const checkBoxHandler = (cat) => {
-    console.log(cat);
+    setActiveCategory(cat);
+    setCurrentCategory(cat.slug);
   };
 
   return (
@@ -82,14 +87,18 @@ const SubCategory = ({ category }) => {
             >
               <input
                 type="checkbox"
-                // checked={cat.slug === checkedCategory}
+                checked={cat.slug === activeCategory.slug}
                 onChange={() => checkBoxHandler(cat)}
               />
               <span>{cat.name}</span>
             </div>
 
             {cat?._id === activeCategory?._id && (
-              <SubCategory category={activeCategory?.children} />
+              <SubCategory
+                category={activeCategory?.children}
+                currentCategory={currentCategory}
+                setCurrentCategory={setCurrentCategory}
+              />
             )}
           </li>
         );

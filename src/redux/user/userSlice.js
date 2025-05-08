@@ -22,7 +22,7 @@ export const fetchAsyncUser = createAsyncThunk(
 const initialState = {
   authenticated: false,
   userInfo: {},
-  currency: "USD",
+  currency: "BDT",
 };
 
 // Slice for handling user information

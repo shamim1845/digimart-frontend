@@ -53,8 +53,25 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [limit, setLimit] = React.useState(20);
   const [keyword, setKeyWord] = React.useState("");
+  const [category, setCategory] = React.useState("");
+  const [price, setPrice] = React.useState({
+    gte: 0,
+    lte: 0,
+  });
+
   const [edit, setEdit] = React.useState(false);
   const [ProductForEdit, setProductForEdit] = React.useState(null);
+
+  const clearFilter = () => {
+    setPage(0)
+    setLimit(20)
+    setKeyWord("")
+    setCategory("")
+    setPrice({
+      gte: 0,
+      lte: 100000,
+    })
+  }
 
   // If searching set page to 0
   React.useEffect(() => {
@@ -66,15 +83,19 @@ export default function StickyHeadTable() {
   // Generate queryString for searching and filtering
   const queryString = generateQuery({
     keyword: keyword,
+    category: category,
     page: page + 1,
     limit: limit,
+    price
   });
 
+
   // fetch products
-  const { data, isSuccess, isLoading, isError, error, refetch } =
+  const { data, isSuccess, isLoading, isFetching, isError, error, refetch } =
     useGetProductsQuery(queryString, {
       refetchOnMountOrArgChange: true,
       refetchOnReconnect: true,
+      skip: price.lte === 0
     });
 
   // Delete product mutation
@@ -130,9 +151,17 @@ export default function StickyHeadTable() {
 
   return (
     <Container>
-      <AdminProductSearch setKeyWord={setKeyWord} />
+      <AdminProductSearch
+        keyword={keyword}
+        setKeyWord={setKeyWord}
+        category={category}
+        setCategory={setCategory}
+        currentPrice={price}
+        setCurrentPrice={setPrice}
+        clearFilter={clearFilter}
+      />
 
-      {isLoading && <Loading />}
+      {(isLoading || isFetching) && <Loading />}
 
       {isError && (
         <>
